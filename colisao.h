@@ -14,8 +14,6 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
 
-
-
 //ALLEGRO_FONT *font5;
 
 typedef struct Pessoa {
@@ -52,6 +50,5 @@ int colidiu(char** map,int x,int y,int caso,int cx[],int cy[],int eu);
 int colisao_fireball(char** m,int x,int y,int d);
 int contato_proximo(int *cx,int *cy,int i,int j, Pessoa *p);
 int contato_proximo_direcionado(int x,int y,int *cx,int *cy,int i,int j,int d);
-
 
 #endif

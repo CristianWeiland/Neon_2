@@ -62,9 +62,9 @@ void teclas_iniciais()
 }
 */
 
-void keyboard_down(int evkeyboardkeycode,int *correr,bool *puxa,int *tlep,int *cx,int *cy,Magia (*fireball)[2],int *energia, Pessoa *p)
+void keyboard_down(int evkeyboardkeycode,bool *puxa,int *tlep,int *cx,int *cy,Magia (*fireball)[2], Pessoa *p)
 {
-	for(int i=0; i<4;i++) {
+	for(int i=0; i<4; ++i) {
 		if(p[i].comp==0) {
 			if(evkeyboardkeycode == p[i].botao_char_int[0]) {
 				//andou_c[i] = 1;
@@ -83,7 +83,7 @@ void keyboard_down(int evkeyboardkeycode,int *correr,bool *puxa,int *tlep,int *c
 				p[i].andou_e = 1;
 			}
 			if(evkeyboardkeycode == p[i].botao_char_int[4]) {
-				correr[i] = 2;
+				p[i].correr = 2;
 			}
 			if(evkeyboardkeycode == p[i].botao_char_int[5]) {
 				puxa[i] = true;
@@ -97,29 +97,29 @@ void keyboard_down(int evkeyboardkeycode,int *correr,bool *puxa,int *tlep,int *c
 		/* Primeiro Player */
         /* Magias */
         case ALLEGRO_KEY_Z:
-        	if(fireball[0][0].ativa == true && energia[0] >= 50 && fireball[0][1].ativa == false) {
+        	if(fireball[0][0].ativa == true && p[0].energia >= 50 && fireball[0][1].ativa == false) {
         		fireball[0][1].ativa = true;
         		fireball[0][1].x = cx[0];
         		fireball[0][1].y = cy[0];
         		fireball[0][1].dist = 0;
-        		energia[0] -= 50;
+        		p[0].energia -= 50;
         	}
-        	else if(energia[0] >= 50) {
+        	else if(p[0].energia >= 50) {
         		fireball[0][0].ativa = true;
         		fireball[0][0].x = cx[0];
         		fireball[0][0].y = cy[0];
         		fireball[0][0].dist = 0;
-        		energia[0] -= 50;
+        		p[0].energia -= 50;
         	}
     	default: break;
     }
 }
 
 
-void keyboard_up(int evkeyboardkeycode,int *correr,bool *puxa,bool *sair, Pessoa *p)
+void keyboard_up(int evkeyboardkeycode,bool *puxa,bool *sair, Pessoa *p)
 {
-	for(int i=0; i<4;i++) {
-		if(p[i].comp==0) {
+	for(int i=0; i<4; ++i) {
+		if(p[i].comp == 0) {
 			if(evkeyboardkeycode == p[i].botao_char_int[0]) {
 				//andou_c[i] = 0;
 				p[i].andou_c = 0;
@@ -137,7 +137,7 @@ void keyboard_up(int evkeyboardkeycode,int *correr,bool *puxa,bool *sair, Pessoa
 				p[i].andou_e = 0;
 			}
 			if(evkeyboardkeycode == p[i].botao_char_int[4]) {
-				correr[i] = 1;
+				p[i].correr = 1;
 			}
 		}
 	}

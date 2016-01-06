@@ -11,7 +11,7 @@
 int main()
 {
     /* Coisas relacionadas aos chars */
-    int cont=0,i,j,x,y,*correr,*energia;
+    int cont=0,i,j,x,y;//,*energia;
     int *cx,*cy,*desx,*desy;/*[4]={200,250,300,350},cy[4]={400,400,400,400},desx[4]={64,64,64,64},desy[4]={0,0,0,0}; */// cx = coordenada X, vetor de 4 pra incluir ateh 4 chars.
     /* Coisas relacioinadas ao mapa */
 	int mapsize,xtile[TAM],ytile[TAM],xcorte[TAM],ycorte[TAM];
@@ -26,10 +26,12 @@ int main()
 	for(i=0; i<NJOGADORES; ++i) {
 		// Inicializacoes da estrutura Pessoa
 		pessoas[i].andou_b = pessoas[i].andou_c = pessoas[i].andou_d = pessoas[i].andou_e = 0;
+		pessoas[i].correr = 1;
+		pessoas[i].energia = 100;
 	}
 
-	energia = (int*) malloc (NJOGADORES * sizeof(int));
-	correr = (int*) malloc (NJOGADORES * sizeof(int));
+	//energia = (int*) malloc (NJOGADORES * sizeof(int));
+	//correr = (int*) malloc (NJOGADORES * sizeof(int));
 	desx = (int*) malloc (NJOGADORES * sizeof(int));
 	desy = (int*) malloc (NJOGADORES * sizeof(int));
 	cx = (int*) malloc (NJOGADORES * sizeof(int));
@@ -38,8 +40,8 @@ int main()
 	for(i=0;i<NJOGADORES;i++) {
 		desy[i]=0;
 		desx[i]=64;
-		correr[i]=1;
-		energia[i]=100;
+		//correr[i]=1;
+		//energia[i]=100;
 	}
 
 	Window win;
@@ -187,7 +189,7 @@ int main()
 
     /* Opera o jogo */
 	if(abremenu(win,chars,pessoas)==1) {
-		fase1(win,sair,correr,puxa,tlep,cx,cy,fireball,energia,redraw,map,cont,i,j,temneon,desx,desy,xneon,yneon,neons,chars,cor,frente,font5,fireballs,explox,exploy,explosion,pessoas);
+		fase1(win,sair,puxa,tlep,cx,cy,fireball,redraw,map,cont,i,j,temneon,desx,desy,xneon,yneon,neons,chars,cor,frente,font5,fireballs,explox,exploy,explosion,pessoas);
 	}
 	graphdeinit(win);
 	exit(1);

@@ -1,6 +1,6 @@
 #include "magia.h"
 
-void tira_neon(bool *puxa,bool *temneon,int *cx,int *cy, Pessoa *p)
+inline void tira_neon(bool *puxa,bool *temneon,int *cx,int *cy, Pessoa *p)
 {
 	int j;
 	for(int i=0;i<4;i++) {
@@ -12,23 +12,23 @@ void tira_neon(bool *puxa,bool *temneon,int *cx,int *cy, Pessoa *p)
 	return ;
 }
 
-void desconta_energia(int correr[],int energia[], Pessoa *p)
+inline void desconta_energia(Pessoa *p, int njogadores)
 {
-	for(int i=0;i<4;i++)
-	    if((p[i].andou_b == 1 || p[i].andou_c == 1 || p[i].andou_d == 1 || p[i].andou_e == 1) && correr[i] == 2 ) // Andou com correr ativado.
-	    	energia[i] -= 3;
+	for(int i=0; i<njogadores; ++i)
+	    if((p[i].andou_b == 1 || p[i].andou_c == 1 || p[i].andou_d == 1 || p[i].andou_e == 1) && p[i].correr == 2 ) // Andou com correr ativado.
+	    	p[i].energia -= 3;
 }
 
-void usa_magias(int *energia,int *cx,int *cy,char **matriz,Magia (*fb)[2], Pessoa *p)
+void usa_magias(int *cx,int *cy,char **matriz,Magia (*fb)[2], Pessoa *p)
 {
 	int i,j,k;
 	for(i=0; i<4; ++i) {
 		if(fb[i][0].ativa == false && fb[i][1].ativa == false)
 			break ;
-		for(j=0;j<2;j++) { // O mesmo player pode ter jogado duas fireballs.
+		for(j=0; j<2; ++j) { // O mesmo player pode ter jogado duas fireballs.
 			if(fb[i][j].d == -1)
 				fb[i][j].d = calcula_direcao(p,i); /* Numeros de direçao no colisao.h */
-			for(k=0;k<4;k++) {
+			for(k=0; k<4; ++k) {
 				if(contato_proximo_direcionado(fb[i][j].x,fb[i][j].y,cx,cy,i,k,fb[i][j].d) == k) {
 					k = k; // Isso nao faz nada, tem que substituir por tirar vida de k.
 					fb[i][j].ativa = false;
@@ -100,13 +100,13 @@ int calcula_direcao(Pessoa *p,int i)
 	return -1; // Deu erro.
 }
 
-void flash(Pessoa *p,int *energia,int *cx,int *cy,int *tlep,char **matriz)
+void flash(Pessoa *p,int *cx,int *cy,int *tlep,char **matriz)
 {
 	int i,j;
 	for(i=0;i<4;i++) {
-		if(tlep[i] && energia[i] >= 50) {
+		if(tlep[i] && p[i].energia >= 50) {
 			tlep[i] = 0;
-			energia[i] -= 50;
+			p[i].energia -= 50;
 			/* Existem 8 casos (8 direçoes possiveis de andar, 4 sentidos e 4 diagonais). */
 			for(j=0;j<19;j++) {
 				if((p[i].andou_c) && !(p[i].andou_b) && !(p[i].andou_d) && !(p[i].andou_e)) { // Soh pra cima ( /\ ).
