@@ -22,7 +22,7 @@ char** le_matriz(FILE *fp)
 	return matriz;
 }
 
-int contato_proximo(int *cx,int *cy,int *andou_b,int *andou_c,int *andou_d,int *andou_e,int i,int j, Pessoa *p)
+int contato_proximo(int *cx,int *cy,int i,int j, Pessoa *p)
 {	// I eh o char que tah realizando a acao, J eh o cara que talvez foi atacado / puxado o neon
 	if(p[i].andou_c == 1 || (p[i].andou_b == 0 && p[i].andou_c == 0 && p[i].andou_d == 0 && p[i].andou_e == 0)) { // Olhando pra cima.
 		for(j=0;j<4;j++) {

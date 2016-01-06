@@ -50,7 +50,7 @@ char** le_matriz(FILE *fp);
 bool colisao(int,int,char**,int);
 int colidiu(char** map,int x,int y,int caso,int cx[],int cy[],int eu);
 int colisao_fireball(char** m,int x,int y,int d);
-int contato_proximo(int *cx,int *cy,int *andou_b,int *andou_c,int *andou_d,int *andou_e,int i,int j, Pessoa *p);
+int contato_proximo(int *cx,int *cy,int i,int j, Pessoa *p);
 int contato_proximo_direcionado(int x,int y,int *cx,int *cy,int i,int j,int d);
 
 

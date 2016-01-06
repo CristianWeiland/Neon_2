@@ -1,8 +1,8 @@
-void fase1(Window win,bool sair,int andou_b[],int andou_c[],int andou_d[],int andou_e[],int correr[],bool *puxa,int *tlep,int *cx,int *cy,Magia fireball[4][2],int *energia,bool redraw,ALLEGRO_BITMAP *map,int cont,int i,int j,bool *temneon,int desx[4],int desy[4],int xneon[4],int yneon[4],ALLEGRO_BITMAP **neons,ALLEGRO_BITMAP *chars,int cor[4],ALLEGRO_BITMAP *frente,ALLEGRO_FONT *font5,ALLEGRO_BITMAP **fireballs,int explox[4][2],int exploy[4][2],ALLEGRO_BITMAP* explosion, Pessoa *pessoas)
+void fase1(Window win,bool sair,int correr[],bool *puxa,int *tlep,int *cx,int *cy,Magia fireball[4][2],int *energia,bool redraw,ALLEGRO_BITMAP *map,int cont,int i,int j,bool *temneon,int desx[4],int desy[4],int xneon[4],int yneon[4],ALLEGRO_BITMAP **neons,ALLEGRO_BITMAP *chars,int cor[4],ALLEGRO_BITMAP *frente,ALLEGRO_FONT *font5,ALLEGRO_BITMAP **fireballs,int explox[4][2],int exploy[4][2],ALLEGRO_BITMAP* explosion, Pessoa *pessoas)
 {
 	char** matriz;
 	ALLEGRO_BITMAP *tiles;
-	int mapsize,xtile[TAM],ytile[TAM],xcorte[TAM],ycorte[TAM], njogadores = 5;
+	int mapsize,xtile[TAM],ytile[TAM],xcorte[TAM],ycorte[TAM], njogadores = 4;
 	FILE *mapa,*errext;
 
 	cx[0]=100;
@@ -55,9 +55,9 @@ void fase1(Window win,bool sair,int andou_b[],int andou_c[],int andou_d[],int an
 			graphdeinit(win);
 			exit(1);
 		} else if(ev.type == ALLEGRO_EVENT_KEY_DOWN) { // Detecta se apertaram alguma tecla.
-			keyboard_down(ev.keyboard.keycode,andou_b,andou_c,andou_d,andou_e,correr,puxa,tlep,cx,cy,fireball,energia,pessoas);
+			keyboard_down(ev.keyboard.keycode,correr,puxa,tlep,cx,cy,fireball,energia,pessoas);
         } else if(ev.type == ALLEGRO_EVENT_KEY_UP)   { // Detecta se soltaram alguma tecla.
-			keyboard_up(ev.keyboard.keycode,andou_b,andou_c,andou_d,andou_e,correr,puxa,&sair,pessoas);
+			keyboard_up(ev.keyboard.keycode,correr,puxa,&sair,pessoas);
         } else if (al_is_event_queue_empty(win.event_queue)) { // Nao ocorreu nenhum evento.
             /* Imprime */
 			redraw = false; // Fica true quando Timer acaba
@@ -71,9 +71,9 @@ void fase1(Window win,bool sair,int andou_b[],int andou_c[],int andou_d[],int an
 
 			//usa_magias(andou_b,andou_c,andou_d,andou_e,cx,cy,fireball)
 
-			flash(andou_b,andou_c,andou_d,andou_e,energia,cx,cy,tlep,matriz,pessoas);
+			flash(pessoas,energia,cx,cy,tlep,matriz);
 
-			usa_magias(andou_b,andou_c,andou_d,andou_e,energia,cx,cy,matriz,fireball,pessoas);
+			usa_magias(energia,cx,cy,matriz,fireball,pessoas);
 
 			for(int h=0;h<4;h++) {
 				for(j=0;j<2;j++) {
@@ -81,7 +81,7 @@ void fase1(Window win,bool sair,int andou_b[],int andou_c[],int andou_d[],int an
 						al_draw_bitmap(fireballs[fireball[h][j].d],fireball[h][j].x,fireball[h][j].y,0);
 						//al_rest(4);
 					}
-					if(fireball[h][j].explosao==true) { // Enquanto explox = 288 e exploy = 224, ele nao immprime a explosao.
+					if(fireball[h][j].explosao == true) { // Enquanto explox = 288 e exploy = 224, ele nao immprime a explosao.
 									// Entao o esquema eh zerar eles e dai o programa começa a contagem e a impressao.
 						explox[h][j] = exploy[i][j] = 0;
 						fireball[h][j].explosao = false;
@@ -99,14 +99,14 @@ void fase1(Window win,bool sair,int andou_b[],int andou_c[],int andou_d[],int an
 				}
 			}
 
-			tira_neon(puxa,temneon,cx,cy,andou_b,andou_c,andou_d,andou_e,pessoas);
+			tira_neon(puxa,temneon,cx,cy,pessoas);
 
 			for(i=0;i<4;i++) // Pra nao contar como se estivesse sempre tentando puxar.
 				puxa[i] = false;
 
-            imprime_4_chars_for(cont,desx,desy,cx,cy,andou_b,andou_c,andou_d,andou_e,correr,energia,xneon,yneon,matriz,neons,chars,cor,temneon,njogadores,pessoas);
+            imprime_4_chars_for(cont,desx,desy,cx,cy,correr,energia,xneon,yneon,matriz,neons,chars,cor,temneon,njogadores,pessoas);
 
-            IA(andou_b,andou_c,andou_d,andou_e,pessoas);
+            IA(pessoas);
 
             if(cont==CONT)
           		cont=0;
@@ -114,7 +114,7 @@ void fase1(Window win,bool sair,int andou_b[],int andou_c[],int andou_d[],int an
           		if(energia[i]<100)
 					energia[i]++;
 
-            desconta_energia(andou_b,andou_c,andou_d,andou_e,correr,energia,pessoas);
+            desconta_energia(correr,energia,pessoas);
 
             al_draw_bitmap(frente,0,0,0);
 

@@ -62,7 +62,7 @@ void teclas_iniciais()
 }
 */
 
-void keyboard_down(int evkeyboardkeycode,int *andou_b,int *andou_c,int *andou_d,int *andou_e,int *correr,bool *puxa,int *tlep,int *cx,int *cy,Magia (*fireball)[2],int *energia, Pessoa *p)
+void keyboard_down(int evkeyboardkeycode,int *correr,bool *puxa,int *tlep,int *cx,int *cy,Magia (*fireball)[2],int *energia, Pessoa *p)
 {
 	for(int i=0; i<4;i++) {
 		if(p[i].comp==0) {
@@ -116,7 +116,7 @@ void keyboard_down(int evkeyboardkeycode,int *andou_b,int *andou_c,int *andou_d,
 }
 
 
-void keyboard_up(int evkeyboardkeycode,int *andou_b,int *andou_c,int *andou_d,int *andou_e,int *correr,bool *puxa,bool *sair, Pessoa *p)
+void keyboard_up(int evkeyboardkeycode,int *correr,bool *puxa,bool *sair, Pessoa *p)
 {
 	for(int i=0; i<4;i++) {
 		if(p[i].comp==0) {

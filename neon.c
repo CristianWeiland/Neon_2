@@ -11,7 +11,7 @@
 int main()
 {
     /* Coisas relacionadas aos chars */
-    int cont=0,i,j,x,y,*andou_b,*andou_c,*andou_d,*andou_e,*correr,*energia;
+    int cont=0,i,j,x,y,*correr,*energia;
     int *cx,*cy,*desx,*desy;/*[4]={200,250,300,350},cy[4]={400,400,400,400},desx[4]={64,64,64,64},desy[4]={0,0,0,0}; */// cx = coordenada X, vetor de 4 pra incluir ateh 4 chars.
     /* Coisas relacioinadas ao mapa */
 	int mapsize,xtile[TAM],ytile[TAM],xcorte[TAM],ycorte[TAM];
@@ -21,19 +21,11 @@ int main()
 	int tlep[4]={0,0,0,0},explox[4][2],exploy[4][2];
 
 	Pessoa *pessoas;
-/*
-	andou_b = (int*) malloc (NJOGADORES * sizeof(int));
-	andou_c = (int*) malloc (NJOGADORES * sizeof(int));
-	andou_d = (int*) malloc (NJOGADORES * sizeof(int));
-	andou_e = (int*) malloc (NJOGADORES * sizeof(int));
-*/
+
 	pessoas = (Pessoa *) malloc(sizeof(Pessoa) * NJOGADORES);
 	for(i=0; i<NJOGADORES; ++i) {
 		// Inicializacoes da estrutura Pessoa
-		pessoas[i].andou_b = 0;
-		pessoas[i].andou_c = 0;
-		pessoas[i].andou_d = 0;
-		pessoas[i].andou_e = 0;
+		pessoas[i].andou_b = pessoas[i].andou_c = pessoas[i].andou_d = pessoas[i].andou_e = 0;
 	}
 
 	energia = (int*) malloc (NJOGADORES * sizeof(int));
@@ -47,12 +39,6 @@ int main()
 		desy[i]=0;
 		desx[i]=64;
 		correr[i]=1;
-		/*
-		andou_b[i]=0;
-		andou_c[i]=0;
-		andou_d[i]=0;
-		andou_e[i]=0;
-		*/
 		energia[i]=100;
 	}
 
@@ -201,7 +187,7 @@ int main()
 
     /* Opera o jogo */
 	if(abremenu(win,chars,pessoas)==1) {
-		fase1(win,sair,andou_b,andou_c,andou_d,andou_e,correr,puxa,tlep,cx,cy,fireball,energia,redraw,map,cont,i,j,temneon,desx,desy,xneon,yneon,neons,chars,cor,frente,font5,fireballs,explox,exploy,explosion,pessoas);
+		fase1(win,sair,correr,puxa,tlep,cx,cy,fireball,energia,redraw,map,cont,i,j,temneon,desx,desy,xneon,yneon,neons,chars,cor,frente,font5,fireballs,explox,exploy,explosion,pessoas);
 	}
 	graphdeinit(win);
 	exit(1);

@@ -1,25 +1,25 @@
 #include "magia.h"
 
-void tira_neon(bool *puxa,bool *temneon,int *cx,int *cy,int *andou_b,int *andou_c,int *andou_d,int *andou_e, Pessoa *p)
+void tira_neon(bool *puxa,bool *temneon,int *cx,int *cy, Pessoa *p)
 {
 	int j;
 	for(int i=0;i<4;i++) {
 		if(puxa[i]) {
-			if(j = contato_proximo(cx,cy,andou_b,andou_c,andou_d,andou_e,i,j,p) != 5)
+			if(j = contato_proximo(cx,cy,i,j,p) != 5)
 				temneon[j] = false;
 		}
 	}
 	return ;
 }
 
-void desconta_energia(int andou_b[],int andou_c[],int andou_d[],int andou_e[],int correr[],int energia[], Pessoa *p)
+void desconta_energia(int correr[],int energia[], Pessoa *p)
 {
 	for(int i=0;i<4;i++)
 	    if((p[i].andou_b == 1 || p[i].andou_c == 1 || p[i].andou_d == 1 || p[i].andou_e == 1) && correr[i] == 2 ) // Andou com correr ativado.
 	    	energia[i] -= 3;
 }
 
-void usa_magias(int *andou_b,int *andou_c,int *andou_d,int *andou_e,int *energia,int *cx,int *cy,char **matriz,Magia (*fb)[2], Pessoa *pessoas)
+void usa_magias(int *energia,int *cx,int *cy,char **matriz,Magia (*fb)[2], Pessoa *p)
 {
 	int i,j,k;
 	for(i=0; i<4; ++i) {
@@ -27,7 +27,7 @@ void usa_magias(int *andou_b,int *andou_c,int *andou_d,int *andou_e,int *energia
 			break ;
 		for(j=0;j<2;j++) { // O mesmo player pode ter jogado duas fireballs.
 			if(fb[i][j].d == -1)
-				fb[i][j].d = calcula_direcao(andou_b,andou_c,andou_d,andou_e,i); /* Numeros de direçao no colisao.h */
+				fb[i][j].d = calcula_direcao(p,i); /* Numeros de direçao no colisao.h */
 			for(k=0;k<4;k++) {
 				if(contato_proximo_direcionado(fb[i][j].x,fb[i][j].y,cx,cy,i,k,fb[i][j].d) == k) {
 					k = k; // Isso nao faz nada, tem que substituir por tirar vida de k.
@@ -79,28 +79,28 @@ void usa_magias(int *andou_b,int *andou_c,int *andou_d,int *andou_e,int *energia
 	return ;
 }
 
-int calcula_direcao(int *andou_b,int *andou_c,int *andou_d,int *andou_e,int i)
+int calcula_direcao(Pessoa *p,int i)
 {
-	if(andou_c[i]==1 || (andou_b[i]==0 && andou_c[i]==0 && andou_d[i]==0 && andou_e[i]==0)) { // Olhando pra cima.
+	if(p[i].andou_c == 1 || (p[i].andou_b == 0 && p[i].andou_c == 0 && p[i].andou_d == 0 && p[i].andou_e == 0)) { // Olhando pra cima.
 		al_flip_display;
 		return 0;
 	}
-	if(andou_d[i]==1) { // Olhando pra direita.
+	if(p[i].andou_d == 1) { // Olhando pra direita.
 		al_flip_display;
 		return 1;
 	}
-	if(andou_e[i]==1) { // Olhando pra esquerda.
+	if(p[i].andou_e == 1) { // Olhando pra esquerda.
 		al_flip_display;
 		return 2;
 	}
-	if(andou_b[i]==1) { // Olhando pra baixo.
+	if(p[i].andou_b == 1) { // Olhando pra baixo.
 		al_flip_display;
 		return 3;
 	}
 	return -1; // Deu erro.
 }
 
-void flash(int *andou_b,int *andou_c,int *andou_d,int *andou_e,int *energia,int *cx,int *cy,int *tlep,char **matriz, Pessoa *p)
+void flash(Pessoa *p,int *energia,int *cx,int *cy,int *tlep,char **matriz)
 {
 	int i,j;
 	for(i=0;i<4;i++) {

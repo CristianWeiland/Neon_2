@@ -1,6 +1,6 @@
 #include "ia.h"
 
-void IA(int *andou_b,int *andou_c,int *andou_d,int *andou_e, Pessoa *p)
+void IA(Pessoa *p)
 {
 	int menor_dist[4]={1000,1000,1000,1000};
 	int pessoa_perto[4];
