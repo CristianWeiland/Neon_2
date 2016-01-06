@@ -1,0 +1,4 @@
+#!/bin/bash
+make faxina
+make limpa
+make
