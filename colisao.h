@@ -22,11 +22,11 @@ typedef struct Pessoa {
 	int x,y,desx,desy,hp;
 	int xneon,yneon;
 	int andou_b,andou_c,andou_d,andou_e;
-	char * botao_b,*botao_c,*botao_d,*botao_e;
-	int energia,correr,morto,dash;
-	int comp;
+	char *botao_b, *botao_c, *botao_d, *botao_e;
 	char *nome,*ataque;
 	char *botao_char[7];
+	int energia,correr,morto,dash;
+	int comp;
 	int botao_char_int[7],time;
 } Pessoa;
 
@@ -50,7 +50,7 @@ char** le_matriz(FILE *fp);
 bool colisao(int,int,char**,int);
 int colidiu(char** map,int x,int y,int caso,int cx[],int cy[],int eu);
 int colisao_fireball(char** m,int x,int y,int d);
-int contato_proximo(int *cx,int *cy,int *andou_b,int *andou_c,int *andou_d,int *andou_e,int i,int j);
+int contato_proximo(int *cx,int *cy,int *andou_b,int *andou_c,int *andou_d,int *andou_e,int i,int j, Pessoa *p);
 int contato_proximo_direcionado(int x,int y,int *cx,int *cy,int i,int j,int d);
 
 

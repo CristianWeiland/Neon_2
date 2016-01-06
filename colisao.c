@@ -22,36 +22,26 @@ char** le_matriz(FILE *fp)
 	return matriz;
 }
 
-int contato_proximo(int *cx,int *cy,int *andou_b,int *andou_c,int *andou_d,int *andou_e,int i,int j)
+int contato_proximo(int *cx,int *cy,int *andou_b,int *andou_c,int *andou_d,int *andou_e,int i,int j, Pessoa *p)
 {	// I eh o char que tah realizando a acao, J eh o cara que talvez foi atacado / puxado o neon
-	if(andou_c[i]==1 || (andou_b[i]==0 && andou_c[i]==0 && andou_d[i]==0 && andou_e[i]==0)) // Olhando pra cima.
-	{
-		for(j=0;j<4;j++)
-		{
+	if(p[i].andou_c == 1 || (p[i].andou_b == 0 && p[i].andou_c == 0 && p[i].andou_d == 0 && p[i].andou_e == 0)) { // Olhando pra cima.
+		for(j=0;j<4;j++) {
 			if(j!=i && ( (cy[i]-cy[j]<=24 && cy[i]-cy[j]>=0) && (cx[i]-cx[j]<=8 && cx[i]-cx[j]>=-8 ) ) )
 				return j;
 		}
-	}
-	else if(andou_d[i]==1) // Olhando pra direita.
-	{
-		for(j=0;j<4;j++)
-		{
+	} else if(p[i].andou_d == 1) { // Olhando pra direita.
+		for(j=0;j<4;j++) {
 			if(j!=i && ( (cy[i]-cy[j]<=8 && cy[i]-cy[j]>=-8) && (cx[i]-cx[j]<=0 && cx[i]-cx[j]>=-32 ) ) )
 				return j;
 		}
-	}
-	else if(andou_e[i]==1)
-	{
-		for(j=0;j<4;j++)
-		{
+	} else if(p[i].andou_e == 1) {
+		for(j=0;j<4;j++) {
 			if(j!=i && ( (cy[i]-cy[j]<=8 && cy[i]-cy[j]>=-8) && (cx[i]-cx[j]<=32 && cx[i]-cx[j]>=0 ) ) )
 				return j;
 		}
 	}
-	if(andou_b[i]==1) // Olhando pra baixo.
-	{
-		for(j=0;j<4;j++)
-		{
+	if(p[i].andou_b == 1) { // Olhando pra baixo. OBS: AQUI EH MESMO IF E NAO ELSE IF??
+		for(j=0;j<4;j++) {
 			if(j!=i && ( (cy[i]-cy[j]<=0 && cy[i]-cy[j]>=-24) && (cx[i]-cx[j]<=8 && cx[i]-cx[j]>=-8 ) ) )
 				return j;
 		}
@@ -63,34 +53,24 @@ int contato_proximo_direcionado(int x,int y,int *cx,int *cy,int i,int j,int d)
 {	// I eh o char que tah realizando a acao, J eh o cara que talvez foi atacado / puxado o neon *
 /* x e y eh a posicao de quem tah andando (ex: fireball, char), cx e cy usados pra verificar se  *
  * bateu em algum outro char. D eh a direçao (0 = cima, 1 = direita, 2 = esquerda, 3 = baixo)    */
-	if(d == 0) // Olhando pra cima.
-	{
-		for(j=0;j<4;j++)
-		{
+	if(d == 0) { // Olhando pra cima.
+		for(j=0;j<4;j++) {
 			if(j!=i && ( (y-cy[j]<=24 && y-cy[j]>=0) && (x-cx[j]<=8 && x-cx[j]>=-8 ) ) )
 				return j;
 		}
-	}
-	else if(d == 1) // Olhando pra direita.
-	{
-		for(j=0;j<4;j++)
-		{
+	} else if(d == 1) { // Olhando pra direita.
+		for(j=0;j<4;j++) {
 			if(j!=i && ( (y-cy[j]<=8 && y-cy[j]>=-8) && (x-cx[j]<=0 && x-cx[j]>=-32 ) ) )
 				return j;
 		}
-	}
-	else if(d == 2)
-	{
-		for(j=0;j<4;j++)
-		{
+	} else if(d == 2) {
+		for(j=0;j<4;j++) {
 			if(j!=i && ( (y-cy[j]<=8 && y-cy[j]>=-8) && (x-cx[j]<=32 && x-cx[j]>=0 ) ) )
 				return j;
 		}
 	}
-	if(d == 3) // Olhando pra baixo.
-	{
-		for(j=0;j<4;j++)
-		{
+	if(d == 3) { // Olhando pra baixo.
+		for(j=0;j<4;j++) {
 			if(j!=i && ( (y-cy[j]<=0 && y-cy[j]>=-24) && (x-cx[j]<=8 && x-cx[j]>=-8 ) ) )
 				return j;
 		}
@@ -106,14 +86,11 @@ int colisao_fireball(char** map,int x,int y,int d)
 	int i,j;
 	int xm = x/4;
 	int ym = y/4;
-	switch(d)
-	{
+	switch(d) {
 		case 0: // Fireball pra cima
-			for(i=0;i<4;i++)
-			{
+			for(i=0;i<4;i++) {
 				if(map[xm+8+i][ym+1] == '3' || map[xm+8+i][ym+2] == '3')
                        return 1;
-
 			}
 			break;
 		case 1:

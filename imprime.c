@@ -15,7 +15,7 @@ void imprime_char(int cx,int cy,int a,int b,int selx,int sely,ALLEGRO_BITMAP *ch
     return ;
 }
 
-int imprime_4_chars_for(int cont,int desx[],int desy[],int cx[],int cy[],int andou_b[],int andou_c[],int andou_d[],int andou_e[],int correr[],int energia[],int xneon[],int yneon[],char** matriz,ALLEGRO_BITMAP** neons,ALLEGRO_BITMAP *chars,int *cor,bool *temneon,int njogadores)
+int imprime_4_chars_for(int cont,int desx[],int desy[],int cx[],int cy[],int andou_b[],int andou_c[],int andou_d[],int andou_e[],int correr[],int energia[],int xneon[],int yneon[],char** matriz,ALLEGRO_BITMAP** neons,ALLEGRO_BITMAP *chars,int *cor,bool *temneon,int njogadores, Pessoa *p)
 {
 	puts("Imprimindo chars...");
 	int i,j,selecx,selecy,char4;
@@ -41,8 +41,8 @@ int imprime_4_chars_for(int cont,int desx[],int desy[],int cx[],int cy[],int and
 
 	/* Tentativa de transformar tudo em um for */
 	for(i=0; i<njogadores; i++) {
-	 	pessoa[i].x = cx[i];
-	 	pessoa[i].y = cy[i];
+	 	p[i].x = cx[i];
+	 	p[i].y = cy[i];
 	 	/* Algumas adaptaçoes pra fazer funcionar com um For. */
 	 	if(i == 0 || i == 2)
 	 		selecx = 0;
@@ -67,7 +67,7 @@ int imprime_4_chars_for(int cont,int desx[],int desy[],int cx[],int cy[],int and
 		 	cy[i] += 4*correr[i];
 	        desy[i]=0+128*char4;
 			if(!andou_e[i] && !andou_d[i] && !andou_c[i])
-				imprime_char(cx[i],cy[i],pessoa[i].desx,pessoa[i].desy,desx[i],desy[i],chars);
+				imprime_char(cx[i],cy[i],p[i].desx,p[i].desy,desx[i],desy[i],chars);
 	    }
 	    if(andou_e[i] == 1)
 	    {
@@ -77,7 +77,7 @@ int imprime_4_chars_for(int cont,int desx[],int desy[],int cx[],int cy[],int and
 	        cx[i] -= 4*correr[i];
 	        desy[i]=32+128*char4;
 	        if(!andou_d[i] && !andou_c[i])
-	         	imprime_char(cx[i],cy[i],pessoa[i].desx,pessoa[i].desy,desx[i],desy[i],chars);
+	         	imprime_char(cx[i],cy[i],p[i].desx,p[i].desy,desx[i],desy[i],chars);
 	    }
 	    if(andou_d[i] == 1)
 	    {
@@ -87,7 +87,7 @@ int imprime_4_chars_for(int cont,int desx[],int desy[],int cx[],int cy[],int and
 	        cx[i] += 4*correr[i];
 	        desy[i]=64+128*char4;
 	        if(!andou_c[i])
-	            imprime_char(cx[i],cy[i],pessoa[i].desx,pessoa[i].desy,desx[i],desy[i],chars);
+	            imprime_char(cx[i],cy[i],p[i].desx,p[i].desy,desx[i],desy[i],chars);
 	    }
 	    if(andou_c[i] == 1) {
 	        if(colidiu(matriz,cx[i]/4,cy[i]/4,2,cx,cy,i) == 1) { // O 2(dois) tah ali porque eh o caso de andar pra cima.
@@ -95,7 +95,7 @@ int imprime_4_chars_for(int cont,int desx[],int desy[],int cx[],int cy[],int and
 	        }
 	        cy[i] -= 4*correr[i];
 	        desy[i]=96+128*char4;
-	        imprime_char(cx[i],cy[i],pessoa[i].desx,pessoa[i].desy,desx[i],desy[i],chars);
+	        imprime_char(cx[i],cy[i],p[i].desx,p[i].desy,desx[i],desy[i],chars);
 	        if(andou_d[i] == 1 && andou_e[i]==0)
 		 	    imprime_neon(xneon[i]+4*correr[i],yneon[i],neons[i],temneon[i]);
 	        else if(andou_e[i] == 1 && andou_d[i]==0)
@@ -104,8 +104,8 @@ int imprime_4_chars_for(int cont,int desx[],int desy[],int cx[],int cy[],int and
 	        	imprime_neon(xneon[i],yneon[i],neons[i],temneon[i]);
 	    }
 	    if(!andou_b[i] && !andou_c[i] && !andou_d[i] && !andou_e[i]) { // Nao andou.
-			imprime_char(cx[i],cy[i],pessoa[i].desx,pessoa[i].desy,32,96,chars);
-			imprime_neon(xneon[i],yneon[i],neons[pessoa[i].time-1],temneon[i]);
+			imprime_char(cx[i],cy[i],p[i].desx,p[i].desy,32,96,chars);
+			imprime_neon(xneon[i],yneon[i],neons[p[i].time-1],temneon[i]);
 	    }
 	}
 	puts("Chars impressos!");
