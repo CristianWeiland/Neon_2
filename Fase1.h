@@ -1,4 +1,4 @@
-void fase1(Window win,bool sair,bool *puxa,int *tlep,int *cx,int *cy,Magia fireball[4][2],bool redraw,ALLEGRO_BITMAP *map,int cont,int i,int j,bool *temneon,int desx[4],int desy[4],int xneon[4],int yneon[4],ALLEGRO_BITMAP **neons,ALLEGRO_BITMAP *chars,int cor[4],ALLEGRO_BITMAP *frente,ALLEGRO_FONT *font5,ALLEGRO_BITMAP **fireballs,int explox[4][2],int exploy[4][2],ALLEGRO_BITMAP* explosion, Pessoa *pessoas)
+void fase1(Window win,bool sair,bool *puxa,int *tlep,int *cx,int *cy,Magia fireball[4][2],bool redraw,ALLEGRO_BITMAP *map,int cont,int i,int j,bool *temneon,int xneon[4],int yneon[4],ALLEGRO_BITMAP **neons,ALLEGRO_BITMAP *chars,int cor[4],ALLEGRO_BITMAP *frente,ALLEGRO_FONT *font5,ALLEGRO_BITMAP **fireballs,int explox[4][2],int exploy[4][2],ALLEGRO_BITMAP* explosion, Pessoa *pessoas)
 {
 	char** matriz;
 	ALLEGRO_BITMAP *tiles;
@@ -103,7 +103,7 @@ void fase1(Window win,bool sair,bool *puxa,int *tlep,int *cx,int *cy,Magia fireb
 			for(i=0;i<4;i++) // Pra nao contar como se estivesse sempre tentando puxar.
 				puxa[i] = false;
 
-            imprime_4_chars_for(cont,desx,desy,cx,cy,xneon,yneon,matriz,neons,chars,cor,temneon,njogadores,pessoas);
+            imprime_4_chars_for(cont,cx,cy,xneon,yneon,matriz,neons,chars,cor,temneon,njogadores,pessoas);
 
             IA(pessoas);
 

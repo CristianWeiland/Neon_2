@@ -1,35 +1,34 @@
-void fase1(Window win,bool sair,bool *puxa,int *tlep,int *cx,int *cy,Magia fireball[4][2],bool redraw,ALLEGRO_BITMAP *map,int cont,int i,int j,bool *temneon,int desx[4],int desy[4],int xneon[4],int yneon[4],ALLEGRO_BITMAP **neons,ALLEGRO_BITMAP *chars,int cor[4],ALLEGRO_BITMAP *frente,ALLEGRO_FONT *font5,ALLEGRO_BITMAP **fireballs,int explox[4][2],int exploy[4][2],ALLEGRO_BITMAP* explosion, Pessoa *pessoas)
+void fase1(Window win,bool sair,bool *puxa,int *tlep,int *cx,int *cy,Magia fireball[4][2],bool redraw,ALLEGRO_BITMAP *map,int cont,int i,int j,bool *temneon,int xneon[4],int yneon[4],ALLEGRO_BITMAP **neons,ALLEGRO_BITMAP *chars,int cor[4],ALLEGRO_BITMAP *frente,ALLEGRO_FONT *font5,ALLEGRO_BITMAP **fireballs,int explox[4][2],int exploy[4][2],ALLEGRO_BITMAP* explosion, Pessoa *pessoas)
 {
 	char** matriz;
 	ALLEGRO_BITMAP *tiles;
 	int mapsize,xtile[TAM],ytile[TAM],xcorte[TAM],ycorte[TAM], njogadores = 4;
 	FILE *mapa,*errext;
 
-	cx[0]=100;
-	cy[0]=200;
-	cx[1]=150;
-    cy[1]=200;
-	cx[2]=200;
-    cy[2]=200;
-	cx[3]=250;
-    cy[3]=200;
-	cx[4]=300;
-    cy[4]=200;
+	for(i=0; i<njogadores; ++i) {
+		cx[i] = 100 + 50*i;
+		cy[i] = 200;
+	}
 
 	errext = fopen("err.txt","w");
 
 	mapa = fopen("Fases/F1/mapa.txt","r");
     if(!mapa) {
-    	fprintf(errext,"Erro ao abrir mapa.txt.");fclose(errext);exit(1);
+    	fprintf(errext,"Erro ao abrir mapa.txt.");
+    	fclose(errext);
+    	exit(1);
     }
+
+    tiles = al_load_bitmap("Imgs/tiles.bmp");
+    if(!tiles) {
+	   	fprintf(errext,"Falha ao abrir a imagem tiles.");
+	   	fclose(errext);
+	   	exit(1);
+	}
 
     fscanf(mapa,"%i\n",&mapsize);
     for(i=0;i<mapsize+1;i++)
         fscanf(mapa,"%i %i %i %i\n",&xtile[i],&ytile[i],&xcorte[i],&ycorte[i]);
-
-    tiles = al_load_bitmap("Imgs/tiles.bmp");
-    if(!tiles) {
-	   	fprintf(errext,"Falha ao abrir a imagem tiles.");fclose(errext);exit(1); }
 
 	al_convert_mask_to_alpha(tiles,al_map_rgb(255,0,255));
 
@@ -67,7 +66,6 @@ void fase1(Window win,bool sair,bool *puxa,int *tlep,int *cx,int *cy,Magia fireb
 			cont++;
 			for(i=0; i<4; i++) // Faz parar de correr quando a energia acaba.
 				if(pessoas[i].energia <= 0)
-					//correr[i] = 1;
 					pessoas[i].correr = 1;
 
 			//usa_magias(andou_b,andou_c,andou_d,andou_e,cx,cy,fireball)
@@ -105,7 +103,7 @@ void fase1(Window win,bool sair,bool *puxa,int *tlep,int *cx,int *cy,Magia fireb
 			for(i=0;i<4;i++) // Pra nao contar como se estivesse sempre tentando puxar.
 				puxa[i] = false;
 
-            imprime_4_chars_for(cont,desx,desy,cx,cy,xneon,yneon,matriz,neons,chars,cor,temneon,njogadores,pessoas);
+            imprime_4_chars_for(cont,cx,cy,xneon,yneon,matriz,neons,chars,cor,temneon,njogadores,pessoas);
 
             IA(pessoas);
 

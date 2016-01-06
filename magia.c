@@ -1,6 +1,6 @@
 #include "magia.h"
 
-inline void tira_neon(bool *puxa,bool *temneon,int *cx,int *cy, Pessoa *p)
+void tira_neon(bool *puxa,bool *temneon,int *cx,int *cy, Pessoa *p)
 {
 	int j;
 	for(int i=0;i<4;i++) {
@@ -12,7 +12,7 @@ inline void tira_neon(bool *puxa,bool *temneon,int *cx,int *cy, Pessoa *p)
 	return ;
 }
 
-inline void desconta_energia(Pessoa *p, int njogadores)
+void desconta_energia(Pessoa *p, int njogadores)
 {
 	for(int i=0; i<njogadores; ++i)
 	    if((p[i].andou_b == 1 || p[i].andou_c == 1 || p[i].andou_d == 1 || p[i].andou_e == 1) && p[i].correr == 2 ) // Andou com correr ativado.

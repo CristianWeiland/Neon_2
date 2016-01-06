@@ -8,4 +8,5 @@ void desconta_energia(Pessoa *p, int njogadores);
 void usa_magias(int *cx,int *cy,char **matriz,Magia (*fb)[2], Pessoa *pessoas);
 int calcula_direcao(Pessoa *p,int i);
 void flash(Pessoa *p,int *cx,int *cy,int *tlep,char **matriz);
+
 #endif

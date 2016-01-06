@@ -11,8 +11,8 @@
 int main()
 {
     /* Coisas relacionadas aos chars */
-    int cont=0,i,j,x,y;//,*energia;
-    int *cx,*cy,*desx,*desy;/*[4]={200,250,300,350},cy[4]={400,400,400,400},desx[4]={64,64,64,64},desy[4]={0,0,0,0}; */// cx = coordenada X, vetor de 4 pra incluir ateh 4 chars.
+    int cont=0,i,j,x,y;;
+    int *cx,*cy;/*[4]={200,250,300,350},cy[4]={400,400,400,400},desx[4]={64,64,64,64},desy[4]={0,0,0,0}; */// cx = coordenada X, vetor de 4 pra incluir ateh 4 chars.
     /* Coisas relacioinadas ao mapa */
 	int mapsize,xtile[TAM],ytile[TAM],xcorte[TAM],ycorte[TAM];
     /* Coisas relacionadas aos neons */
@@ -20,29 +20,26 @@ int main()
 	/* Coisas relacionadas as tecnicas/magias */
 	int tlep[4]={0,0,0,0},explox[4][2],exploy[4][2];
 
-	Pessoa *pessoas;
+	Pessoa *p;
 
-	pessoas = (Pessoa *) malloc(sizeof(Pessoa) * NJOGADORES);
+	p = (Pessoa *) malloc(sizeof(Pessoa) * NJOGADORES);
 	for(i=0; i<NJOGADORES; ++i) {
 		// Inicializacoes da estrutura Pessoa
-		pessoas[i].andou_b = pessoas[i].andou_c = pessoas[i].andou_d = pessoas[i].andou_e = 0;
-		pessoas[i].correr = 1;
-		pessoas[i].energia = 100;
+		p[i].selx = 0;
+		p[i].sely = 64;
+		p[i].correr = 1;
+		p[i].energia = 100;
+		p[i].andou_b = p[i].andou_c = p[i].andou_d = p[i].andou_e = 0;
 	}
-
-	//energia = (int*) malloc (NJOGADORES * sizeof(int));
-	//correr = (int*) malloc (NJOGADORES * sizeof(int));
-	desx = (int*) malloc (NJOGADORES * sizeof(int));
-	desy = (int*) malloc (NJOGADORES * sizeof(int));
+	//desx = (int*) malloc (NJOGADORES * sizeof(int)); --> Virou p.selx!
+	//desy = (int*) malloc (NJOGADORES * sizeof(int)); --> Virou p.sely!
 	cx = (int*) malloc (NJOGADORES * sizeof(int));
 	cy = (int*) malloc (NJOGADORES * sizeof(int));
 
-	for(i=0;i<NJOGADORES;i++) {
-		desy[i]=0;
-		desx[i]=64;
-		//correr[i]=1;
-		//energia[i]=100;
-	}
+	//for(i=0;i<NJOGADORES;i++) {
+		//desy[i]=0;
+		//desx[i]=64;
+	//}
 
 	Window win;
     FILE *mapa,*errext; // errext = error exit (ou saida de erros)
@@ -71,42 +68,86 @@ int main()
     /* Inicializacao dos Bitmaps */
 	neons = (ALLEGRO_BITMAP**) malloc(4*sizeof(ALLEGRO_BITMAP*));
 	fireballs = (ALLEGRO_BITMAP**) malloc(4*sizeof(ALLEGRO_BITMAP*));
+
     tiles = al_load_bitmap("Imgs/tiles.bmp");
     if(!tiles) {
-	   	fprintf(errext,"Falha ao abrir a imagem tiles.");fclose(errext);exit(1); }
+	   	fprintf(errext,"Falha ao abrir a imagem tiles.");
+	   	fclose(errext);
+	   	exit(1);
+	}
+
     chars = al_load_bitmap("Imgs/chars.bmp"); // Obs: Cada imagem de cada char eh 32x32
     if(!chars) {
-    	fprintf(errext,"Falha ao abrir a imagem chars.");fclose(errext);exit(1); }
+    	fprintf(errext,"Falha ao abrir a imagem chars.");
+    	fclose(errext);
+    	exit(1);
+    }
+
     explosion = al_load_bitmap("Imgs/Explo.bmp");
     if(!explosion) {
-    	fprintf(errext,"Falha ao abrir a imagem explo.");fclose(errext);exit(1); }
+    	fprintf(errext,"Falha ao abrir a imagem explo.");
+    	fclose(errext);
+    	exit(1);
+    }
+
 	neons[0] = al_load_bitmap("Imgs/neonamarelo.bmp");
     if(!neons[0]) {
-    	fprintf(errext,"Falha ao abrir a imagem neons[0].");fclose(errext);exit(1); }
+    	fprintf(errext,"Falha ao abrir a imagem neons[0].");
+    	fclose(errext);
+    	exit(1);
+    }
+
 	neons[1] = al_load_bitmap("Imgs/neonazul.bmp");
     if(!neons[1]) {
-    	fprintf(errext,"Falha ao abrir a imagem neons[1].");fclose(errext);exit(1); }
+    	fprintf(errext,"Falha ao abrir a imagem neons[1].");
+    	fclose(errext);
+    	exit(1);
+    }
+
 	neons[2] = al_load_bitmap("Imgs/neonverde.bmp");
     if(!neons[2]) {
-    	fprintf(errext,"Falha ao abrir a imagem neons[2].");fclose(errext);exit(1); }
+    	fprintf(errext,"Falha ao abrir a imagem neons[2].");
+    	fclose(errext);
+    	exit(1);
+    }
+
 	neons[3] = al_load_bitmap("Imgs/neonvermelho.bmp");
     if(!neons[3]) {
-    	fprintf(errext,"Falha ao abrir a imagem neons[3].");fclose(errext);exit(1); }
+    	fprintf(errext,"Falha ao abrir a imagem neons[3].");
+    	fclose(errext);
+    	exit(1);
+    }
+
 	fireballs[0] = al_load_bitmap("Imgs/Fireballc.bmp");
     if(!fireballs[0]) {
-    	fprintf(errext,"Falha ao abrir a imagem fireballs[0].");fclose(errext);exit(1); }
+    	fprintf(errext,"Falha ao abrir a imagem fireballs[0].");
+    	fclose(errext);
+    	exit(1);
+    }
+
 	fireballs[1] = al_load_bitmap("Imgs/Fireballd.bmp");
     if(!fireballs[1]) {
-    	fprintf(errext,"Falha ao abrir a imagem fireballs[1].");fclose(errext);exit(1); }
+    	fprintf(errext,"Falha ao abrir a imagem fireballs[1].");
+    	fclose(errext);
+    	exit(1);
+    }
+
 	fireballs[2] = al_load_bitmap("Imgs/Fireballe.bmp");
     if(!fireballs[2]) {
-    	fprintf(errext,"Falha ao abrir a imagem fireballs[2].");fclose(errext);exit(1); }
+    	fprintf(errext,"Falha ao abrir a imagem fireballs[2].");
+    	fclose(errext);
+    	exit(1);
+    }
+
 	fireballs[3] = al_load_bitmap("Imgs/Fireballb.bmp");
     if(!fireballs[3]) {
-    	fprintf(errext,"Falha ao abrir a imagem fireballs[3].");fclose(errext);exit(1); }
+    	fprintf(errext,"Falha ao abrir a imagem fireballs[3].");
+    	fclose(errext);
+    	exit(1);
+    }
 
 	for(i=0; i<4; ++i) {
-		for(j=0; j<2; j++) {
+		for(j=0; j<2; ++j) {
 			//al_convert_mask_to_alpha(fireball[i][j].sprite,al_map_rgb(255,0,255));
 			fireball[i][j].ativa = false; // Nao foi usada.
 			fireball[i][j].dano = 20; // Dano da tecnica.
@@ -137,31 +178,39 @@ int main()
     //matriz = le_matriz(fopen("matriz.txt","r"));
 
 	for(i=0; i<4; ++i) {
-        pessoas[i].botao_char[0]=(char*) malloc(30*sizeof(char));sprintf(pessoas[i].botao_char[0],"%c",98);
-		if(!pessoas[i].botao_char[0]) {
-			fprintf(errext,"Falha ao alocar memoria para pessoas[%d].botao_char[0]",i);fclose(errext);exit(1); }
-        pessoas[i].botao_char[1]=(char*) malloc(30*sizeof(char));sprintf(pessoas[i].botao_char[1],"%c",99);
-		if(!pessoas[i].botao_char[1]) {
-			fprintf(errext,"Falha ao alocar memoria para pessoas[%d].botao_char[1]",i);fclose(errext);exit(1); }
-        pessoas[i].botao_char[2]=(char*) malloc(30*sizeof(char));sprintf(pessoas[i].botao_char[2],"%c",100);
-		if(!pessoas[i].botao_char[2]) {
-			fprintf(errext,"Falha ao alocar memoria para pessoas[%d].botao_char[2]",i);fclose(errext);exit(1); }
-        pessoas[i].botao_char[3]=(char*) malloc(30*sizeof(char));sprintf(pessoas[i].botao_char[3],"%c",101);
-		if(!pessoas[i].botao_char[3]) {
-			fprintf(errext,"Falha ao alocar memoria para pessoas[%d].botao_char[3]",i);fclose(errext);exit(1); }
-        pessoas[i].botao_char[4]=(char*) malloc(30*sizeof(char));sprintf(pessoas[0].botao_char[4],"%c",97);
-		if(!pessoas[i].botao_char[4]) {
-			fprintf(errext,"Falha ao alocar memoria para pessoas[%d].botao_char[4]",i);fclose(errext);exit(1); }
-		pessoas[i].botao_char[5]=(char*) malloc(30*sizeof(char));sprintf(pessoas[0].botao_char[5],"%c",97);
-		if(!pessoas[i].botao_char[5]) {
-			fprintf(errext,"Falha ao alocar memoria para pessoas[%d].botao_char[5]",i);fclose(errext);exit(1); }
-		pessoas[i].botao_char[6]=(char*) malloc(30*sizeof(char));sprintf(pessoas[0].botao_char[6],"%c",97);
-		if(!pessoas[i].botao_char[6]) {
-			fprintf(errext,"Falha ao alocar memoria para pessoas[%d].botao_char[6]",i);fclose(errext);exit(1); }
-		pessoas[i].nome		   =(char*) malloc(30*sizeof(char));sprintf(pessoas[i].nome,"player %d",i+1);
-		if(!pessoas[i].nome) {
-			fprintf(errext,"Falha ao alocar memoria para pessoas[%d].nome",i);fclose(errext);exit(1); }
-		pessoas[i].time=1;
+        p[i].botao_char[0]=(char*) malloc(30*sizeof(char)); sprintf(p[i].botao_char[0],"%c",98);
+		if(!p[i].botao_char[0]) {
+			fprintf(errext,"Falha ao alocar memoria para p[%d].botao_char[0]",i);fclose(errext);exit(1);
+		}
+        p[i].botao_char[1]=(char*) malloc(30*sizeof(char)); sprintf(p[i].botao_char[1],"%c",99);
+		if(!p[i].botao_char[1]) {
+			fprintf(errext,"Falha ao alocar memoria para p[%d].botao_char[1]",i);fclose(errext);exit(1);
+		}
+        p[i].botao_char[2]=(char*) malloc(30*sizeof(char)); sprintf(p[i].botao_char[2],"%c",100);
+		if(!p[i].botao_char[2]) {
+			fprintf(errext,"Falha ao alocar memoria para p[%d].botao_char[2]",i);fclose(errext);exit(1);
+		}
+        p[i].botao_char[3]=(char*) malloc(30*sizeof(char)); sprintf(p[i].botao_char[3],"%c",101);
+		if(!p[i].botao_char[3]) {
+			fprintf(errext,"Falha ao alocar memoria para p[%d].botao_char[3]",i);fclose(errext);exit(1);
+		}
+        p[i].botao_char[4]=(char*) malloc(30*sizeof(char)); sprintf(p[0].botao_char[4],"%c",97);
+		if(!p[i].botao_char[4]) {
+			fprintf(errext,"Falha ao alocar memoria para p[%d].botao_char[4]",i);fclose(errext);exit(1);
+		}
+		p[i].botao_char[5]=(char*) malloc(30*sizeof(char)); sprintf(p[0].botao_char[5],"%c",97);
+		if(!p[i].botao_char[5]) {
+			fprintf(errext,"Falha ao alocar memoria para p[%d].botao_char[5]",i);fclose(errext);exit(1);
+		}
+		p[i].botao_char[6]=(char*) malloc(30*sizeof(char)); sprintf(p[0].botao_char[6],"%c",97);
+		if(!p[i].botao_char[6]) {
+			fprintf(errext,"Falha ao alocar memoria para p[%d].botao_char[6]",i);fclose(errext);exit(1);
+		}
+		p[i].nome		  =(char*) malloc(30*sizeof(char)); sprintf(p[i].nome,"player %d",i+1);
+		if(!p[i].nome) {
+			fprintf(errext,"Falha ao alocar memoria para p[%d].nome",i);fclose(errext);exit(1);
+		}
+		p[i].time = 1;
 	}
 
 	//teclas_iniciais();
@@ -178,8 +227,8 @@ int main()
 	{
 		for(int i=0;i<5;i++)
 		{
-			fscanf(cmd,"%s %d\n",pessoas[j].botao_char[i],&pessoas[j].botao_char_int[i]);
-			//printf("%s %d\n",pessoas[j].botao_char[i],pessoas[j].botao_char_int[i]);
+			fscanf(cmd,"%s %d\n",p[j].botao_char[i],&p[j].botao_char_int[i]);
+			//printf("%s %d\n",p[j].botao_char[i],p[j].botao_char_int[i]);
 	    }
 	}
 	fclose(cmd);
@@ -188,8 +237,8 @@ int main()
 	puts("Inicializacoes completas!");
 
     /* Opera o jogo */
-	if(abremenu(win,chars,pessoas)==1) {
-		fase1(win,sair,puxa,tlep,cx,cy,fireball,redraw,map,cont,i,j,temneon,desx,desy,xneon,yneon,neons,chars,cor,frente,font5,fireballs,explox,exploy,explosion,pessoas);
+	if(abremenu(win,chars,p)==1) {
+		fase1(win,sair,puxa,tlep,cx,cy,fireball,redraw,map,cont,i,j,temneon,xneon,yneon,neons,chars,cor,frente,font5,fireballs,explox,exploy,explosion,p);
 	}
 	graphdeinit(win);
 	exit(1);

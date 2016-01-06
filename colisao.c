@@ -186,7 +186,7 @@ X X B B B B X X
     }*/
     switch(caso)
     {
-        case 0: // Tentou andar pra baixo.
+        case BAIXO: // Tentou andar pra baixo.
             for(i=0;i<4;i++) // Colisoes com o mapa.
                 if((map[x+2+i][y+8] =='0')||(map[x+2+i][y+8] == '3'))
                     return 1;
@@ -195,7 +195,7 @@ X X B B B B X X
                         return 1;
 
             break;
-        case 1: // Tentou andar pra esquerda.
+        case ESQ: // Tentou andar pra esquerda.
             for(i=0;i<4;i++)
                 if(map[x+1][y+4+i] == '3' || map[x+1][y+4+i] == '0')
                     return 1;
@@ -209,7 +209,7 @@ X X B B B B X X
                     return 1;
 
             break;
-        case 2: // Tentou andar pra cima.
+        case CIMA: // Tentou andar pra cima.
             for(i=0;i<4;i++)
                 if(map[x+2+i][y+3] == '3' || map[x+2+i][y+3] == '0')
                     return 1;
@@ -218,7 +218,7 @@ X X B B B B X X
                     return 1;
 
               break;
-        case 3: // Tentou andar pra direita.
+        case DIR: // Tentou andar pra direita.
             for(i=0;i<4;i++)
                 if(map[x+6][y+4+i] == '3' || map[x+6][y+4+i] == '0')
                     return 1;
