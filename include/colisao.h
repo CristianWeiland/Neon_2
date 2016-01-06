@@ -17,7 +17,7 @@
 //ALLEGRO_FONT *font5;
 
 typedef struct Pessoa {
-	int x,y,desx,desy,selx,sely,hp;
+	int x,y,desx,desy,selx,sely,hp; // Desx e desy escolhem o char na imagem; Selx e sely escolhem qual sprite do char (olhando pra cima,esq,...)
 	int xneon,yneon;
 	int andou_b,andou_c,andou_d,andou_e;
 	char *botao_b, *botao_c, *botao_d, *botao_e;
@@ -50,9 +50,9 @@ typedef struct Magia {
 
 char** le_matriz(FILE *fp);
 bool colisao(int,int,char**,int);
-int colidiu(char** map,int x,int y,int caso,int cx[],int cy[],int eu);
+int colidiu(char** map,int x,int y,int caso,int eu, Pessoa *p);
 int colisao_fireball(char** m,int x,int y,int d);
-int contato_proximo(int *cx,int *cy,int i,int j, Pessoa *p);
-int contato_proximo_direcionado(int x,int y,int *cx,int *cy,int i,int j,int d);
+int contato_proximo(int i,int j, Pessoa *p);
+int contato_proximo_direcionado(int x,int y,int i,int j,int d, Pessoa *p);
 
 #endif

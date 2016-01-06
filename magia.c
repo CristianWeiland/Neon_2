@@ -1,11 +1,11 @@
 #include "magia.h"
 
-void tira_neon(bool *puxa,bool *temneon,int *cx,int *cy, Pessoa *p)
+void tira_neon(bool *puxa,bool *temneon, Pessoa *p)
 {
 	int j;
 	for(int i=0;i<4;i++) {
 		if(puxa[i]) {
-			if(j = contato_proximo(cx,cy,i,j,p) != 5)
+			if(j = contato_proximo(i,j,p) != 5)
 				temneon[j] = false;
 		}
 	}
@@ -19,7 +19,7 @@ void desconta_energia(Pessoa *p, int njogadores)
 	    	p[i].energia -= 3;
 }
 
-void usa_magias(int *cx,int *cy,char **matriz,Magia (*fb)[2], Pessoa *p)
+void usa_magias(char **matriz,Magia (*fb)[2], Pessoa *p)
 {
 	int i,j,k;
 	for(i=0; i<4; ++i) {
@@ -29,7 +29,7 @@ void usa_magias(int *cx,int *cy,char **matriz,Magia (*fb)[2], Pessoa *p)
 			if(fb[i][j].d == -1)
 				fb[i][j].d = calcula_direcao(p,i); /* Numeros de direçao no colisao.h */
 			for(k=0; k<4; ++k) {
-				if(contato_proximo_direcionado(fb[i][j].x,fb[i][j].y,cx,cy,i,k,fb[i][j].d) == k) {
+				if(contato_proximo_direcionado(fb[i][j].x,fb[i][j].y,i,k,fb[i][j].d,p) == k) {
 					k = k; // Isso nao faz nada, tem que substituir por tirar vida de k.
 					fb[i][j].ativa = false;
 					fb[i][j].explosao = true;
@@ -100,8 +100,12 @@ int calcula_direcao(Pessoa *p,int i)
 	return -1; // Deu erro.
 }
 
-void flash(Pessoa *p,int *cx,int *cy,int *tlep,char **matriz)
+void flash(Pessoa *p,int *tlep,char **matriz)
 {
+	/* Por favor otimizar isso aqui. O for(j=0; j<19) tem 8 ifs dentro. Nao da pra puxar o if pra fora
+	   e escolher qual deles eh feito, e dai fazer as 19 iteracoes? Alem disso, se colidiu uma vez, colidiu
+	   pra sempre, entao pode dar um break/return (cuidar com diagonais dai!)
+	*/
 	int i,j;
 	for(i=0;i<4;i++) {
 		if(tlep[i] && p[i].energia >= 50) {
@@ -110,76 +114,76 @@ void flash(Pessoa *p,int *cx,int *cy,int *tlep,char **matriz)
 			/* Existem 8 casos (8 direçoes possiveis de andar, 4 sentidos e 4 diagonais). */
 			for(j=0;j<19;j++) {
 				if((p[i].andou_c) && !(p[i].andou_b) && !(p[i].andou_d) && !(p[i].andou_e)) { // Soh pra cima ( /\ ).
-					if(colidiu(matriz,cx[i]/4,cy[i]/4,2,cx,cy,i) == 1) {
-					    cy[i] += 4;
+					if(colidiu(matriz,p[i].x/4,p[i].y/4,2,i,p) == 1) {
+					    p[i].y += 4;
 		            }
-		            cy[i] -= 4;
+		            p[i].y -= 4;
 				}
 
 				if((p[i].andou_c) && (p[i].andou_d) && !(p[i].andou_b) && !(p[i].andou_e)) { // Pra cima e pra direita ( /\ + > ).
-					if(colidiu(matriz,cx[i]/4,cy[i]/4,2,cx,cy,i) == 1) {
-					    cy[i] += 4;
+					if(colidiu(matriz,p[i].x/4,p[i].y/4,2,i,p) == 1) {
+					    p[i].y += 4;
 		            }
-		            cy[i] -= 4;
-					if(colidiu(matriz,cx[i]/4,cy[i]/4,3,cx,cy,i) == 1) {
-					    cx[i] -= 4;
+		            p[i].y -= 4;
+					if(colidiu(matriz,p[i].x/4,p[i].y/4,3,i,p) == 1) {
+					    p[i].x -= 4;
 		            }
-		            cx[i] += 4;
+		            p[i].x += 4;
 				}
 
 				if((p[i].andou_d) && !(p[i].andou_b) && !(p[i].andou_c) && !(p[i].andou_e)) { // Soh pra direita ( > ).
-					if(colidiu(matriz,cx[i]/4,cy[i]/4,3,cx,cy,i) == 1)
+					if(colidiu(matriz,p[i].x/4,p[i].y/4,3,i,p) == 1)
 		            {
-					    cx[i] -= 4;
+					    p[i].x -= 4;
 		            }
-		            cx[i] += 4;
+		            p[i].x += 4;
 				}
 
 				if((p[i].andou_d) && (p[i].andou_b) && !(p[i].andou_c) && !(p[i].andou_e)) { // Pra direita e pra baixo ( > \/ ).
-					if(colidiu(matriz,cx[i]/4,cy[i]/4,3,cx,cy,i) == 1) {
-					    cx[i] -= 4;
+					if(colidiu(matriz,p[i].x/4,p[i].y/4,3,i,p) == 1) {
+					    p[i].x -= 4;
 		            }
-		            cx[i] += 4;
-					if(colidiu(matriz,cx[i]/4,cy[i]/4,0,cx,cy,i) == 1) {
-					    cy[i] -= 4;
+		            p[i].x += 4;
+					if(colidiu(matriz,p[i].x/4,p[i].y/4,0,i,p) == 1) {
+					    p[i].y -= 4;
 		            }
-		            cy[i] += 4;
+		            p[i].y += 4;
 				}
 
 				if((p[i].andou_b) && !(p[i].andou_c) && !(p[i].andou_d) && !(p[i].andou_e)) { // Soh pra baixo ( \/ ).
-					if(colidiu(matriz,cx[i]/4,cy[i]/4,0,cx,cy,i) == 1) {
-					    cy[i] -= 4;
+					if(colidiu(matriz,p[i].x/4,p[i].y/4,0,i,p) == 1) {
+					    p[i].y -= 4;
 		            }
-		            cy[i] += 4;
+		            p[i].y += 4;
 				}
 
 				if((p[i].andou_b) && (p[i].andou_e) && !(p[i].andou_c) && !(p[i].andou_d)) { // Pra baixo e pra esquerda. ( < \/ ).
-					if(colidiu(matriz,cx[i]/4,cy[i]/4,0,cx,cy,i) == 1) {
-					    cy[i] -= 4;
+					if(colidiu(matriz,p[i].x/4,p[i].y/4,0,i,p) == 1) {
+					    p[i].y -= 4;
 		            }
-		            cy[i] += 4;
-					if(colidiu(matriz,cx[i]/4,cy[i]/4,1,cx,cy,i) == 1) {
-					    cx[i] += 4;
+		            p[i].y += 4;
+					if(colidiu(matriz,p[i].x/4,p[i].y/4,1,i,p) == 1) {
+					    p[i].x += 4;
 		            }
-		            cx[i] -= 4;
+		            p[i].x -= 4;
 				}
 
 				if((p[i].andou_e) && !(p[i].andou_b) && !(p[i].andou_c) && !(p[i].andou_d)) { // Soh pra esquerda. ( < ).
-					if(colidiu(matriz,cx[i]/4,cy[i]/4,1,cx,cy,i) == 1) {
-					    cx[i] += 4;
+					if(colidiu(matriz,p[i].x/4,p[i].y/4,1,i,p) == 1) {
+					    p[i].x += 4;
 		            }
-		            cx[i] -= 4;
+		            p[i].x -= 4;
 				}
 
 				if((p[i].andou_e) && (p[i].andou_c) && !(p[i].andou_b) && !(p[i].andou_d)) { // Pra esquerda e pra cima. ( < /\ ).
-					if(colidiu(matriz,cx[i]/4,cy[i]/4,1,cx,cy,i) == 1) {
-					    cx[i] += 4;
+					if(colidiu(matriz,p[i].x/4,p[i].y/4,1,i,p) == 1) {
+					    p[i].x += 4;
 		            }
-		            cx[i] -= 4;
-					if(colidiu(matriz,cx[i]/4,cy[i]/4,2,cx,cy,i) == 1) {
-					    cy[i] += 4;
+		            p[i].x -= 4;
+					if(colidiu(matriz,p[i].x/4,p[i].y/4,2,i,p) == 1) {
+					    p[i].y += 4;
 		            }
-		            cy[i] -= 4;
+		            p[i].y -= 4;
 				}
 			}
 		}

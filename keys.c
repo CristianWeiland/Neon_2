@@ -62,7 +62,7 @@ void teclas_iniciais()
 }
 */
 
-void keyboard_down(int evkeyboardkeycode,bool *puxa,int *tlep,int *cx,int *cy,Magia (*fireball)[2], Pessoa *p)
+void keyboard_down(int evkeyboardkeycode,bool *puxa,int *tlep,Magia (*fireball)[2], Pessoa *p)
 {
 	for(int i=0; i<4; ++i) {
 		if(p[i].comp==0) {
@@ -99,15 +99,15 @@ void keyboard_down(int evkeyboardkeycode,bool *puxa,int *tlep,int *cx,int *cy,Ma
         case ALLEGRO_KEY_Z:
         	if(fireball[0][0].ativa == true && p[0].energia >= 50 && fireball[0][1].ativa == false) {
         		fireball[0][1].ativa = true;
-        		fireball[0][1].x = cx[0];
-        		fireball[0][1].y = cy[0];
+        		fireball[0][1].x = p[0].x;
+        		fireball[0][1].y = p[0].y;
         		fireball[0][1].dist = 0;
         		p[0].energia -= 50;
         	}
         	else if(p[0].energia >= 50) {
         		fireball[0][0].ativa = true;
-        		fireball[0][0].x = cx[0];
-        		fireball[0][0].y = cy[0];
+        		fireball[0][0].x = p[0].x;
+        		fireball[0][0].y = p[0].y;
         		fireball[0][0].dist = 0;
         		p[0].energia -= 50;
         	}

@@ -1,4 +1,4 @@
-void fase1(Window win,bool sair,bool *puxa,int *tlep,int *cx,int *cy,Magia fireball[4][2],bool redraw,ALLEGRO_BITMAP *map,int cont,int i,int j,bool *temneon,int xneon[4],int yneon[4],ALLEGRO_BITMAP **neons,ALLEGRO_BITMAP *chars,int cor[4],ALLEGRO_BITMAP *frente,ALLEGRO_FONT *font5,ALLEGRO_BITMAP **fireballs,int explox[4][2],int exploy[4][2],ALLEGRO_BITMAP* explosion, Pessoa *pessoas)
+void fase1(Window win,bool sair,bool *puxa,int *tlep,Magia fireball[4][2],bool redraw,ALLEGRO_BITMAP *map,int cont,int i,int j,bool *temneon,int xneon[4],int yneon[4],ALLEGRO_BITMAP **neons,ALLEGRO_BITMAP *chars,int cor[4],ALLEGRO_BITMAP *frente,ALLEGRO_FONT *font5,ALLEGRO_BITMAP **fireballs,int explox[4][2],int exploy[4][2],ALLEGRO_BITMAP* explosion, Pessoa *p)
 {
 	char** matriz;
 	ALLEGRO_BITMAP *tiles;
@@ -6,8 +6,8 @@ void fase1(Window win,bool sair,bool *puxa,int *tlep,int *cx,int *cy,Magia fireb
 	FILE *mapa,*errext;
 
 	for(i=0; i<njogadores; ++i) {
-		cx[i] = 100 + 50*i;
-		cy[i] = 200;
+		p[i].x = 100 + 50*i;
+		p[i].y = 200;
 	}
 
 	errext = fopen("err.txt","w");
@@ -54,9 +54,9 @@ void fase1(Window win,bool sair,bool *puxa,int *tlep,int *cx,int *cy,Magia fireb
 			graphdeinit(win);
 			exit(1);
 		} else if(ev.type == ALLEGRO_EVENT_KEY_DOWN) { // Detecta se apertaram alguma tecla.
-			keyboard_down(ev.keyboard.keycode,puxa,tlep,cx,cy,fireball,pessoas);
+			keyboard_down(ev.keyboard.keycode,puxa,tlep,fireball,p);
         } else if(ev.type == ALLEGRO_EVENT_KEY_UP) { // Detecta se soltaram alguma tecla.
-			keyboard_up(ev.keyboard.keycode,puxa,&sair,pessoas);
+			keyboard_up(ev.keyboard.keycode,puxa,&sair,p);
         } else if (al_is_event_queue_empty(win.event_queue)) { // Nao ocorreu nenhum evento.
             /* Imprime */
 			redraw = false; // Fica true quando Timer acaba
@@ -65,14 +65,14 @@ void fase1(Window win,bool sair,bool *puxa,int *tlep,int *cx,int *cy,Magia fireb
 
 			cont++;
 			for(i=0; i<4; i++) // Faz parar de correr quando a energia acaba.
-				if(pessoas[i].energia <= 0)
-					pessoas[i].correr = 1;
+				if(p[i].energia <= 0)
+					p[i].correr = 1;
 
 			//usa_magias(andou_b,andou_c,andou_d,andou_e,cx,cy,fireball)
 
-			flash(pessoas,cx,cy,tlep,matriz);
+			flash(p,tlep,matriz);
 
-			usa_magias(cx,cy,matriz,fireball,pessoas);
+			usa_magias(matriz,fireball,p);
 
 			for(int h=0;h<4;h++) {
 				for(j=0;j<2;j++) {
@@ -98,22 +98,22 @@ void fase1(Window win,bool sair,bool *puxa,int *tlep,int *cx,int *cy,Magia fireb
 				}
 			}
 
-			tira_neon(puxa,temneon,cx,cy,pessoas);
+			tira_neon(puxa,temneon,p);
 
 			for(i=0;i<4;i++) // Pra nao contar como se estivesse sempre tentando puxar.
 				puxa[i] = false;
 
-            imprime_4_chars_for(cont,cx,cy,xneon,yneon,matriz,neons,chars,cor,temneon,njogadores,pessoas);
+            imprime_4_chars_for(cont,xneon,yneon,matriz,neons,chars,cor,temneon,njogadores,p);
 
-            IA(pessoas);
+            IA(p);
 
             if(cont==CONT)
           		cont=0;
           	for(i=0;i<4;i++)
-          		if(pessoas[i].energia < 100)
-					pessoas[i].energia++;
+          		if(p[i].energia < 100)
+					p[i].energia++;
 
-            desconta_energia(pessoas,njogadores);
+            desconta_energia(p,njogadores);
 
             al_draw_bitmap(frente,0,0,0);
 
@@ -121,7 +121,7 @@ void fase1(Window win,bool sair,bool *puxa,int *tlep,int *cx,int *cy,Magia fireb
             al_draw_text(font5,VERMELHO,20,620,0,   "Vida    :               Vida    :             Vida    :               Vida    :");
             al_draw_text(font5,AZUL,20,640,0,       "Energia :               Energia :             Energia :               Energia :");
             for(i=0;i<4;i++)
-            	for(j=0; j< (pessoas[i].energia/5);j++ )
+            	for(j=0; j< (p[i].energia/5);j++ )
             		al_draw_text(font5,AMARELO,100+200*i+4*j,640,0,"| ");
             //al_draw_textf(font5,VERDE_LIMAO,20,450,0,"%d",fireball[i][j].explosao);
 			al_flip_display();

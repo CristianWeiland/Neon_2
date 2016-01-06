@@ -14,15 +14,15 @@ inline void imprime_char(int cx,int cy,int a,int b,int selx,int sely,ALLEGRO_BIT
     return ;
 }
 
-int imprime_4_chars_for(int cont,int cx[],int cy[],int xneon[],int yneon[],char** matriz,ALLEGRO_BITMAP** neons,ALLEGRO_BITMAP *chars,int *cor,bool *temneon,int njogadores, Pessoa *p)
+int imprime_4_chars_for(int cont,int xneon[],int yneon[],char** matriz,ALLEGRO_BITMAP** neons,ALLEGRO_BITMAP *chars,int *cor,bool *temneon,int njogadores, Pessoa *p)
 {
 	//puts("Imprimindo chars...");
 	int i,j,selecx,selecy,char4;
     //ALLEGRO_FONT *font=al_load_font("Fonts/fixed_font.tga", 0, 0);
     /* Calcula a posiçao dos neons */
 	for(i=0; i<njogadores; i++) {
-	 	xneon[i]=cx[i]+8;
-	 	yneon[i]=cy[i]+8;
+	 	xneon[i] = p[i].x+8;
+	 	yneon[i] = p[i].y+8;
 	}
 	/* Sobre a retirada dos neons. A ordem de prioridade de pra onde o char tah olhando eh: Cima > Direita > Esquerda > Baixo. */
 
@@ -40,8 +40,8 @@ int imprime_4_chars_for(int cont,int cx[],int cy[],int xneon[],int yneon[],char*
 
 	/* Tentativa de transformar tudo em um for */
 	for(i=0; i<njogadores; i++) {
-	 	p[i].x = cx[i];
-	 	p[i].y = cy[i];
+	 	//p[i].x = cx[i];
+	 	//p[i].y = cy[i];
 	 	/* Algumas adaptaçoes pra fazer funcionar com um For. */
 	 	if(i == 0 || i == 2)
 	 		selecx = 0;
@@ -58,45 +58,45 @@ int imprime_4_chars_for(int cont,int cx[],int cy[],int xneon[],int yneon[],char*
 	 	//printf("Imprimindo char %d\n", i);
 
 	 	if((p[i].andou_b) == 1) {
-	 		if(colidiu(matriz,cx[i]/4,cy[i]/4,BAIXO,cx,cy,i) == 1)
+	 		if(colidiu(matriz,p[i].x/4,p[i].y/4,BAIXO,i,p) == 1)
 	 		{
-	 			cy[i] -= 4 * p[i].correr;
+	 			p[i].y -= 4 * p[i].correr;
 	 		}
-		 	cy[i] += 4 * p[i].correr;
+		 	p[i].y += 4 * p[i].correr;
 	        p[i].sely = 0 + 128*char4;
 			if(!(p[i].andou_e) && !(p[i].andou_d) && !(p[i].andou_c))
-				imprime_char(cx[i],cy[i],p[i].desx,p[i].desy,p[i].selx,p[i].sely,chars);
+				imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,chars);
 	    }
 	    //printf("Primeiro if completo! ");
 	    if((p[i].andou_e) == 1) {
 	 		//puts("Entrei no primeiro if!");
-	        if(colidiu(matriz,cx[i]/4,cy[i]/4,ESQ,cx,cy,i) == 1) { // O 1(um) tah ali porque eh o caso de andar pra esquerda.
-				cx[i] += 4 * p[i].correr; // Como colidiu, ele "anda" pra trás, o que faz ele nao se mexer.
+	        if(colidiu(matriz,p[i].x/4,p[i].y/4,ESQ,i,p) == 1) { // O 1(um) tah ali porque eh o caso de andar pra esquerda.
+				p[i].x += 4 * p[i].correr; // Como colidiu, ele "anda" pra trás, o que faz ele nao se mexer.
 	        }
-	        cx[i] -= 4 * p[i].correr;
+	        p[i].x -= 4 * p[i].correr;
 	        p[i].sely = 32 + 128*char4;
 	        if(!(p[i].andou_d) && !(p[i].andou_c))
-	         	//imprime_char(cx[i],cy[i],p[i].desx,p[i].desy,desx[i],desy[i],chars);
-	         	imprime_char(cx[i],cy[i],p[i].desx,p[i].desy,p[i].selx,p[i].sely,chars);
+	         	//imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,desx[i],desy[i],chars);
+	         	imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,chars);
 	    }
 	    //printf("Segundo if completo! ");
 	    if((p[i].andou_d) == 1) {
-	        if(colidiu(matriz,cx[i]/4,cy[i]/4,DIR,cx,cy,i) == 1) { // O 3(tres) tah ali porque eh o caso de andar pra direita.
-				cx[i] -= 4 * p[i].correr; // Como colidiu, ele "anda" pra trás, o que faz ele nao se mexer.
+	        if(colidiu(matriz,p[i].x/4,p[i].y/4,DIR,i,p) == 1) { // O 3(tres) tah ali porque eh o caso de andar pra direita.
+				p[i].x -= 4 * p[i].correr; // Como colidiu, ele "anda" pra trás, o que faz ele nao se mexer.
 			}
-	        cx[i] += 4 * p[i].correr;
+	        p[i].x += 4 * p[i].correr;
 	        p[i].sely = 64 + 128*char4;
 	        if(!(p[i].andou_c))
-	            imprime_char(cx[i],cy[i],p[i].desx,p[i].desy,p[i].selx,p[i].sely,chars);
+	            imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,chars);
 	    }
 	    //printf("Terceiro if completo! ");
 	    if((p[i].andou_c) == 1) {
-	        if(colidiu(matriz,cx[i]/4,cy[i]/4,CIMA,cx,cy,i) == 1) { // O 2(dois) tah ali porque eh o caso de andar pra cima.
-		        cy[i] += 4 * p[i].correr; // Como colidiu, ele "anda" pra trás, o que faz ele nao se mexer.
+	        if(colidiu(matriz,p[i].x/4,p[i].y/4,CIMA,i,p) == 1) { // O 2(dois) tah ali porque eh o caso de andar pra cima.
+		        p[i].y += 4 * p[i].correr; // Como colidiu, ele "anda" pra trás, o que faz ele nao se mexer.
 	        }
-	        cy[i] -= 4 * p[i].correr;
+	        p[i].y -= 4 * p[i].correr;
 	        p[i].sely = 96 + 128*char4;
-	        imprime_char(cx[i],cy[i],p[i].desx,p[i].desy,p[i].selx,p[i].sely,chars);
+	        imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,chars);
 	        if((p[i].andou_d) == 1 && (p[i].andou_e)==0)
 		 	    imprime_neon(xneon[i]+4*p[i].correr,yneon[i],neons[i],temneon[i]);
 	        else if((p[i].andou_e) == 1 && (p[i].andou_d)==0)
@@ -106,7 +106,7 @@ int imprime_4_chars_for(int cont,int cx[],int cy[],int xneon[],int yneon[],char*
 	    }
 	    //printf("Quarto if completo!\n");
 	    if(!(p[i].andou_b) && !(p[i].andou_c) && !(p[i].andou_d) && !(p[i].andou_e)) { // Nao andou.
-			imprime_char(cx[i],cy[i],p[i].desx,p[i].desy,32,96,chars);
+			imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,32,96,chars);
 			imprime_neon(xneon[i],yneon[i],neons[p[i].time-1],temneon[i]);
 	    }
 	}

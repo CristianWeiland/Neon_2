@@ -11,15 +11,14 @@
 int main()
 {
     /* Coisas relacionadas aos chars */
-    int cont=0,i,j,x,y;;
-    int *cx,*cy;/*[4]={200,250,300,350},cy[4]={400,400,400,400},desx[4]={64,64,64,64},desy[4]={0,0,0,0}; */// cx = coordenada X, vetor de 4 pra incluir ateh 4 chars.
+    int cont=0,i,j,x,y;
     /* Coisas relacioinadas ao mapa */
 	int mapsize,xtile[TAM],ytile[TAM],xcorte[TAM],ycorte[TAM];
     /* Coisas relacionadas aos neons */
 	int xneon[NJOGADORES],yneon[NJOGADORES],direcao=0,cor[4]={1,2,3,4};
 	/* Coisas relacionadas as tecnicas/magias */
 	int tlep[4]={0,0,0,0},explox[4][2],exploy[4][2];
-
+	/* Pessoas, que contem quase todos os dados (ver colisao.h) */
 	Pessoa *p;
 
 	p = (Pessoa *) malloc(sizeof(Pessoa) * NJOGADORES);
@@ -33,13 +32,6 @@ int main()
 	}
 	//desx = (int*) malloc (NJOGADORES * sizeof(int)); --> Virou p.selx!
 	//desy = (int*) malloc (NJOGADORES * sizeof(int)); --> Virou p.sely!
-	cx = (int*) malloc (NJOGADORES * sizeof(int));
-	cy = (int*) malloc (NJOGADORES * sizeof(int));
-
-	//for(i=0;i<NJOGADORES;i++) {
-		//desy[i]=0;
-		//desx[i]=64;
-	//}
 
 	Window win;
     FILE *mapa,*errext; // errext = error exit (ou saida de erros)
@@ -215,18 +207,16 @@ int main()
 
 	//teclas_iniciais();
 
-	for(int i=0;i<4;i++)
-		for(int j=0;j<2;j++)
+	for(i=0;i<4;i++)
+		for(j=0;j<2;j++)
 			fireball[i][j].explosao = 0;
 
 	ALLEGRO_FONT *font5;
 	font5 = al_load_font("Fonts/fixed_font.tga", 0, 0);
 
 	FILE *cmd = fopen("Comandos/cmd.txt","r");
-	for(int j=0;j<4;j++)
-	{
-		for(int i=0;i<5;i++)
-		{
+	for(j=0; j<4; ++j) {
+		for(i=0; i<NJOGADORES; ++i) {
 			fscanf(cmd,"%s %d\n",p[j].botao_char[i],&p[j].botao_char_int[i]);
 			//printf("%s %d\n",p[j].botao_char[i],p[j].botao_char_int[i]);
 	    }
@@ -238,7 +228,7 @@ int main()
 
     /* Opera o jogo */
 	if(abremenu(win,chars,p)==1) {
-		fase1(win,sair,puxa,tlep,cx,cy,fireball,redraw,map,cont,i,j,temneon,xneon,yneon,neons,chars,cor,frente,font5,fireballs,explox,exploy,explosion,p);
+		fase1(win,sair,puxa,tlep,fireball,redraw,map,cont,i,j,temneon,xneon,yneon,neons,chars,cor,frente,font5,fireballs,explox,exploy,explosion,p);
 	}
 	graphdeinit(win);
 	exit(1);
