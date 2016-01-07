@@ -14,7 +14,7 @@ inline void imprime_char(int cx,int cy,int a,int b,int selx,int sely,Sprite s)
     return ;
 }
 
-int imprime_4_chars_for(int cont,char** matriz,ALLEGRO_BITMAP** neons,int *cor,bool *temneon,int njogadores,Pessoa *p,Sprite s)
+int imprime_4_chars_for(int cont,char** matriz,int *cor,bool *temneon,int njogadores,Pessoa *p,Sprite s)
 {
 	//puts("Imprimindo chars...");
 	int i,j,selecx,selecy,char4;
@@ -98,16 +98,16 @@ int imprime_4_chars_for(int cont,char** matriz,ALLEGRO_BITMAP** neons,int *cor,b
 	        p[i].sely = 96 + 128*char4;
 	        imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,s);
 	        if((p[i].andou_d) == 1 && (p[i].andou_e)==0)
-		 	    imprime_neon(p[i].xneon+4*p[i].correr,p[i].yneon,neons[i],temneon[i]);
+		 	    imprime_neon(p[i].xneon+4*p[i].correr,p[i].yneon,s.neons[i],temneon[i]);
 	        else if((p[i].andou_e) == 1 && (p[i].andou_d)==0)
-			    imprime_neon(p[i].xneon-4*p[i].correr,p[i].yneon,neons[i],temneon[i]);
+			    imprime_neon(p[i].xneon-4*p[i].correr,p[i].yneon,s.neons[i],temneon[i]);
 			else
-	        	imprime_neon(p[i].xneon,p[i].yneon,neons[i],temneon[i]);
+	        	imprime_neon(p[i].xneon,p[i].yneon,s.neons[i],temneon[i]);
 	    }
 	    //printf("Quarto if completo!\n");
 	    if(!(p[i].andou_b) && !(p[i].andou_c) && !(p[i].andou_d) && !(p[i].andou_e)) { // Nao andou.
 			imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,32,96,s);
-			imprime_neon(p[i].xneon,p[i].yneon,neons[p[i].time-1],temneon[i]);
+			imprime_neon(p[i].xneon,p[i].yneon,s.neons[p[i].time-1],temneon[i]);
 	    }
 	}
 	//puts("Chars impressos!");

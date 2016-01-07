@@ -67,28 +67,18 @@ void keyboard_down(int evkeyboardkeycode,bool *puxa,int *tlep,Magia (*fireball)[
 	for(int i=0; i<4; ++i) {
 		if(p[i].comp==0) {
 			if(evkeyboardkeycode == p[i].botao_char_int[0]) {
-				//andou_c[i] = 1;
 				p[i].andou_c = 1;
-			}
-			if(evkeyboardkeycode == p[i].botao_char_int[1]) {
-				//andou_b[i] = 1;
+			} else if(evkeyboardkeycode == p[i].botao_char_int[1]) {
 				p[i].andou_b = 1;
-			}
-			if(evkeyboardkeycode == p[i].botao_char_int[2]) {
-				//andou_d[i] = 1;
+			} else if(evkeyboardkeycode == p[i].botao_char_int[2]) {
 				p[i].andou_d = 1;
-			}
-			if(evkeyboardkeycode == p[i].botao_char_int[3]) {
-				//andou_e[i] = 1;
+			} else if(evkeyboardkeycode == p[i].botao_char_int[3]) {
 				p[i].andou_e = 1;
-			}
-			if(evkeyboardkeycode == p[i].botao_char_int[4]) {
+			} else if(evkeyboardkeycode == p[i].botao_char_int[4]) {
 				p[i].correr = 2;
-			}
-			if(evkeyboardkeycode == p[i].botao_char_int[5]) {
+			} else if(evkeyboardkeycode == p[i].botao_char_int[5]) {
 				puxa[i] = true;
-			}
-			if(evkeyboardkeycode == p[i].botao_char_int[6]) {
+			} else if(evkeyboardkeycode == p[i].botao_char_int[6]) {
 				tlep[i] = 1;
 			}
 		}
@@ -121,22 +111,14 @@ void keyboard_up(int evkeyboardkeycode,bool *puxa,bool *sair, Pessoa *p)
 	for(int i=0; i<4; ++i) {
 		if(p[i].comp == 0) {
 			if(evkeyboardkeycode == p[i].botao_char_int[0]) {
-				//andou_c[i] = 0;
 				p[i].andou_c = 0;
-			}
-			if(evkeyboardkeycode == p[i].botao_char_int[1]) {
-				//andou_b[i] = 0;
+			} else if(evkeyboardkeycode == p[i].botao_char_int[1]) {
 				p[i].andou_b = 0;
-			}
-			if(evkeyboardkeycode == p[i].botao_char_int[2]) {
-				//andou_d[i] = 0;
+			} else if(evkeyboardkeycode == p[i].botao_char_int[2]) {
 				p[i].andou_d = 0;
-			}
-			if(evkeyboardkeycode == p[i].botao_char_int[3]) {
-				//andou_e[i] = 0;
+			} else if(evkeyboardkeycode == p[i].botao_char_int[3]) {
 				p[i].andou_e = 0;
-			}
-			if(evkeyboardkeycode == p[i].botao_char_int[4]) {
+			} else if(evkeyboardkeycode == p[i].botao_char_int[4]) {
 				p[i].correr = 1;
 			}
 		}

@@ -11,14 +11,14 @@
 int main()
 {
     /* Coisas relacionadas aos chars */
-    int cont=0,i,j,x,y;
+    int i,j,x,y;
     /* Coisas relacioinadas ao mapa */
 	int mapsize,xtile[TAM],ytile[TAM],xcorte[TAM],ycorte[TAM];
     /* Coisas relacionadas aos neons */
 	//int xneon[NJOGADORES],yneon[NJOGADORES],direcao=0,cor[4]={1,2,3,4};
-	int direcao=0,cor[4]={1,2,3,4};
+	int direcao = 0;
 	/* Coisas relacionadas as tecnicas/magias */
-	int tlep[4]={0,0,0,0},explox[4][2],exploy[4][2];
+	int explox[4][2],exploy[4][2];
 	/* Pessoas, que contem quase todos os dados (ver colisao.h) */
 	Pessoa *p;
 
@@ -36,7 +36,6 @@ int main()
 
 	Window win;
     FILE *mapa,*errext; // errext = error exit (ou saida de erros)
-    bool sair = false,redraw = false,puxa[4]={false,false,false,false},temneon[4]={true,true,true,true};
     /* Magias */
 	Magia fireball[4][2];
 
@@ -44,7 +43,6 @@ int main()
     //ALLEGRO_FONT *font;
 	//font5 = al_load_font("Fonts/fixed_font.tga", 0, 0);
     //ALLEGRO_BITMAP *tiles,*chars,*map,*frente,**neons,**fireballs,*explosion;
-	ALLEGRO_BITMAP *map,*frente,**neons,**fireballs,*explosion;
 	Sprite s;
 
 	/* Inicializacao dos arquivos. */
@@ -62,11 +60,11 @@ int main()
     //	fprintf(errext,"Falha ao abrir a imagem tiles.");fclose(errext);exit(1); }
 
     /* Inicializacao dos Bitmaps */
-	neons = (ALLEGRO_BITMAP**) malloc(4*sizeof(ALLEGRO_BITMAP*));
-	fireballs = (ALLEGRO_BITMAP**) malloc(4*sizeof(ALLEGRO_BITMAP*));
+	s.neons = (ALLEGRO_BITMAP**) malloc(4*sizeof(ALLEGRO_BITMAP*));
+	s.fireballs = (ALLEGRO_BITMAP**) malloc(4*sizeof(ALLEGRO_BITMAP*));
 
     s.chars = al_load_bitmap("Imgs/chars.bmp"); // Obs: Cada imagem de cada char eh 32x32
-    if(!s.chars) {
+    if(!(s.chars)) {
     	fprintf(errext,"Falha ao abrir a imagem chars.");
     	fclose(errext);
     	exit(1);
@@ -79,65 +77,65 @@ int main()
 	   	exit(1);
 	}
 
-    explosion = al_load_bitmap("Imgs/Explo.bmp");
-    if(!explosion) {
+    s.explosion = al_load_bitmap("Imgs/Explo.bmp");
+    if(!(s.explosion)) {
     	fprintf(errext,"Falha ao abrir a imagem explo.");
     	fclose(errext);
     	exit(1);
     }
 
-	neons[0] = al_load_bitmap("Imgs/neonamarelo.bmp");
-    if(!neons[0]) {
-    	fprintf(errext,"Falha ao abrir a imagem neons[0].");
+	s.neons[0] = al_load_bitmap("Imgs/neonamarelo.bmp");
+    if(!s.neons[0]) {
+    	fprintf(errext,"Falha ao abrir a imagem s.neons[0].");
     	fclose(errext);
     	exit(1);
     }
 
-	neons[1] = al_load_bitmap("Imgs/neonazul.bmp");
-    if(!neons[1]) {
-    	fprintf(errext,"Falha ao abrir a imagem neons[1].");
+	s.neons[1] = al_load_bitmap("Imgs/neonazul.bmp");
+    if(!s.neons[1]) {
+    	fprintf(errext,"Falha ao abrir a imagem s.neons[1].");
     	fclose(errext);
     	exit(1);
     }
 
-	neons[2] = al_load_bitmap("Imgs/neonverde.bmp");
-    if(!neons[2]) {
-    	fprintf(errext,"Falha ao abrir a imagem neons[2].");
+	s.neons[2] = al_load_bitmap("Imgs/neonverde.bmp");
+    if(!s.neons[2]) {
+    	fprintf(errext,"Falha ao abrir a imagem s.neons[2].");
     	fclose(errext);
     	exit(1);
     }
 
-	neons[3] = al_load_bitmap("Imgs/neonvermelho.bmp");
-    if(!neons[3]) {
-    	fprintf(errext,"Falha ao abrir a imagem neons[3].");
+	s.neons[3] = al_load_bitmap("Imgs/neonvermelho.bmp");
+    if(!s.neons[3]) {
+    	fprintf(errext,"Falha ao abrir a imagem s.neons[3].");
     	fclose(errext);
     	exit(1);
     }
 
-	fireballs[0] = al_load_bitmap("Imgs/Fireballc.bmp");
-    if(!fireballs[0]) {
-    	fprintf(errext,"Falha ao abrir a imagem fireballs[0].");
+	s.fireballs[0] = al_load_bitmap("Imgs/Fireballc.bmp");
+    if(!s.fireballs[0]) {
+    	fprintf(errext,"Falha ao abrir a imagem s.fireballs[0].");
     	fclose(errext);
     	exit(1);
     }
 
-	fireballs[1] = al_load_bitmap("Imgs/Fireballd.bmp");
-    if(!fireballs[1]) {
-    	fprintf(errext,"Falha ao abrir a imagem fireballs[1].");
+	s.fireballs[1] = al_load_bitmap("Imgs/Fireballd.bmp");
+    if(!s.fireballs[1]) {
+    	fprintf(errext,"Falha ao abrir a imagem s.fireballs[1].");
     	fclose(errext);
     	exit(1);
     }
 
-	fireballs[2] = al_load_bitmap("Imgs/Fireballe.bmp");
-    if(!fireballs[2]) {
-    	fprintf(errext,"Falha ao abrir a imagem fireballs[2].");
+	s.fireballs[2] = al_load_bitmap("Imgs/Fireballe.bmp");
+    if(!s.fireballs[2]) {
+    	fprintf(errext,"Falha ao abrir a imagem s.fireballs[2].");
     	fclose(errext);
     	exit(1);
     }
 
-	fireballs[3] = al_load_bitmap("Imgs/Fireballb.bmp");
-    if(!fireballs[3]) {
-    	fprintf(errext,"Falha ao abrir a imagem fireballs[3].");
+	s.fireballs[3] = al_load_bitmap("Imgs/Fireballb.bmp");
+    if(!s.fireballs[3]) {
+    	fprintf(errext,"Falha ao abrir a imagem s.fireballs[3].");
     	fclose(errext);
     	exit(1);
     }
@@ -157,22 +155,14 @@ int main()
 
 	al_convert_mask_to_alpha(s.tiles,al_map_rgb(255,0,255));
 	al_convert_mask_to_alpha(s.chars,al_map_rgb(255,0,255));
-	al_convert_mask_to_alpha(explosion,al_map_rgb(255,0,255));
+	al_convert_mask_to_alpha(s.explosion,al_map_rgb(255,0,255));
 	for(i=0;i<4;i++) {
-		al_convert_mask_to_alpha(neons[i],al_map_rgb(255,0,255));
-		al_convert_mask_to_alpha(fireballs[i],al_map_rgb(255,0,255));
+		al_convert_mask_to_alpha(s.neons[i],al_map_rgb(255,0,255));
+		al_convert_mask_to_alpha(s.fireballs[i],al_map_rgb(255,0,255));
 	}
-	/* Carrega o mapa */
-
-    //fscanf(mapa,"%i\n",&mapsize);
-    //for(int i=0;i<mapsize+1;i++)
-     //   fscanf(mapa,"%i %i %i %i\n",&xtile[i],&ytile[i],&xcorte[i],&ycorte[i]);
-
 
     al_register_event_source(win.event_queue, al_get_display_event_source(win.display));
-
-    //matriz = le_matriz(fopen("matriz.txt","r"));
-
+/* Tentativa de otimizar - se o proximo 'for' nao for equivalente a esse, deu errado!
 	for(i=0; i<4; ++i) {
         p[i].botao_char[0]=(char*) malloc(30*sizeof(char)); sprintf(p[i].botao_char[0],"%c",98);
 		if(!p[i].botao_char[0]) {
@@ -208,6 +198,32 @@ int main()
 		}
 		p[i].time = 1;
 	}
+*/
+	for(i=0; i<4; ++i) {
+		for(j=0; j<7; ++j) {
+			p[i].botao_char[j] = (char*) malloc(30 * sizeof(char));
+			if(!(p[i].botao_char[j])) {
+				fprintf(errext,"Falha ao alocar memoria para p[%d].botao_char[%d]",i,j);
+				fclose(errext);
+				exit(1);
+			}
+		}
+		sprintf(p[i].botao_char[0],"%c",98);
+		sprintf(p[i].botao_char[1],"%c",99);
+		sprintf(p[i].botao_char[2],"%c",100);
+		sprintf(p[i].botao_char[3],"%c",101);
+		sprintf(p[0].botao_char[4],"%c",97);
+		sprintf(p[0].botao_char[5],"%c",97);
+		sprintf(p[0].botao_char[6],"%c",97);
+		p[i].nome = (char*) malloc(30*sizeof(char));
+		if(!p[i].nome) {
+			fprintf(errext,"Falha ao alocar memoria para p[%d].nome",i);
+			fclose(errext);
+			exit(1);
+		}
+		sprintf(p[i].nome,"player %d",i+1);
+		p[i].time = 1;
+	}
 
 	//teclas_iniciais();
 
@@ -228,11 +244,9 @@ int main()
 	fclose(cmd);
 	fclose(errext);
 
-	puts("Inicializacoes completas!");
-
     /* Opera o jogo */
 	if(abremenu(win,p,s)==1) {
-		fase1(win,sair,puxa,tlep,fireball,redraw,map,cont,i,j,temneon,neons,cor,frente,font5,fireballs,explox,exploy,explosion,p,s);
+		fase1(win,fireball,font5,explox,exploy,p,s);
 	}
 	graphdeinit(win);
 	exit(1);
