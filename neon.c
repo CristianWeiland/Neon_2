@@ -15,7 +15,8 @@ int main()
     /* Coisas relacioinadas ao mapa */
 	int mapsize,xtile[TAM],ytile[TAM],xcorte[TAM],ycorte[TAM];
     /* Coisas relacionadas aos neons */
-	int xneon[NJOGADORES],yneon[NJOGADORES],direcao=0,cor[4]={1,2,3,4};
+	//int xneon[NJOGADORES],yneon[NJOGADORES],direcao=0,cor[4]={1,2,3,4};
+	int direcao=0,cor[4]={1,2,3,4};
 	/* Coisas relacionadas as tecnicas/magias */
 	int tlep[4]={0,0,0,0},explox[4][2],exploy[4][2];
 	/* Pessoas, que contem quase todos os dados (ver colisao.h) */
@@ -228,7 +229,7 @@ int main()
 
     /* Opera o jogo */
 	if(abremenu(win,chars,p)==1) {
-		fase1(win,sair,puxa,tlep,fireball,redraw,map,cont,i,j,temneon,xneon,yneon,neons,chars,cor,frente,font5,fireballs,explox,exploy,explosion,p);
+		fase1(win,sair,puxa,tlep,fireball,redraw,map,cont,i,j,temneon,neons,chars,cor,frente,font5,fireballs,explox,exploy,explosion,p);
 	}
 	graphdeinit(win);
 	exit(1);

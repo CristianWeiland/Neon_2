@@ -14,15 +14,15 @@ inline void imprime_char(int cx,int cy,int a,int b,int selx,int sely,ALLEGRO_BIT
     return ;
 }
 
-int imprime_4_chars_for(int cont,int xneon[],int yneon[],char** matriz,ALLEGRO_BITMAP** neons,ALLEGRO_BITMAP *chars,int *cor,bool *temneon,int njogadores, Pessoa *p)
+int imprime_4_chars_for(int cont,char** matriz,ALLEGRO_BITMAP** neons,ALLEGRO_BITMAP *chars,int *cor,bool *temneon,int njogadores, Pessoa *p)
 {
 	//puts("Imprimindo chars...");
 	int i,j,selecx,selecy,char4;
     //ALLEGRO_FONT *font=al_load_font("Fonts/fixed_font.tga", 0, 0);
     /* Calcula a posiçao dos neons */
 	for(i=0; i<njogadores; i++) {
-	 	xneon[i] = p[i].x+8;
-	 	yneon[i] = p[i].y+8;
+	 	p[i].xneon = p[i].x+8;
+	 	p[i].yneon = p[i].y+8;
 	}
 	/* Sobre a retirada dos neons. A ordem de prioridade de pra onde o char tah olhando eh: Cima > Direita > Esquerda > Baixo. */
 
@@ -98,16 +98,16 @@ int imprime_4_chars_for(int cont,int xneon[],int yneon[],char** matriz,ALLEGRO_B
 	        p[i].sely = 96 + 128*char4;
 	        imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,chars);
 	        if((p[i].andou_d) == 1 && (p[i].andou_e)==0)
-		 	    imprime_neon(xneon[i]+4*p[i].correr,yneon[i],neons[i],temneon[i]);
+		 	    imprime_neon(p[i].xneon+4*p[i].correr,p[i].yneon,neons[i],temneon[i]);
 	        else if((p[i].andou_e) == 1 && (p[i].andou_d)==0)
-			    imprime_neon(xneon[i]-4*p[i].correr,yneon[i],neons[i],temneon[i]);
+			    imprime_neon(p[i].xneon-4*p[i].correr,p[i].yneon,neons[i],temneon[i]);
 			else
-	        	imprime_neon(xneon[i],yneon[i],neons[i],temneon[i]);
+	        	imprime_neon(p[i].xneon,p[i].yneon,neons[i],temneon[i]);
 	    }
 	    //printf("Quarto if completo!\n");
 	    if(!(p[i].andou_b) && !(p[i].andou_c) && !(p[i].andou_d) && !(p[i].andou_e)) { // Nao andou.
 			imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,32,96,chars);
-			imprime_neon(xneon[i],yneon[i],neons[p[i].time-1],temneon[i]);
+			imprime_neon(p[i].xneon,p[i].yneon,neons[p[i].time-1],temneon[i]);
 	    }
 	}
 	//puts("Chars impressos!");
