@@ -43,7 +43,9 @@ int main()
 	/* Declaracao de estrtuturas do Allegro. Obs: Neons vai ser um vetor de imagens, na ordem amarelo - azul - verde - vermelho. */
     //ALLEGRO_FONT *font;
 	//font5 = al_load_font("Fonts/fixed_font.tga", 0, 0);
-    ALLEGRO_BITMAP *tiles,*chars,*map,*frente,**neons,**fireballs,*explosion;
+    //ALLEGRO_BITMAP *tiles,*chars,*map,*frente,**neons,**fireballs,*explosion;
+	ALLEGRO_BITMAP *map,*frente,**neons,**fireballs,*explosion;
+	Sprite s;
 
 	/* Inicializacao dos arquivos. */
 	errext = fopen("lago.txt","w"); fclose(errext); errext = fopen("err.txt","w");
@@ -58,23 +60,24 @@ int main()
     //font = al_load_font("Fonts/fixed_font.tga", 0, 0);
     //if(!font) {
     //	fprintf(errext,"Falha ao abrir a imagem tiles.");fclose(errext);exit(1); }
+
     /* Inicializacao dos Bitmaps */
 	neons = (ALLEGRO_BITMAP**) malloc(4*sizeof(ALLEGRO_BITMAP*));
 	fireballs = (ALLEGRO_BITMAP**) malloc(4*sizeof(ALLEGRO_BITMAP*));
 
-    tiles = al_load_bitmap("Imgs/tiles.bmp");
-    if(!tiles) {
-	   	fprintf(errext,"Falha ao abrir a imagem tiles.");
-	   	fclose(errext);
-	   	exit(1);
-	}
-
-    chars = al_load_bitmap("Imgs/chars.bmp"); // Obs: Cada imagem de cada char eh 32x32
-    if(!chars) {
+    s.chars = al_load_bitmap("Imgs/chars.bmp"); // Obs: Cada imagem de cada char eh 32x32
+    if(!s.chars) {
     	fprintf(errext,"Falha ao abrir a imagem chars.");
     	fclose(errext);
     	exit(1);
     }
+
+    s.tiles = al_load_bitmap("Imgs/tiles.bmp");
+    if(!(s.tiles)) {
+	   	fprintf(errext,"Falha ao abrir a imagem tiles.");
+	   	fclose(errext);
+	   	exit(1);
+	}
 
     explosion = al_load_bitmap("Imgs/Explo.bmp");
     if(!explosion) {
@@ -152,8 +155,8 @@ int main()
 		}
 	}
 
-	//al_convert_mask_to_alpha(tiles,al_map_rgb(255,0,255));
-	al_convert_mask_to_alpha(chars,al_map_rgb(255,0,255));
+	al_convert_mask_to_alpha(s.tiles,al_map_rgb(255,0,255));
+	al_convert_mask_to_alpha(s.chars,al_map_rgb(255,0,255));
 	al_convert_mask_to_alpha(explosion,al_map_rgb(255,0,255));
 	for(i=0;i<4;i++) {
 		al_convert_mask_to_alpha(neons[i],al_map_rgb(255,0,255));
@@ -228,8 +231,8 @@ int main()
 	puts("Inicializacoes completas!");
 
     /* Opera o jogo */
-	if(abremenu(win,chars,p)==1) {
-		fase1(win,sair,puxa,tlep,fireball,redraw,map,cont,i,j,temneon,neons,chars,cor,frente,font5,fireballs,explox,exploy,explosion,p);
+	if(abremenu(win,p,s)==1) {
+		fase1(win,sair,puxa,tlep,fireball,redraw,map,cont,i,j,temneon,neons,cor,frente,font5,fireballs,explox,exploy,explosion,p,s);
 	}
 	graphdeinit(win);
 	exit(1);

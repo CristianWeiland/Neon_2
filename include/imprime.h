@@ -21,6 +21,6 @@
 
 //extern Pessoa pessoa[4];
 
-void imprime_char(int cx,int cy,int a,int b,int selx,int sely,ALLEGRO_BITMAP *chars);
+void imprime_char(int cx,int cy,int a,int b,int selx,int sely,Sprite s);
 void imprime_neon(int x,int y,ALLEGRO_BITMAP* neon,bool temneon);
-int imprime_4_chars_for(int cont,char** matriz,ALLEGRO_BITMAP** neons,ALLEGRO_BITMAP *chars,int *cor,bool *temneon,int njogadores, Pessoa *p);
+int imprime_4_chars_for(int cont,char** matriz,ALLEGRO_BITMAP** neons,int *cor,bool *temneon,int njogadores,Pessoa *p,Sprite s);

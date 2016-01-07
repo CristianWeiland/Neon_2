@@ -36,6 +36,15 @@ typedef struct Magia {
 				  * 0 = cima; 1 = direita; 2 = esquerda; 3 = baixo; */
 } Magia;
 
+typedef struct Sprite {
+	//*tiles,*chars,*map,*frente,**neons,**fireballs,*explosion;
+	ALLEGRO_BITMAP *tiles;
+	//ALLEGRO_BITMAP
+	//ALLEGRO_BITMAP
+	//ALLEGRO_BITMAP
+	//ALLEGRO_BITMAP
+	ALLEGRO_BITMAP *chars;
+} Sprite;
 
 #define CONT 2
 #define NEONAMARELO 1

@@ -1,7 +1,6 @@
-void fase1(Window win,bool sair,bool *puxa,int *tlep,Magia fireball[4][2],bool redraw,ALLEGRO_BITMAP *map,int cont,int i,int j,bool *temneon,ALLEGRO_BITMAP **neons,ALLEGRO_BITMAP *chars,int cor[4],ALLEGRO_BITMAP *frente,ALLEGRO_FONT *font5,ALLEGRO_BITMAP **fireballs,int explox[4][2],int exploy[4][2],ALLEGRO_BITMAP* explosion, Pessoa *p)
+void fase1(Window win,bool sair,bool *puxa,int *tlep,Magia fireball[4][2],bool redraw,ALLEGRO_BITMAP *map,int cont,int i,int j,bool *temneon,ALLEGRO_BITMAP **neons,int cor[4],ALLEGRO_BITMAP *frente,ALLEGRO_FONT *font5,ALLEGRO_BITMAP **fireballs,int explox[4][2],int exploy[4][2],ALLEGRO_BITMAP* explosion,Pessoa *p,Sprite s)
 {
 	char** matriz;
-	ALLEGRO_BITMAP *tiles;
 	int mapsize,xtile[TAM],ytile[TAM],xcorte[TAM],ycorte[TAM], njogadores = 4;
 	FILE *mapa,*errext;
 
@@ -19,21 +18,12 @@ void fase1(Window win,bool sair,bool *puxa,int *tlep,Magia fireball[4][2],bool r
     	exit(1);
     }
 
-    tiles = al_load_bitmap("Imgs/tiles.bmp");
-    if(!tiles) {
-	   	fprintf(errext,"Falha ao abrir a imagem tiles.");
-	   	fclose(errext);
-	   	exit(1);
-	}
-
     fscanf(mapa,"%i\n",&mapsize);
     for(i=0;i<mapsize+1;i++)
         fscanf(mapa,"%i %i %i %i\n",&xtile[i],&ytile[i],&xcorte[i],&ycorte[i]);
 
-	al_convert_mask_to_alpha(tiles,al_map_rgb(255,0,255));
-
-    map = cria_mapa(win,mapa,mapsize,xtile,ytile,xcorte,ycorte,tiles);
-    frente = cria_frente(win,mapa,mapsize,xcorte,ycorte,xtile,ytile,tiles); // Obs: Confundi dentro da funçao, entao to passando invertido aqui. EH PROPOSITAL!
+    map = cria_mapa(win,mapa,mapsize,xtile,ytile,xcorte,ycorte,s);
+    frente = cria_frente(win,mapa,mapsize,xcorte,ycorte,xtile,ytile,s); // Obs: Confundi dentro da funçao, entao to passando invertido aqui. EH PROPOSITAL!
 
 	matriz = le_matriz(fopen("Fases/F1/matriz.txt","r"));
 
@@ -103,7 +93,7 @@ void fase1(Window win,bool sair,bool *puxa,int *tlep,Magia fireball[4][2],bool r
 			for(i=0;i<4;i++) // Pra nao contar como se estivesse sempre tentando puxar.
 				puxa[i] = false;
 
-            imprime_4_chars_for(cont,matriz,neons,chars,cor,temneon,njogadores,p);
+            imprime_4_chars_for(cont,matriz,neons,cor,temneon,njogadores,p,s);
 
             IA(p);
 
