@@ -79,7 +79,7 @@ int botao(char *texto,int x,int y,ALLEGRO_EVENT ev)
     al_destroy_font(font2);
 }
 
-void opcoes(Window win){
+void opcoes(Window win, Pessoa *p){
 	int tipo_botao=-1,jogador_opcoes=0;
 	ALLEGRO_FONT *font2 = al_load_font("Fonts/fixed_font.tga",0,0);
 	bool sair = false,muda_botao=false;
@@ -109,9 +109,9 @@ void opcoes(Window win){
 			}
 		} else {
 	        if(muda_botao==true) {
-	            sprintf(pessoa[jogador_opcoes].botao_char[tipo_botao],"%c",editor_text(ev,win));
-	            //sscanf(pessoa[jogador_opcoes].botao_char[tipo_botao],"%d",&pessoa[jogador_opcoes].botao_char_int[tipo_botao]);
-	            pessoa[jogador_opcoes].botao_char_int[tipo_botao]=auxilia_botao;
+	            sprintf(p[jogador_opcoes].botao_char[tipo_botao],"%c",editor_text(ev,win));
+	            //sscanf(p[jogador_opcoes].botao_char[tipo_botao],"%d",&p[jogador_opcoes].botao_char_int[tipo_botao]);
+	            p[jogador_opcoes].botao_char_int[tipo_botao]=auxilia_botao;
 				//muda_botao=false;
 	        }
 	    	if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
@@ -134,9 +134,9 @@ void opcoes(Window win){
 
 			for(int i=0;i<5;++i)
 	        {
-	            if(botao(pessoa[jogador_opcoes].botao_char[i],(640/3)+150,(2*i+1)*10+50,ev)==1)
+	            if(botao(p[jogador_opcoes].botao_char[i],(640/3)+150,(2*i+1)*10+50,ev)==1)
 	            {
-	                sprintf(edit,"%c",pessoa[jogador_opcoes].botao_char[i]);
+	                sprintf(edit,"%c",p[jogador_opcoes].botao_char[i]);
 	                tipo_botao=i;
 	                palavra=0;
 	                muda_botao=true;
@@ -164,15 +164,15 @@ void opcoes(Window win){
 	{
 		for(int i=0;i<5;i++)
 		{
-			fprintf(cmd,"%c  %d \n",pessoa[j].botao_char[i],pessoa[j].botao_char_int[i]);
+			fprintf(cmd,"%c  %d \n",p[j].botao_char[i],p[j].botao_char_int[i]);
 	    }
 	}*/
 	for(int j=0;j<4;j++)
 	{
 		for(int i=0;i<5;i++)
 		{
-			fprintf(cmd,"%s %d\n",pessoa[j].botao_char[i],pessoa[j].botao_char_int[i]);
-			printf("%s %d\n",pessoa[j].botao_char[i],pessoa[j].botao_char_int[i]);
+			fprintf(cmd,"%s %d\n",p[j].botao_char[i],p[j].botao_char_int[i]);
+			printf("%s %d\n",p[j].botao_char[i],p[j].botao_char_int[i]);
 	    }
 	}
 	fclose(cmd);
@@ -180,7 +180,7 @@ void opcoes(Window win){
 	return;
 }
 
-int abremenu(Window win,ALLEGRO_BITMAP *chars)
+int abremenu(Window win,Pessoa *p,Sprite s)
 {
 	ALLEGRO_FONT *font2 = al_load_font("Fonts/fixed_font.tga",0,0);
 
@@ -198,7 +198,7 @@ int abremenu(Window win,ALLEGRO_BITMAP *chars)
 	opcoesmenu[4] = (char*)"Sair";
 
 	bool sair = false;
-	pessoa[0].ataque=(char*) malloc(30*sizeof(char));
+	p[0].ataque=(char*) malloc(30*sizeof(char));
 	for(int i=0;i<255;i++){
 		edit[i]=0;
 	}
@@ -230,74 +230,74 @@ int abremenu(Window win,ALLEGRO_BITMAP *chars)
 		} else {
 			for(i=0;i<4;i++)
 			{
-				if(botao(pessoa[i].nome,20,30+40*i,ev)==1)
+				if(botao(p[i].nome,20,30+40*i,ev)==1)
 				{
-					if(pessoa[i].comp==0)
+					if(p[i].comp==0)
 					{
-						pessoa[i].comp = 1;
-						sprintf(pessoa[i].nome,"Comp");
+						p[i].comp = 1;
+						sprintf(p[i].nome,"Comp");
 					}
-					else if(pessoa[i].comp==1)
+					else if(p[i].comp==1)
 					{
-						pessoa[i].comp = 0;
-						sprintf(pessoa[i].nome,"Player %d",i+1);
+						p[i].comp = 0;
+						sprintf(p[i].nome,"Player %d",i+1);
 					}
 				}
-				imprime_char(120,30+i*50,32,0,pessoa[i].desx,pessoa[i].desy,chars);
+				imprime_char(120,30+i*50,32,0,p[i].desx,p[i].desy,s);
 	    		if(botao((char*)"<",110,30+i*50,ev)==1)
 	    		{
-	    			pessoa[i].desx-=96;
-	    			if((pessoa[i].desx<-32) && (pessoa[i].desy >120))
+	    			p[i].desx-=96;
+	    			if((p[i].desx<-32) && (p[i].desy >120))
 					{
-	                   pessoa[i].desx=96;
-	                    pessoa[i].desy-=128;
+	                   p[i].desx=96;
+	                    p[i].desy-=128;
 	                }
-	                if((pessoa[i].desx<-32) && (pessoa[i].desy <120))
+	                if((p[i].desx<-32) && (p[i].desy <120))
 					{
-	                   pessoa[i].desx=96;
-	                    pessoa[i].desy=128;
+	                   p[i].desx=96;
+	                    p[i].desy=128;
 	                }
 	            }
 	            if((botao((char*)">",160,30+i*50,ev)==1))
 	    		{
-	    			pessoa[i].desx+=96;
-	    			if((pessoa[i].desx>130) && (pessoa[i].desy <120))
+	    			p[i].desx+=96;
+	    			if((p[i].desx>130) && (p[i].desy <120))
 					{
-	                    pessoa[i].desx=0;
-	                    pessoa[i].desy+=128;
+	                    p[i].desx=0;
+	                    p[i].desy+=128;
 	                }
-	                if((pessoa[i].desx>130) && (pessoa[i].desy >120))
+	                if((p[i].desx>130) && (p[i].desy >120))
 					{
-	                    pessoa[i].desx=0;
-	                    pessoa[i].desy=0;
+	                    p[i].desx=0;
+	                    p[i].desy=0;
 	                }
 	        	}
-	        	if(pessoa[i].time==2)
+	        	if(p[i].time==2)
 	        	{
 	        		cor_neon[i]=PIXEL(0,0,255);
-	        	}else if(pessoa[i].time==3)
+	        	}else if(p[i].time==3)
 	        	{
 	        		cor_neon[i]=PIXEL(0,128,0);
-	        	}else if(pessoa[i].time==4)
+	        	}else if(p[i].time==4)
 	        	{
 	        		cor_neon[i]=PIXEL(255,0,0);
-	        	}else if(pessoa[i].time==1)
+	        	}else if(p[i].time==1)
 	        	{
 	        		cor_neon[i]=PIXEL(255,255,0);
 	        	}
-	        	al_draw_textf(font2,cor_neon[i],180,30+i*50,0,"%i",pessoa[i].time);
+	        	al_draw_textf(font2,cor_neon[i],180,30+i*50,0,"%i",p[i].time);
 	    		if(botao((char*)"<",170,30+i*50,ev)==1)
 	    		{
-	    			if((pessoa[i].time>1) && (pessoa[i].time<=4))
+	    			if((p[i].time>1) && (p[i].time<=4))
 					{
-	                   pessoa[i].time--;
+	                   p[i].time--;
 	                }
 	            }
 	            if((botao((char*)">",190,30+i*50,ev)==1))
 	    		{
-	    			if((pessoa[i].time>=1) && (pessoa[i].time<4))
+	    			if((p[i].time>=1) && (p[i].time<4))
 					{
-	                   pessoa[i].time++;
+	                   p[i].time++;
 	                }
 	        	}
 			}
@@ -318,14 +318,14 @@ int abremenu(Window win,ALLEGRO_BITMAP *chars)
 	        }
 	        if(botao(opcoesmenu[3],345,90,ev)==1)
 			{
-	            opcoes(win);
+	            opcoes(win,p);
 	        }
 	        if(botao(opcoesmenu[4],345,110,ev)==1)
 			{
 				sair = true;
 				return 0;
 	        }
-			al_draw_textf(font2,VERDE_LIMAO,20,660,0,"x = %d ",pessoa[0].desx);
+			al_draw_textf(font2,VERDE_LIMAO,20,660,0,"x = %d ",p[0].desx);
 			al_draw_textf(font2,VERDE_LIMAO,300,0,0,"JOGO do Neon %d      %d",ev.mouse.x,mousex); // Essas impressoes explicam porque o while n funciona.
 
 			al_flip_display();

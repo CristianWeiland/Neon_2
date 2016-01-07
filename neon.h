@@ -15,6 +15,9 @@
 #include "keys.h"
 #include "menu.h"
 #include "grafico.h"
+#include "ia.h"
+#include "magia.h"
+#include "map.h"
 
-Pessoa pessoa[4];
+//Pessoa pessoa[4];
 //Magia fireball[4][2]; // 4 chars, cada um pode usar ateh 2 fireballs simultaneas.
