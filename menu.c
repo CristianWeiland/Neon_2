@@ -180,7 +180,7 @@ void opcoes(Window win, Pessoa *p){
 	return;
 }
 
-int abremenu(Window win,ALLEGRO_BITMAP *chars, Pessoa *p)
+int abremenu(Window win,Pessoa *p,Sprite s)
 {
 	ALLEGRO_FONT *font2 = al_load_font("Fonts/fixed_font.tga",0,0);
 
@@ -243,7 +243,7 @@ int abremenu(Window win,ALLEGRO_BITMAP *chars, Pessoa *p)
 						sprintf(p[i].nome,"Player %d",i+1);
 					}
 				}
-				imprime_char(120,30+i*50,32,0,p[i].desx,p[i].desy,chars);
+				imprime_char(120,30+i*50,32,0,p[i].desx,p[i].desy,s);
 	    		if(botao((char*)"<",110,30+i*50,ev)==1)
 	    		{
 	    			p[i].desx-=96;

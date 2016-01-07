@@ -7,14 +7,14 @@ inline void imprime_neon(int x,int y,ALLEGRO_BITMAP* neon,bool temneon)
 	return ;
 }
 
-inline void imprime_char(int cx,int cy,int a,int b,int selx,int sely,ALLEGRO_BITMAP *chars)
+inline void imprime_char(int cx,int cy,int a,int b,int selx,int sely,Sprite s)
 {    // cx e cy indicam qual a posicao do char no mapa. A e B indicam qual o "boneco" deve ser imprimido pela funçao. Selx e Sely indicam qual
      // imagem do "boneco" (ex: mexendo uma perna, ou de costas, etc.)
-    al_draw_bitmap_region(chars,a+selx,b+sely,32,32,cx,cy,0);   // Desenha char 1. | Obs.: Ver 96 como 32x3 e 128 como 32x4.
+    al_draw_bitmap_region(s.chars,a+selx,b+sely,32,32,cx,cy,0);   // Desenha char 1. | Obs.: Ver 96 como 32x3 e 128 como 32x4.
     return ;
 }
 
-int imprime_4_chars_for(int cont,char** matriz,ALLEGRO_BITMAP** neons,ALLEGRO_BITMAP *chars,int *cor,bool *temneon,int njogadores, Pessoa *p)
+int imprime_4_chars_for(int cont,char** matriz,int *cor,bool *temneon,int njogadores,Pessoa *p,Sprite s)
 {
 	//puts("Imprimindo chars...");
 	int i,j,selecx,selecy,char4;
@@ -65,7 +65,7 @@ int imprime_4_chars_for(int cont,char** matriz,ALLEGRO_BITMAP** neons,ALLEGRO_BI
 		 	p[i].y += 4 * p[i].correr;
 	        p[i].sely = 0 + 128*char4;
 			if(!(p[i].andou_e) && !(p[i].andou_d) && !(p[i].andou_c))
-				imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,chars);
+				imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,s);
 	    }
 	    //printf("Primeiro if completo! ");
 	    if((p[i].andou_e) == 1) {
@@ -77,7 +77,7 @@ int imprime_4_chars_for(int cont,char** matriz,ALLEGRO_BITMAP** neons,ALLEGRO_BI
 	        p[i].sely = 32 + 128*char4;
 	        if(!(p[i].andou_d) && !(p[i].andou_c))
 	         	//imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,desx[i],desy[i],chars);
-	         	imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,chars);
+	         	imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,s);
 	    }
 	    //printf("Segundo if completo! ");
 	    if((p[i].andou_d) == 1) {
@@ -87,7 +87,7 @@ int imprime_4_chars_for(int cont,char** matriz,ALLEGRO_BITMAP** neons,ALLEGRO_BI
 	        p[i].x += 4 * p[i].correr;
 	        p[i].sely = 64 + 128*char4;
 	        if(!(p[i].andou_c))
-	            imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,chars);
+	            imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,s);
 	    }
 	    //printf("Terceiro if completo! ");
 	    if((p[i].andou_c) == 1) {
@@ -96,18 +96,18 @@ int imprime_4_chars_for(int cont,char** matriz,ALLEGRO_BITMAP** neons,ALLEGRO_BI
 	        }
 	        p[i].y -= 4 * p[i].correr;
 	        p[i].sely = 96 + 128*char4;
-	        imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,chars);
+	        imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,s);
 	        if((p[i].andou_d) == 1 && (p[i].andou_e)==0)
-		 	    imprime_neon(p[i].xneon+4*p[i].correr,p[i].yneon,neons[i],temneon[i]);
+		 	    imprime_neon(p[i].xneon+4*p[i].correr,p[i].yneon,s.neons[i],temneon[i]);
 	        else if((p[i].andou_e) == 1 && (p[i].andou_d)==0)
-			    imprime_neon(p[i].xneon-4*p[i].correr,p[i].yneon,neons[i],temneon[i]);
+			    imprime_neon(p[i].xneon-4*p[i].correr,p[i].yneon,s.neons[i],temneon[i]);
 			else
-	        	imprime_neon(p[i].xneon,p[i].yneon,neons[i],temneon[i]);
+	        	imprime_neon(p[i].xneon,p[i].yneon,s.neons[i],temneon[i]);
 	    }
 	    //printf("Quarto if completo!\n");
 	    if(!(p[i].andou_b) && !(p[i].andou_c) && !(p[i].andou_d) && !(p[i].andou_e)) { // Nao andou.
-			imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,32,96,chars);
-			imprime_neon(p[i].xneon,p[i].yneon,neons[p[i].time-1],temneon[i]);
+			imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,32,96,s);
+			imprime_neon(p[i].xneon,p[i].yneon,s.neons[p[i].time-1],temneon[i]);
 	    }
 	}
 	//puts("Chars impressos!");

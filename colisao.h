@@ -36,6 +36,15 @@ typedef struct Magia {
 				  * 0 = cima; 1 = direita; 2 = esquerda; 3 = baixo; */
 } Magia;
 
+typedef struct Sprite {
+	//*tiles,*chars,*map,*frente,**neons,**fireballs,*explosion;
+	ALLEGRO_BITMAP *tiles; // Usado pra coisas dos mapas.
+	ALLEGRO_BITMAP **fireballs, *explosion; // Sprite da bola de fogo (cima, dir, esq, baixo) + explosao da fireball.
+	ALLEGRO_BITMAP **neons; // Todos os neons (4 cores, na sequencia: amarelo - azul - verde - vermelho)
+	//ALLEGRO_BITMAP
+	//ALLEGRO_BITMAP
+	ALLEGRO_BITMAP *chars;
+} Sprite;
 
 #define CONT 2
 #define NEONAMARELO 1
