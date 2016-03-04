@@ -1,3 +1,13 @@
+#ifndef ALLEGRO
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_native_dialog.h>
+#include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_ttf.h>
+#endif
+
 void fase1(Window win,Magia fireball[4][2],ALLEGRO_FONT *font5,int explox[4][2],int exploy[4][2],Pessoa *p,Sprite s)
 {
 	char** matriz;
