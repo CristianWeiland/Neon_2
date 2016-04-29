@@ -233,7 +233,7 @@ int main()
 
 	ALLEGRO_FONT *font5;
 	font5 = al_load_font("Fonts/fixed_font.tga", 0, 0);
-
+/*
 	FILE *cmd = fopen("Comandos/cmd.txt","r");
 	for(j=0; j<4; ++j) {
 		for(i=0; i<NJOGADORES; ++i) {
@@ -242,6 +242,7 @@ int main()
 	    }
 	}
 	fclose(cmd);
+*/
 	fclose(errext);
 
     /* Opera o jogo */
