@@ -13,7 +13,7 @@ void fase1(Window win,Magia fireball[4][2],ALLEGRO_FONT *font5,int explox[4][2],
 	char** matriz;
 	int mapsize,xtile[TAM],ytile[TAM],xcorte[TAM],ycorte[TAM], njogadores = 4;
 	FILE *mapa,*errext,*auxFile;
-	ALLEGRO_BITMAP *map, *frente;
+	ALLEGRO_BITMAP *map;//, *frente;
 	int i,j,k,cont = 0,*tlep,*cor;
 	bool sair = false, *puxa, *temneon;
 
@@ -45,7 +45,7 @@ void fase1(Window win,Magia fireball[4][2],ALLEGRO_FONT *font5,int explox[4][2],
         fscanf(mapa,"%i %i %i %i\n",&xtile[i],&ytile[i],&xcorte[i],&ycorte[i]);
 
     map = cria_mapa(win,mapa,mapsize,xtile,ytile,xcorte,ycorte,s);
-    frente = cria_frente(win,mapa,mapsize,xcorte,ycorte,xtile,ytile,s); // Obs: Confundi dentro da funçao, entao to passando invertido aqui. EH PROPOSITAL!
+    s.frente = cria_frente(win,mapa,mapsize,xcorte,ycorte,xtile,ytile,s); // Obs: Confundi dentro da funçao, entao to passando invertido aqui. EH PROPOSITAL!
 
     auxFile = fopen("Fases/f1/matriz.txt","r");
     if(!auxFile) {
@@ -118,10 +118,6 @@ void fase1(Window win,Magia fireball[4][2],ALLEGRO_FONT *font5,int explox[4][2],
 			for(i=0;i<4;i++) // Pra nao contar como se estivesse sempre tentando puxar.
 				puxa[i] = false;
 
-            imprime_4_chars_for(cont,matriz,cor,temneon,njogadores,p,s);
-
-            IA(p);
-
             if(cont == CONT)
           		cont = 0;
           	for(i=0; i<njogadores; ++i)
@@ -130,14 +126,18 @@ void fase1(Window win,Magia fireball[4][2],ALLEGRO_FONT *font5,int explox[4][2],
 
             desconta_energia(p,njogadores);
 
-            al_draw_bitmap(frente,0,0,0);
+            imprime_4_chars_for(cont,matriz,cor,temneon,njogadores,p,s);
 
-            al_draw_text(font5,VERDE_LIMAO,20,600,0,"Player 1:               Player 2:             Player 3:               Player 4:");
+            IA(p);
+
+            //al_draw_bitmap(frente,0,0,0);
+
+            /*al_draw_text(font5,VERDE_LIMAO,20,600,0,"Player 1:               Player 2:             Player 3:               Player 4:");
             al_draw_text(font5,VERMELHO,20,620,0,   "Vida    :               Vida    :             Vida    :               Vida    :");
             al_draw_text(font5,AZUL,20,640,0,       "Energia :               Energia :             Energia :               Energia :");
             for(i=0; i<njogadores; ++i)
             	for(j=0; j< (p[i].energia/5);j++ )
-            		al_draw_text(font5,AMARELO,100+200*i+4*j,640,0,"| ");
+            		al_draw_text(font5,AMARELO,100+200*i+4*j,640,0,"| ");*/
             //al_draw_textf(font5,VERDE_LIMAO,20,450,0,"%d",fireball[i][j].explosao);
 			al_flip_display();
 		}
