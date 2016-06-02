@@ -1,11 +1,21 @@
+#ifndef ALLEGRO
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_native_dialog.h>
+#include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_ttf.h>
+#endif
+
 void fase1(Window win,Magia fireball[4][2],ALLEGRO_FONT *font5,int explox[4][2],int exploy[4][2],Pessoa *p,Sprite s)
 {
 	char** matriz;
 	int mapsize,xtile[TAM],ytile[TAM],xcorte[TAM],ycorte[TAM], njogadores = 4;
-	FILE *mapa,*errext;
+	FILE *mapa,*errext,*auxFile;
 	ALLEGRO_BITMAP *map, *frente;
 	int i,j,k,cont = 0,*tlep,*cor;
-	bool redraw = false, sair = false, *puxa, *temneon;
+	bool sair = false, *puxa, *temneon;
 
 	puxa = (bool *) malloc(sizeof(bool) * njogadores);
 	temneon = (bool *) malloc(sizeof(bool) * njogadores);
@@ -23,9 +33,9 @@ void fase1(Window win,Magia fireball[4][2],ALLEGRO_FONT *font5,int explox[4][2],
 
 	errext = fopen("err.txt","w");
 
-	mapa = fopen("Fases/F1/mapa.txt","r");
+	mapa = fopen("Fases/f1/map.txt","r");
     if(!mapa) {
-    	fprintf(errext,"Erro ao abrir mapa.txt.");
+    	fprintf(errext,"Erro ao abrir mapa.txt.\n");
     	fclose(errext);
     	exit(1);
     }
@@ -37,7 +47,13 @@ void fase1(Window win,Magia fireball[4][2],ALLEGRO_FONT *font5,int explox[4][2],
     map = cria_mapa(win,mapa,mapsize,xtile,ytile,xcorte,ycorte,s);
     frente = cria_frente(win,mapa,mapsize,xcorte,ycorte,xtile,ytile,s); // Obs: Confundi dentro da funçao, entao to passando invertido aqui. EH PROPOSITAL!
 
-	matriz = le_matriz(fopen("Fases/F1/matriz.txt","r"));
+    auxFile = fopen("Fases/f1/matriz.txt","r");
+    if(!auxFile) {
+    	fprintf(errext,"Erro ao abrir matriz.txt.\n");
+    	fclose(errext);
+    	exit(1);
+    }
+	matriz = le_matriz(auxFile);
 
 	al_flush_event_queue(win.event_queue);
 	while (!sair) /* Pra sair, botoes como Esc, o X ali em cima direita,... transformam a variavel sair de false pra true, dai sai do while. */
@@ -59,9 +75,11 @@ void fase1(Window win,Magia fireball[4][2],ALLEGRO_FONT *font5,int explox[4][2],
 			keyboard_up(ev.keyboard.keycode,puxa,&sair,p);
         } else if (al_is_event_queue_empty(win.event_queue)) { // Nao ocorreu nenhum evento.
             /* Imprime */
-			redraw = false; // Fica true quando Timer acaba
 			al_clear_to_color(PRETO);
 			al_draw_bitmap(map,0,0,0);
+
+			//for(i=0; i<4; i++)
+	        //	imprime_pessoa(p[i]);
 
 			cont++;
 			for(i=0; i<njogadores; i++) // Faz parar de correr quando a energia acaba.

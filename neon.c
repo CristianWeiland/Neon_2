@@ -3,6 +3,15 @@
 #include "Fase1.h"
 #include <math.h>
 
+/*
+Problemas:
+1- Bola de fogo não explode.
+2- Barra de HP / Energia.
+3- Cor do neon quando parado.
+4- Neon se movendo quando colide.
+5- Personagens todos iguais.
+*/
+
 #define CONT 2
 #define CONTEXPLO 9
 #define TAM 1000
@@ -31,6 +40,10 @@ int main()
 		p[i].energia = 100;
 		p[i].andou_b = p[i].andou_c = p[i].andou_d = p[i].andou_e = 0;
 	}
+	p[0].time = 1;
+	p[1].time = 2;
+	p[2].time = 3;
+	p[3].time = 4;
 	//desx = (int*) malloc (NJOGADORES * sizeof(int)); --> Virou p.selx!
 	//desy = (int*) malloc (NJOGADORES * sizeof(int)); --> Virou p.sely!
 
@@ -199,6 +212,7 @@ int main()
 		p[i].time = 1;
 	}
 */
+	// Comentei isso sem saber exatamente porque. Pode dar ruim.
 	for(i=0; i<4; ++i) {
 		for(j=0; j<7; ++j) {
 			p[i].botao_char[j] = (char*) malloc(30 * sizeof(char));
@@ -225,7 +239,7 @@ int main()
 		p[i].time = 1;
 	}
 
-	//teclas_iniciais();
+	teclas_iniciais(p);
 
 	for(i=0;i<4;i++)
 		for(j=0;j<2;j++)
@@ -233,15 +247,20 @@ int main()
 
 	ALLEGRO_FONT *font5;
 	font5 = al_load_font("Fonts/fixed_font.tga", 0, 0);
-
-	FILE *cmd = fopen("Comandos/cmd.txt","r");
-	for(j=0; j<4; ++j) {
-		for(i=0; i<NJOGADORES; ++i) {
-			fscanf(cmd,"%s %d\n",p[j].botao_char[i],&p[j].botao_char_int[i]);
-			//printf("%s %d\n",p[j].botao_char[i],p[j].botao_char_int[i]);
-	    }
+/*
+	if( access( Comandos/cmd.txt, F_OK ) != -1 ) {
+		FILE *cmd = fopen("Comandos/cmd.txt","r");
+		for(j=0; j<4; ++j) {
+			for(i=0; i<NJOGADORES; ++i) {
+				fscanf(cmd,"%s %d\n",p[j].botao_char[i],&p[j].botao_char_int[i]);
+				//printf("%s %d\n",p[j].botao_char[i],p[j].botao_char_int[i]);
+		    }
+		}
+		fclose(cmd);
+	} else {
+	    teclas_iniciais(p);
 	}
-	fclose(cmd);
+*/
 	fclose(errext);
 
     /* Opera o jogo */

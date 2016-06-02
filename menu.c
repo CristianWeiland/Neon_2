@@ -1,7 +1,8 @@
 #include "menu.h"
 
+Window Win;
 int mousex=0, mousey=0;
-
+/*
 char edit[255];
 int palavra=0,auxilia_botao=0;//diz qual botao sera usado no codigo allegro
 
@@ -167,7 +168,7 @@ void opcoes(Window win, Pessoa *p){
 			fprintf(cmd,"%c  %d \n",p[j].botao_char[i],p[j].botao_char_int[i]);
 	    }
 	}*/
-	for(int j=0;j<4;j++)
+/*	for(int j=0;j<4;j++)
 	{
 		for(int i=0;i<5;i++)
 		{
@@ -179,35 +180,141 @@ void opcoes(Window win, Pessoa *p){
 	al_destroy_font(font2);
 	return;
 }
+*/
+void imprime_menu(Botoes *botoes, int n_botoes, int mx, int my) {
+/* Imprimir o menu eh uma operacao cara. Soh imprima quando ele mudar:
+o jogador passar o mouse por cima de um botao ou clicar em um botao. */
+
+    int i;
+
+    al_clear_to_color(PRETO);
+
+    //printf("Imprimindo com mx = %d e my = %d\n",mx, my);
+
+    for(i=0; i<n_botoes; ++i) {
+        botoes[i].imprime(botoes[i].hovering(mx,my));
+    }
+
+    al_flip_display();
+}
+
+int comeca_jogo() {
+    return 1;
+}
+
+int fecha_jogo(void) {
+    graphdeinit(Win);
+    exit(0);
+    return 0;
+}
 
 int abremenu(Window win,Pessoa *p,Sprite s)
 {
 	ALLEGRO_FONT *font2 = al_load_font("Fonts/fixed_font.tga",0,0);
+    Win = win;
 
 	char** opcoesmenu;
 	int i,tamanho;
 	ALLEGRO_COLOR cor_neon[4];
 
-	opcoesmenu = (char**)malloc(sizeof(char)*10);
-	for(i=0;i<10;i++)
+	opcoesmenu = (char**)malloc(sizeof(char*)*10);
+	for(i=0; i<10; ++i)
 		opcoesmenu[i] = (char*)malloc(sizeof(char)*20);
-	opcoesmenu[0] = (char*)"Campanha";
-	opcoesmenu[1] = (char*)"Load";
-	opcoesmenu[2] = (char*)"Multiplayer";
-	opcoesmenu[3] = (char*)"Comandos";
-	opcoesmenu[4] = (char*)"Sair";
+
+	strcpy(opcoesmenu[0], "Campanha");
+	strcpy(opcoesmenu[0], "Load");
+	strcpy(opcoesmenu[0], "Multiplayer");
+	strcpy(opcoesmenu[0], "Comandos");
+	strcpy(opcoesmenu[0], "Sair");
 
 	bool sair = false;
-	p[0].ataque=(char*) malloc(30*sizeof(char));
+	/*p[0].ataque=(char*) malloc(30*sizeof(char));
 	for(int i=0;i<255;i++){
 		edit[i]=0;
-	}
+	}*/
 	al_flush_event_queue(win.event_queue);
 
+    int mx = 0, my = 0;
+
+    Botoes botoes[NUM_BOTOES];
+    bool oldHovering[NUM_BOTOES], newHovering[NUM_BOTOES], devoImprimir = false;
+    for(i=0; i<NUM_BOTOES; ++i)
+        oldHovering[i] = newHovering[i] = false;
+
+    botoes[0].set_position(30,50);
+    botoes[1].set_position(30,90);
+    botoes[2].set_position(30,130);
+    botoes[3].set_position(30,170);
+    botoes[4].set_position(30,210);
+    botoes[0].set_text("Jogar");
+    botoes[1].set_text("Carregar");
+    botoes[2].set_text("Multiplayer");
+    botoes[3].set_text("Comandos");
+    botoes[4].set_text("Sair");
+    botoes[0].set_func(comeca_jogo);
+    botoes[4].set_func(fecha_jogo);
+
+    imprime_menu(botoes, NUM_BOTOES, mx, my);
+
+    int retorno = 0;
+
+    ALLEGRO_EVENT ev;
+    do {
+        al_wait_for_event(win.event_queue, &ev);
+        switch (ev.type) {
+            case ALLEGRO_EVENT_DISPLAY_CLOSE:
+                //puts("Clicou no X");
+			    graphdeinit(win);
+    			exit(1);
+                break ;
+            case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
+                for(i=0; i<NUM_BOTOES; ++i) {
+                    if(botoes[i].hovering(mx,my)) {
+                        //printf("Clicou no botao %d\n",i);
+                        retorno = botoes[i].execute();
+                        if(retorno == 1) { // Começa jogo
+                        	return 1;
+                        }
+                        imprime_menu(botoes, NUM_BOTOES, mx, my);
+                    }
+                }
+                //puts("Clicou com o mouse");
+                break ;
+            case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
+                //puts("Soltou o mouse");
+                break ;
+            case ALLEGRO_EVENT_MOUSE_AXES:
+			    mx = ev.mouse.x;
+    			my = ev.mouse.y;
+                for(i=0; i<NUM_BOTOES; ++i) {
+                    newHovering[i] = botoes[i].hovering(mx,my);
+                    if(oldHovering[i] != newHovering[i]) { // Se tava em cima do botao, tirou. Se tava fora, colocou em cima.
+                        oldHovering[i] = newHovering[i];
+                        devoImprimir = true;
+                        //puts("Tirou ou colocou em/de cima de um botao");
+                    }
+                    if(devoImprimir) {
+                        imprime_menu(botoes, NUM_BOTOES, mx, my);
+                        devoImprimir = false;
+                    }
+                }
+                //puts("Mexeu o mouse");
+                break ;
+        }
+        if(retorno == 2) {
+            //opcoes(win,p);
+        }
+    } while(!retorno);
+	al_destroy_font(font2);
+    return retorno;
+/*
+	ALLEGRO_EVENT ev;
 	do
 	{
+        if(al_is_event_queue_empty(win.event_queue)) {
+            puts("Event queue is empty.");
+        }
 		al_clear_to_color(PRETO);
-		ALLEGRO_EVENT ev;
         al_wait_for_event(win.event_queue, &ev);
 
 		if (ev.type == ALLEGRO_EVENT_MOUSE_AXES ) // Guarda o local do ponteiro do mouse.
@@ -331,5 +438,5 @@ int abremenu(Window win,Pessoa *p,Sprite s)
 			al_flip_display();
 		}
 	}while(!sair);
-	al_destroy_font(font2);
+*/
 }

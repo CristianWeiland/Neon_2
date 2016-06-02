@@ -6,6 +6,7 @@
 #include <string.h>
 
 /* Allegro */
+#ifndef ALLEGRO
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_font.h>
@@ -13,6 +14,7 @@
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
+#endif
 
 //ALLEGRO_FONT *font5;
 
@@ -56,6 +58,8 @@ typedef struct Sprite {
 #define ESQ 1
 #define CIMA 2
 #define DIR 3
+#define PESSOAS 4
+#define COMPUTADORES 1
 
 char** le_matriz(FILE *fp);
 bool colisao(int,int,char**,int);
