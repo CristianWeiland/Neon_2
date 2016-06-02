@@ -1,8 +1,19 @@
 #include "keys.h"
 
-/*
-void teclas_iniciais()
+
+void teclas_iniciais(Pessoa *pessoa)
 {
+	/*
+		Botoes:
+		[0] --> Andar pra cima.
+		[1] --> Andar pra baixo.
+		[2] --> Andar pra direita.
+		[3] --> Andar pra esquerda.
+		[4] --> Correr.
+		[5] --> Puxar.
+		[6] --> Tlep.
+	*/
+
 	sprintf(pessoa[0].botao_char[0],"%c",'^');
 	sprintf(pessoa[0].botao_char[1],"%c",'|');
 	sprintf(pessoa[0].botao_char[2],"%c",'>');
@@ -31,41 +42,42 @@ void teclas_iniciais()
 	sprintf(pessoa[3].botao_char[4],"%c",ALLEGRO_KEY_Q+96);
 	sprintf(pessoa[3].botao_char[5],"%c",ALLEGRO_KEY_E+96);
 
-	pessoa[0].botao_char_int[0]=ALLEGRO_KEY_UP;
-	pessoa[0].botao_char_int[1]=ALLEGRO_KEY_DOWN;
-	pessoa[0].botao_char_int[2]=ALLEGRO_KEY_RIGHT;
-	pessoa[0].botao_char_int[3]=ALLEGRO_KEY_LEFT;
-	pessoa[0].botao_char_int[4]=ALLEGRO_KEY_RCTRL;
-	pessoa[0].botao_char_int[5]=ALLEGRO_KEY_ALTGR;
+	pessoa[0].botao_char_int[0] = ALLEGRO_KEY_UP;
+	pessoa[0].botao_char_int[1] = ALLEGRO_KEY_DOWN;
+	pessoa[0].botao_char_int[2] = ALLEGRO_KEY_RIGHT;
+	pessoa[0].botao_char_int[3] = ALLEGRO_KEY_LEFT;
+	pessoa[0].botao_char_int[4] = ALLEGRO_KEY_RCTRL;
+	pessoa[0].botao_char_int[5] = ALLEGRO_KEY_ALTGR;
 
-	pessoa[1].botao_char_int[0]=ALLEGRO_KEY_I;
-	pessoa[1].botao_char_int[1]=ALLEGRO_KEY_K;
-	pessoa[1].botao_char_int[2]=ALLEGRO_KEY_L;
-	pessoa[1].botao_char_int[3]=ALLEGRO_KEY_J;
-	pessoa[1].botao_char_int[4]=ALLEGRO_KEY_U;
-	pessoa[1].botao_char_int[5]=ALLEGRO_KEY_O;
+	pessoa[1].botao_char_int[0] = ALLEGRO_KEY_I;
+	pessoa[1].botao_char_int[1] = ALLEGRO_KEY_K;
+	pessoa[1].botao_char_int[2] = ALLEGRO_KEY_L;
+	pessoa[1].botao_char_int[3] = ALLEGRO_KEY_J;
+	pessoa[1].botao_char_int[4] = ALLEGRO_KEY_U;
+	pessoa[1].botao_char_int[5] = ALLEGRO_KEY_O;
 
-	pessoa[2].botao_char_int[0]=ALLEGRO_KEY_T;
-	pessoa[2].botao_char_int[1]=ALLEGRO_KEY_G;
-	pessoa[2].botao_char_int[2]=ALLEGRO_KEY_H;
-	pessoa[2].botao_char_int[3]=ALLEGRO_KEY_F;
-	pessoa[2].botao_char_int[4]=ALLEGRO_KEY_R;
-	pessoa[2].botao_char_int[5]=ALLEGRO_KEY_Y;
+	pessoa[2].botao_char_int[0] = ALLEGRO_KEY_T;
+	pessoa[2].botao_char_int[1] = ALLEGRO_KEY_G;
+	pessoa[2].botao_char_int[2] = ALLEGRO_KEY_H;
+	pessoa[2].botao_char_int[3] = ALLEGRO_KEY_F;
+	pessoa[2].botao_char_int[4] = ALLEGRO_KEY_R;
+	pessoa[2].botao_char_int[5] = ALLEGRO_KEY_Y;
 
-	pessoa[3].botao_char_int[0]=ALLEGRO_KEY_W;
-	pessoa[3].botao_char_int[1]=ALLEGRO_KEY_S;
-	pessoa[3].botao_char_int[2]=ALLEGRO_KEY_D;
-	pessoa[3].botao_char_int[3]=ALLEGRO_KEY_A;
-	pessoa[3].botao_char_int[4]=ALLEGRO_KEY_Q;
-	pessoa[3].botao_char_int[5]=ALLEGRO_KEY_E;
+	pessoa[3].botao_char_int[0] = ALLEGRO_KEY_W;
+	pessoa[3].botao_char_int[1] = ALLEGRO_KEY_S;
+	pessoa[3].botao_char_int[2] = ALLEGRO_KEY_D;
+	pessoa[3].botao_char_int[3] = ALLEGRO_KEY_A;
+	pessoa[3].botao_char_int[4] = ALLEGRO_KEY_Q;
+	pessoa[3].botao_char_int[5] = ALLEGRO_KEY_E;
 	return;
 }
-*/
+
 
 void keyboard_down(int evkeyboardkeycode,bool *puxa,int *tlep,Magia (*fireball)[2], Pessoa *p)
+// Provavelmente, quando eu achei a tecla que foi apertada, posso dar um return, e melhorar a eficiencia da função.
 {
 	for(int i=0; i<4; ++i) {
-		if(p[i].comp==0) {
+		//if(p[i].comp==0) {
 			if(evkeyboardkeycode == p[i].botao_char_int[0]) {
 				p[i].andou_c = 1;
 			} else if(evkeyboardkeycode == p[i].botao_char_int[1]) {
@@ -81,7 +93,7 @@ void keyboard_down(int evkeyboardkeycode,bool *puxa,int *tlep,Magia (*fireball)[
 			} else if(evkeyboardkeycode == p[i].botao_char_int[6]) {
 				tlep[i] = 1;
 			}
-		}
+		//}
 	}
 	switch(evkeyboardkeycode) {   // Os casos DOWN,LEFT,RIGHT,UP sao as setas, e tem que fazer o teu carinha andar. Tah meio bugado, mas funciona um pouco.
 		/* Primeiro Player */
@@ -101,6 +113,9 @@ void keyboard_down(int evkeyboardkeycode,bool *puxa,int *tlep,Magia (*fireball)[
         		fireball[0][0].dist = 0;
         		p[0].energia -= 50;
         	}
+		/* Segundo Player */
+		/* Terceiro Player */
+		/* Quarto Player */
     	default: break;
     }
 }

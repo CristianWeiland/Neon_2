@@ -217,14 +217,15 @@ int abremenu(Window win,Pessoa *p,Sprite s)
 	int i,tamanho;
 	ALLEGRO_COLOR cor_neon[4];
 
-	opcoesmenu = (char**)malloc(sizeof(char)*10);
-	for(i=0;i<10;i++)
+	opcoesmenu = (char**)malloc(sizeof(char*)*10);
+	for(i=0; i<10; ++i)
 		opcoesmenu[i] = (char*)malloc(sizeof(char)*20);
-	opcoesmenu[0] = (char*)"Campanha";
-	opcoesmenu[1] = (char*)"Load";
-	opcoesmenu[2] = (char*)"Multiplayer";
-	opcoesmenu[3] = (char*)"Comandos";
-	opcoesmenu[4] = (char*)"Sair";
+
+	strcpy(opcoesmenu[0], "Campanha");
+	strcpy(opcoesmenu[0], "Load");
+	strcpy(opcoesmenu[0], "Multiplayer");
+	strcpy(opcoesmenu[0], "Comandos");
+	strcpy(opcoesmenu[0], "Sair");
 
 	bool sair = false;
 	/*p[0].ataque=(char*) malloc(30*sizeof(char));
@@ -250,6 +251,7 @@ int abremenu(Window win,Pessoa *p,Sprite s)
     botoes[2].set_text("Multiplayer");
     botoes[3].set_text("Comandos");
     botoes[4].set_text("Sair");
+    botoes[0].set_func(comeca_jogo);
     botoes[4].set_func(fecha_jogo);
 
     imprime_menu(botoes, NUM_BOTOES, mx, my);
@@ -270,6 +272,9 @@ int abremenu(Window win,Pessoa *p,Sprite s)
                     if(botoes[i].hovering(mx,my)) {
                         //printf("Clicou no botao %d\n",i);
                         retorno = botoes[i].execute();
+                        if(retorno == 1) { // Começa jogo
+                        	return 1;
+                        }
                         imprime_menu(botoes, NUM_BOTOES, mx, my);
                     }
                 }

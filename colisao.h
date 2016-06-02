@@ -58,6 +58,8 @@ typedef struct Sprite {
 #define ESQ 1
 #define CIMA 2
 #define DIR 3
+#define PESSOAS 4
+#define COMPUTADORES 1
 
 char** le_matriz(FILE *fp);
 bool colisao(int,int,char**,int);
