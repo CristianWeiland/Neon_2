@@ -34,16 +34,15 @@ int main()
 	p = (Pessoa *) malloc(sizeof(Pessoa) * NJOGADORES);
 	for(i=0; i<NJOGADORES; ++i) {
 		// Inicializacoes da estrutura Pessoa
+		p[i].hp = 1000 - (250 * (i+1));
+		p[i].time = i+1;
 		p[i].selx = 0;
 		p[i].sely = 64;
 		p[i].correr = 1;
 		p[i].energia = 100;
 		p[i].andou_b = p[i].andou_c = p[i].andou_d = p[i].andou_e = 0;
 	}
-	p[0].time = 1;
-	p[1].time = 2;
-	p[2].time = 3;
-	p[3].time = 4;
+
 	//desx = (int*) malloc (NJOGADORES * sizeof(int)); --> Virou p.selx!
 	//desy = (int*) malloc (NJOGADORES * sizeof(int)); --> Virou p.sely!
 
@@ -87,6 +86,30 @@ int main()
     if(!(s.tiles)) {
 	   	fprintf(errext,"Falha ao abrir a imagem tiles.");
 	   	fclose(errext);
+	   	exit(1);
+	}
+
+    s.bar = al_load_bitmap("Imgs/bar.bmp");
+    if(!(s.bar)) {
+    	printf("Falha ao abrir a imagem bar! O problema foi: %s\n",strerror(errno));
+	   	exit(1);
+	}
+
+    s.healthbar = al_load_bitmap("Imgs/healthbar.bmp");
+    if(!(s.healthbar)) {
+    	printf("Falha ao abrir a imagem healthbar! O problema foi: %s\n",strerror(errno));
+	   	exit(1);
+	}
+
+    s.energybar = al_load_bitmap("Imgs/energybar.bmp");
+    if(!(s.energybar)) {
+    	printf("Falha ao abrir a imagem energybar! O problema foi: %s\n",strerror(errno));
+	   	exit(1);
+	}
+
+    s.dead = al_load_bitmap("Imgs/dead.bmp");
+    if(!(s.dead)) {
+    	printf("Falha ao abrir a imagem dead! O problema foi: %s\n",strerror(errno));
 	   	exit(1);
 	}
 
@@ -166,9 +189,13 @@ int main()
 		}
 	}
 
+	al_convert_mask_to_alpha(s.bar,al_map_rgb(255,0,255));
+	al_convert_mask_to_alpha(s.dead,al_map_rgb(255,0,255));
 	al_convert_mask_to_alpha(s.tiles,al_map_rgb(255,0,255));
 	al_convert_mask_to_alpha(s.chars,al_map_rgb(255,0,255));
 	al_convert_mask_to_alpha(s.explosion,al_map_rgb(255,0,255));
+	al_convert_mask_to_alpha(s.healthbar,al_map_rgb(255,0,255));
+	al_convert_mask_to_alpha(s.energybar,al_map_rgb(255,0,255));
 	for(i=0;i<4;i++) {
 		al_convert_mask_to_alpha(s.neons[i],al_map_rgb(255,0,255));
 		al_convert_mask_to_alpha(s.fireballs[i],al_map_rgb(255,0,255));
@@ -236,7 +263,6 @@ int main()
 			exit(1);
 		}
 		sprintf(p[i].nome,"player %d",i+1);
-		p[i].time = 1;
 	}
 
 	teclas_iniciais(p);
