@@ -73,7 +73,7 @@ void teclas_iniciais(Pessoa *pessoa)
 }
 
 
-void keyboard_down(int evkeyboardkeycode,bool *puxa,int *tlep,Magia (*fireball)[2], Pessoa *p)
+void keyboard_down(int evkeyboardkeycode,bool *puxa,int *flash,Magia (*fireball)[2], Pessoa *p)
 // Provavelmente, quando eu achei a tecla que foi apertada, posso dar um return, e melhorar a eficiencia da função.
 {
 	for(int i=0; i<4; ++i) {
@@ -91,7 +91,7 @@ void keyboard_down(int evkeyboardkeycode,bool *puxa,int *tlep,Magia (*fireball)[
 			} else if(evkeyboardkeycode == p[i].botao_char_int[5]) {
 				puxa[i] = true;
 			} else if(evkeyboardkeycode == p[i].botao_char_int[6]) {
-				tlep[i] = 1;
+				flash[i] = 1;
 			}
 		//}
 	}

@@ -2,25 +2,43 @@
 
 void tira_neon(bool *puxa,bool *temneon, Pessoa *p)
 {
-	int j;
-	for(int i=0;i<4;i++) {
+	int i,j;
+	for(i=0;i<4;i++) {
 		if(puxa[i]) {
 			if(j = contato_proximo(i,j,p) != 5)
 				temneon[j] = false;
 		}
 	}
+
+	for(i=0;i<4;i++) // Pra nao contar como se estivesse sempre tentando puxar.
+		puxa[i] = false;
+
 	return ;
 }
 
-void desconta_energia(Pessoa *p, int njogadores)
+void calcula_energia(Pessoa *p, int njogadores)
 {
-	for(int i=0; i<njogadores; ++i)
+	int i;
+
+	// Para de correr quando acaba energia.
+	for(i=0; i<njogadores; i++)
+		if(p[i].energia <= 0)
+			p[i].correr = 1;
+
+	// Desconta energia
+	for(i=0; i<njogadores; ++i)
 	    if((p[i].andou_b == 1 || p[i].andou_c == 1 || p[i].andou_d == 1 || p[i].andou_e == 1) && p[i].correr == 2 ) // Andou com correr ativado.
 	    	p[i].energia -= 3;
+
+	// Recupera energia
+  	for(i=0; i<njogadores; ++i)
+  		if(p[i].energia < 100)
+			p[i].energia++;
+
+	return ;
 }
 
-void usa_magias(char **matriz,Magia (*fb)[2], Pessoa *p)
-{
+void usa_fireball(char **matriz,Magia (*fb)[2], Pessoa *p) {
 	int i,j,k;
 	for(i=0; i<4; ++i) {
 		if(fb[i][0].ativa == false && fb[i][1].ativa == false)
@@ -30,7 +48,8 @@ void usa_magias(char **matriz,Magia (*fb)[2], Pessoa *p)
 				fb[i][j].d = calcula_direcao(p,i); /* Numeros de direçao no colisao.h */
 			for(k=0; k<4; ++k) {
 				if(contato_proximo_direcionado(fb[i][j].x,fb[i][j].y,i,k,fb[i][j].d,p) == k) {
-					k = k; // Isso nao faz nada, tem que substituir por tirar vida de k.
+					//k = k; // Isso nao faz nada, tem que substituir por tirar vida de k.
+					p[k].hp -= fb[i][j].dano;
 					fb[i][j].ativa = false;
 					fb[i][j].explosao = true;
 					fb[i][j].d = -1;
@@ -76,6 +95,38 @@ void usa_magias(char **matriz,Magia (*fb)[2], Pessoa *p)
 			}
 		}
 	}
+}
+
+void explosao(Pessoa *p, int njogadores, Sprite s,int explox[4][2],int exploy[4][2],Magia (*fireball)[2]) {
+	int i, j;
+	for(i=0;i<njogadores;i++) {
+		for(j=0;j<2;j++) {
+			if(fireball[i][j].ativa == true) {
+				al_draw_bitmap(s.fireballs[fireball[i][j].d],fireball[i][j].x,fireball[i][j].y,0);
+			}
+			if(fireball[i][j].explosao == true) { // Enquanto explox = 288 e exploy = 224, ele nao imprime a explosao.
+							// Entao o esquema eh zerar eles e dai o programa começa a contagem e a impressao.
+				explox[i][j] = exploy[i][j] = 0;
+				fireball[i][j].explosao = false;
+			}
+			if(explox[i][j] < 280 && exploy[i][j] < 220) { // Imprime a explosao.
+				al_draw_bitmap_region(s.explosion,explox[i][j],exploy[i][j],32,32,fireball[i][j].x,fireball[i][j].y,0);
+				explox[i][j] += 32;
+				if(explox[i][j] >= 288) {
+					exploy[i][j] += 32;
+					if(exploy[i][j] < 224)
+						explox[i][j] = 0;
+				}
+			}
+		}
+	}
+}
+
+void usa_magias(char **matriz,Magia (*fb)[2], Pessoa *p, int njogadores, Sprite s,int explox[4][2],int exploy[4][2], int *flash)
+{
+	usa_flash(p,flash,matriz);
+	usa_fireball(matriz, fb, p);
+	explosao(p,njogadores,s,explox,exploy,fb);
 	return ;
 }
 
@@ -100,7 +151,7 @@ int calcula_direcao(Pessoa *p,int i)
 	return -1; // Deu erro.
 }
 
-void flash(Pessoa *p,int *tlep,char **matriz)
+void usa_flash(Pessoa *p,int *flash,char **matriz)
 {
 	/* Por favor otimizar isso aqui. O for(j=0; j<19) tem 8 ifs dentro. Nao da pra puxar o if pra fora
 	   e escolher qual deles eh feito, e dai fazer as 19 iteracoes? Alem disso, se colidiu uma vez, colidiu
@@ -108,8 +159,8 @@ void flash(Pessoa *p,int *tlep,char **matriz)
 	*/
 	int i,j;
 	for(i=0;i<4;i++) {
-		if(tlep[i] && p[i].energia >= 50) {
-			tlep[i] = 0;
+		if(flash[i] && p[i].energia >= 50) {
+			flash[i] = 0;
 			p[i].energia -= 50;
 			/* Existem 8 casos (8 direçoes possiveis de andar, 4 sentidos e 4 diagonais). */
 			for(j=0;j<19;j++) {
