@@ -18,11 +18,11 @@ void imprime_pessoa(Pessoa p) {
 	printf("andou_b = %d, andou_c = %d, andou_d = %d, andou_e = %d\n",
 		   p.andou_b, p.andou_c, p.andou_d, p.andou_e);
 	printf("botoes: b = %s, c = %s, d = %s, e = %s\nbotao_char: ", p.botao_b, p.botao_c, p.botao_d, p.botao_e);
-	/*for(int i=0; i<7; i++) { // Isso ta errado.
+	/*for(int i=0; i<7; ++i) { // Isso ta errado.
 		printf("(%d): %c, ", i+1, p.botao_char[i]);
 	}*/
 	printf("\nenergia: %d, correr: %d, morto: %d, dash: %d, comp: %d, time: %d\n", p.energia, p.correr, p.morto, p.dash, p.comp, p.time);
-	for(int i=0; i<7; i++) {
+	for(int i=0; i<7; ++i) {
 		printf("(%d): %d, ", i+1, p.botao_char_int[i]);
 	}
 	printf("\n");
@@ -46,7 +46,7 @@ int imprime_4_chars_for(int cont,char** matriz,int *cor,bool *temneon,int njogad
 {
 	int i,j,selecx,selecy,char4;
     /* Calcula a posiçao dos neons */
-	for(i=0; i<njogadores; i++) {
+	for(i=0; i<njogadores; ++i) {
 	 	p[i].xneon = p[i].x+8;
 	 	p[i].yneon = p[i].y+8;
 	}
@@ -65,7 +65,7 @@ int imprime_4_chars_for(int cont,char** matriz,int *cor,bool *temneon,int njogad
     }
 
 	/* Tentativa de transformar tudo em um for */
-	for(i=0; i<njogadores; i++) {
+	for(i=0; i<njogadores; ++i) {
 	    if(p[i].hp <= 0) {
 	    	al_draw_bitmap(s.dead,p[i].x,p[i].y,0);
 	    	continue;

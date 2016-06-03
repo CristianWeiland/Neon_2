@@ -8,7 +8,7 @@
 #include <allegro5/allegro_ttf.h>
 #endif
 
-void fase1(Window win,Magia fireball[4][2],ALLEGRO_FONT *font,int explox[4][2],int exploy[4][2],Pessoa *p,Sprite s)
+void fase1(Window win, Pessoa *p, Sprite s, Magias m)
 {
 	int njogadores = 4;
 
@@ -22,10 +22,10 @@ void fase1(Window win,Magia fireball[4][2],ALLEGRO_FONT *font,int explox[4][2],i
 	for(i=0; i<njogadores; ++i) {
 		p[i].x = 100 + 50*i;
 		p[i].y = 200;
-		puxa[i] = false;
-		temneon[i] = true;
-		flash[i] = 0;
 		cor[i] = i+1;
+		puxa[i] = false;
+		flash[i] = 0;
+		temneon[i] = true;
 	}
 
 	errext = fopen("err.txt","w");
@@ -64,7 +64,7 @@ void fase1(Window win,Magia fireball[4][2],ALLEGRO_FONT *font,int explox[4][2],i
 			graphdeinit(win);
 			exit(1);
 		} else if(ev.type == ALLEGRO_EVENT_KEY_DOWN) { // Detecta se apertaram alguma tecla.
-			keyboard_down(ev.keyboard.keycode,puxa,flash,fireball,p);
+			keyboard_down(ev.keyboard.keycode,puxa,flash,p,&m);
         } else if(ev.type == ALLEGRO_EVENT_KEY_UP) { // Detecta se soltaram alguma tecla.
 			keyboard_up(ev.keyboard.keycode,puxa,&sair,p);
         } else if (al_is_event_queue_empty(win.event_queue)) { // Nao ocorreu nenhum evento.
@@ -72,7 +72,7 @@ void fase1(Window win,Magia fireball[4][2],ALLEGRO_FONT *font,int explox[4][2],i
 			al_clear_to_color(PRETO);
 			al_draw_bitmap(map,0,0,0);
 
-			usa_magias(matriz,fireball,p,njogadores,s,explox,exploy,flash);
+			usa_magias(matriz,p,njogadores,s,flash,&m);
 
 			tira_neon(puxa,temneon,p);
 

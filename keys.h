@@ -16,9 +16,9 @@
 
 //extern Pessoa pessoa[4];
 
-void keyboard_down(int evkeyboardkeycode,bool *puxa,int *flash,Magia (*fireball)[2], Pessoa *p);
+void teclas_iniciais(Pessoa *pessoa, FILE *errext);
+void keyboard_down(int evkeyboardkeycode,bool *puxa,int *flash, Pessoa *p, Magias *m);
 void keyboard_up(int evkeyboardkeycode,bool *puxa,bool *sair, Pessoa *p);
-void teclas_iniciais(Pessoa *pessoa);
 
 /*
 b 2

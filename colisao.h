@@ -31,12 +31,17 @@ typedef struct Pessoa {
 } Pessoa;
 
 typedef struct Magia {
-	int dano,x,y,dist;
+	int dano,x,y,dist,xexpl,yexpl;
 	bool ativa,explosao;
 	ALLEGRO_BITMAP* sprite;
 	int d; /* Direcao == -1 significa que nao foi calculada ainda.
 				  * 0 = cima; 1 = direita; 2 = esquerda; 3 = baixo; */
 } Magia;
+
+typedef struct Magias {
+	int explox[4][2], exploy[4][2]; // Selecionam a posicao da explosao no bitmap explo.bmp.
+	Magia fireball[4][2];
+} Magias;
 
 typedef struct Sprite {
 	//*tiles,*chars,*map,*frente,**neons,**fireballs,*explosion;

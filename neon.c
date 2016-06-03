@@ -25,29 +25,31 @@ int main()
     /* Coisas relacionadas aos chars */
     int i,j;
 	/* Coisas relacionadas as tecnicas/magias */
-	int explox[4][2],exploy[4][2];
+	Magias m;
 	/* Pessoas, que contem quase todos os dados (ver colisao.h) */
 	Pessoa *p;
+	/* Janela */
+	Window win;
+	/* Arquivos */
+    FILE *errext; // errext = error exit (ou saida de erros)
 
 	p = (Pessoa *) malloc(sizeof(Pessoa) * NJOGADORES);
 	for(i=0; i<NJOGADORES; ++i) {
 		// Inicializacoes da estrutura Pessoa
 		p[i].hp = 1000;
-		p[i].time = i+1;
 		p[i].selx = 0;
 		p[i].sely = 64;
+		p[i].time = i+1;
 		p[i].correr = 1;
+		p[i].andou_b = 0;
+		p[i].andou_c = 0;
+		p[i].andou_d = 0;
+		p[i].andou_e = 0;
 		p[i].energia = 100;
-		p[i].andou_b = p[i].andou_c = p[i].andou_d = p[i].andou_e = 0;
 	}
 
-	Window win;
-    FILE *mapa,*errext; // errext = error exit (ou saida de erros)
-    /* Magias */
-	Magia fireball[4][2];
-
 	/* Inicializacao dos arquivos. */
-	errext = fopen("lago.txt","w"); fclose(errext); errext = fopen("err.txt","w");
+	errext = fopen("err.txt","w");
 	if(!errext) {
 		puts("Error opening file.");
 		exit(1); // Se deu erro no lugar onde vao ser anotados os erros, ferrou!
@@ -59,50 +61,12 @@ int main()
     /* Inicializacao dos Bitmaps */
     Sprite s = init_sprites(errext);
 
-	for(i=0; i<4; ++i) {
-		for(j=0; j<2; ++j) {
-			//al_convert_mask_to_alpha(fireball[i][j].sprite,al_map_rgb(255,0,255));
-			fireball[i][j].ativa = false; // Nao foi usada.
-			fireball[i][j].dano = 200; // Dano da tecnica.
-			fireball[i][j].explosao = false; // Nao colidiu / chegou na distancia limite.
-			fireball[i][j].dist = 0; // Nao percorreu nenhuma distancia.
-			fireball[i][j].d = 0; // Nao tem direçao.
-			explox[i][j] = 280;
-			exploy[i][j] = 220;
-		}
-	}
+    init_magias(&m);
 
     al_register_event_source(win.event_queue, al_get_display_event_source(win.display));
 
-	for(i=0; i<4; ++i) {
-		for(j=0; j<7; ++j) {
-			p[i].botao_char[j] = (char*) malloc(30 * sizeof(char));
-			if(!(p[i].botao_char[j])) {
-				fprintf(errext,"Falha ao alocar memoria para p[%d].botao_char[%d]",i,j);
-				fclose(errext);
-				exit(1);
-			}
-		}
-		sprintf(p[i].botao_char[0],"%c",98);
-		sprintf(p[i].botao_char[1],"%c",99);
-		sprintf(p[i].botao_char[2],"%c",100);
-		sprintf(p[i].botao_char[3],"%c",101);
-		sprintf(p[i].botao_char[4],"%c",97);
-		sprintf(p[i].botao_char[5],"%c",97);
-		sprintf(p[i].botao_char[6],"%c",97);
-		p[i].nome = (char*) malloc(30*sizeof(char));
-		if(!p[i].nome) {
-			fprintf(errext,"Falha ao alocar memoria para p[%d].nome",i);
-			fclose(errext);
-			exit(1);
-		}
-		sprintf(p[i].nome,"player %d",i+1);
-	}
+	teclas_iniciais(p, errext);
 
-	teclas_iniciais(p);
-
-	ALLEGRO_FONT *font;
-	font = al_load_font("Fonts/fixed_font.tga", 0, 0);
 /*
 	if( access( Comandos/cmd.txt, F_OK ) != -1 ) {
 		FILE *cmd = fopen("Comandos/cmd.txt","r");
@@ -121,7 +85,7 @@ int main()
 
     /* Opera o jogo */
 	if(abremenu(win,p,s)==1) {
-		fase1(win,fireball,font,explox,exploy,p,s);
+		fase1(win,p,s,m);
 	}
 	graphdeinit(win);
 	exit(1);
