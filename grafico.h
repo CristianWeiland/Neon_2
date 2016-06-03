@@ -11,6 +11,8 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
 
+#include "colisao.h"
+
 #ifndef GRAFICO_H
 #define GRAFICO_H
 
@@ -39,6 +41,8 @@ void graphdeinit(Window win);
 
 /* Retorna 1 se as coordenadas x,y estão dentro da imagem, 0 caso contrário. */
 bool is_inside_bitmap (BITMAP2 img, int x, int y);
+
+Sprite init_sprites(FILE *errext);
 
 #define ACAFRAO                   PIXEL(244,196,48)
 #define AGUA_MARINHA              PIXEL(127,255,212)
