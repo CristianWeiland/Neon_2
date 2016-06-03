@@ -6,10 +6,13 @@
 /*
 Problemas:
 1- Bola de fogo não explode.
-2- Barra de HP / Energia.
-3- Cor do neon quando parado.
-4- Neon se movendo quando colide.
+2- Barra de HP / Energia - OK.
+3- Cor do neon quando parado - Xunxo.
+4- Neon se movendo quando colide - OK.
 5- Personagens todos iguais.
+6- Bola de fogo nao da dano - OK.
+7- Nao armazena comandos.
+8- Usa fireball quando explosao ta ativa - explosao acompanha a fireball.
 */
 
 #define CONT 2
@@ -34,7 +37,7 @@ int main()
 	p = (Pessoa *) malloc(sizeof(Pessoa) * NJOGADORES);
 	for(i=0; i<NJOGADORES; ++i) {
 		// Inicializacoes da estrutura Pessoa
-		p[i].hp = 1000 - (250 * (i+1));
+		p[i].hp = 1000;
 		p[i].time = i+1;
 		p[i].selx = 0;
 		p[i].sely = 64;
@@ -180,7 +183,7 @@ int main()
 		for(j=0; j<2; ++j) {
 			//al_convert_mask_to_alpha(fireball[i][j].sprite,al_map_rgb(255,0,255));
 			fireball[i][j].ativa = false; // Nao foi usada.
-			fireball[i][j].dano = 20; // Dano da tecnica.
+			fireball[i][j].dano = 200; // Dano da tecnica.
 			fireball[i][j].explosao = false; // Nao colidiu / chegou na distancia limite.
 			fireball[i][j].dist = 0; // Nao percorreu nenhuma distancia.
 			fireball[i][j].d = 0; // Nao tem direçao.
