@@ -14,9 +14,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
 
-//extern Pessoa pessoa[4];
-
-void teclas_iniciais(Pessoa *pessoa, FILE *errext);
+void teclas_iniciais(Pessoa *pessoa);
 void keyboard_down(int evkeyboardkeycode,bool *puxa,int *flash, Pessoa *p, Magias *m);
 void keyboard_up(int evkeyboardkeycode,bool *puxa,bool *sair, Pessoa *p);
 
