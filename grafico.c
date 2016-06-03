@@ -83,3 +83,126 @@ bool is_inside_bitmap (BITMAP2 img, int x, int y)
   return (x >= img.x && x < img.x+img.w &&
 	  y >= img.y && y < img.y+img.h );
 }
+
+Sprite init_sprites(FILE *errext) {
+    int i;
+    Sprite s;
+
+    s.neons = (ALLEGRO_BITMAP**) malloc(4*sizeof(ALLEGRO_BITMAP*));
+    s.fireballs = (ALLEGRO_BITMAP**) malloc(4*sizeof(ALLEGRO_BITMAP*));
+
+    s.chars = al_load_bitmap("Imgs/chars.bmp"); // Obs: Cada imagem de cada char eh 32x32
+    if(!(s.chars)) {
+        fprintf(errext,"Falha ao abrir a imagem chars.");
+        fclose(errext);
+        exit(1);
+    }
+
+    s.tiles = al_load_bitmap("Imgs/tiles.bmp");
+    if(!(s.tiles)) {
+        fprintf(errext,"Falha ao abrir a imagem tiles.");
+        fclose(errext);
+        exit(1);
+    }
+
+    s.bar = al_load_bitmap("Imgs/bar.bmp");
+    if(!(s.bar)) {
+        printf("Falha ao abrir a imagem bar! O problema foi: %s\n",strerror(errno));
+        exit(1);
+    }
+
+    s.healthbar = al_load_bitmap("Imgs/healthbar.bmp");
+    if(!(s.healthbar)) {
+        printf("Falha ao abrir a imagem healthbar! O problema foi: %s\n",strerror(errno));
+        exit(1);
+    }
+
+    s.energybar = al_load_bitmap("Imgs/energybar.bmp");
+    if(!(s.energybar)) {
+        printf("Falha ao abrir a imagem energybar! O problema foi: %s\n",strerror(errno));
+        exit(1);
+    }
+
+    s.dead = al_load_bitmap("Imgs/dead.bmp");
+    if(!(s.dead)) {
+        printf("Falha ao abrir a imagem dead! O problema foi: %s\n",strerror(errno));
+        exit(1);
+    }
+
+    s.explosion = al_load_bitmap("Imgs/Explo.bmp");
+    if(!(s.explosion)) {
+        fprintf(errext,"Falha ao abrir a imagem explo.");
+        fclose(errext);
+        exit(1);
+    }
+
+    s.neons[0] = al_load_bitmap("Imgs/neonamarelo.bmp");
+    if(!s.neons[0]) {
+        fprintf(errext,"Falha ao abrir a imagem s.neons[0].");
+        fclose(errext);
+        exit(1);
+    }
+
+    s.neons[1] = al_load_bitmap("Imgs/neonazul.bmp");
+    if(!s.neons[1]) {
+        fprintf(errext,"Falha ao abrir a imagem s.neons[1].");
+        fclose(errext);
+        exit(1);
+    }
+
+    s.neons[2] = al_load_bitmap("Imgs/neonverde.bmp");
+    if(!s.neons[2]) {
+        fprintf(errext,"Falha ao abrir a imagem s.neons[2].");
+        fclose(errext);
+        exit(1);
+    }
+
+    s.neons[3] = al_load_bitmap("Imgs/neonvermelho.bmp");
+    if(!s.neons[3]) {
+        fprintf(errext,"Falha ao abrir a imagem s.neons[3].");
+        fclose(errext);
+        exit(1);
+    }
+
+    s.fireballs[0] = al_load_bitmap("Imgs/Fireballc.bmp");
+    if(!s.fireballs[0]) {
+        fprintf(errext,"Falha ao abrir a imagem s.fireballs[0].");
+        fclose(errext);
+        exit(1);
+    }
+
+    s.fireballs[1] = al_load_bitmap("Imgs/Fireballd.bmp");
+    if(!s.fireballs[1]) {
+        fprintf(errext,"Falha ao abrir a imagem s.fireballs[1].");
+        fclose(errext);
+        exit(1);
+    }
+
+    s.fireballs[2] = al_load_bitmap("Imgs/Fireballe.bmp");
+    if(!s.fireballs[2]) {
+        fprintf(errext,"Falha ao abrir a imagem s.fireballs[2].");
+        fclose(errext);
+        exit(1);
+    }
+
+    s.fireballs[3] = al_load_bitmap("Imgs/Fireballb.bmp");
+    if(!s.fireballs[3]) {
+        fprintf(errext,"Falha ao abrir a imagem s.fireballs[3].");
+        fclose(errext);
+        exit(1);
+    }
+
+    al_convert_mask_to_alpha(s.bar,al_map_rgb(255,0,255));
+    al_convert_mask_to_alpha(s.dead,al_map_rgb(255,0,255));
+    al_convert_mask_to_alpha(s.tiles,al_map_rgb(255,0,255));
+    al_convert_mask_to_alpha(s.chars,al_map_rgb(255,0,255));
+    al_convert_mask_to_alpha(s.explosion,al_map_rgb(255,0,255));
+    al_convert_mask_to_alpha(s.healthbar,al_map_rgb(255,0,255));
+    al_convert_mask_to_alpha(s.energybar,al_map_rgb(255,0,255));
+    for(i=0;i<4;i++) {
+        al_convert_mask_to_alpha(s.neons[i],al_map_rgb(255,0,255));
+        al_convert_mask_to_alpha(s.fireballs[i],al_map_rgb(255,0,255));
+    }
+
+    return s;
+}
