@@ -9,12 +9,12 @@ char** le_matriz(FILE *fp)
 	//FILE *fp = ;
 
 	matriz = (char**)calloc(TAM,sizeof(char*));
-	for(i=0;i<TAM;i++)
+	for(i=0; i<TAM; ++i)
 	    matriz[i] = (char*)calloc(TAM,sizeof(char));
 
-	for(i=0;i<TAM;i++)
+	for(i=0; i<TAM; ++i)
 	{
-	    for(j=0;j<TAM;j++){
+	    for(j=0; j<TAM; ++j){
 	        fscanf(fp,"%c",&matriz[j][i]);
 	    }
 	    fscanf(fp,"\n");
@@ -25,23 +25,23 @@ char** le_matriz(FILE *fp)
 int contato_proximo(int i,int j, Pessoa *p)
 {	// I eh o char que tah realizando a acao, J eh o cara que talvez foi atacado / puxado o neon
 	if(p[i].andou_c == 1 || (p[i].andou_b == 0 && p[i].andou_c == 0 && p[i].andou_d == 0 && p[i].andou_e == 0)) { // Olhando pra cima.
-		for(j=0;j<4;j++) {
+		for(j=0; j<4; ++j) {
 			if(j!=i && ( (p[i].y-p[j].y<=24 && p[i].y-p[j].y>=0) && (p[i].x-p[j].x<=8 && p[i].x-p[j].x>=-8 ) ) )
 				return j;
 		}
 	} else if(p[i].andou_d == 1) { // Olhando pra direita.
-		for(j=0;j<4;j++) {
+		for(j=0; j<4; ++j) {
 			if(j!=i && ( (p[i].y-p[j].y<=8 && p[i].y-p[j].y>=-8) && (p[i].x-p[j].x<=0 && p[i].x-p[j].x>=-32 ) ) )
 				return j;
 		}
 	} else if(p[i].andou_e == 1) {
-		for(j=0;j<4;j++) {
+		for(j=0; j<4; ++j) {
 			if(j!=i && ( (p[i].y-p[j].y<=8 && p[i].y-p[j].y>=-8) && (p[i].x-p[j].x<=32 && p[i].x-p[j].x>=0 ) ) )
 				return j;
 		}
 	}
 	if(p[i].andou_b == 1) { // Olhando pra baixo. OBS: AQUI EH MESMO IF E NAO ELSE IF??
-		for(j=0;j<4;j++) {
+		for(j=0; j<4; ++j) {
 			if(j!=i && ( (p[i].y-p[j].y<=0 && p[i].y-p[j].y>=-24) && (p[i].x-p[j].x<=8 && p[i].x-p[j].x>=-8 ) ) )
 				return j;
 		}
@@ -54,23 +54,23 @@ int contato_proximo_direcionado(int x,int y,int i,int j,int d, Pessoa *p)
 /* x e y eh a posicao de quem tah andando (ex: fireball, char), cx e cy usados pra verificar se  *
  * bateu em algum outro char. D eh a direçao (0 = cima, 1 = direita, 2 = esquerda, 3 = baixo)    */
 	if(d == 0) { // Olhando pra cima.
-		for(j=0;j<4;j++) {
+		for(j=0; j<4; ++j) {
 			if(j!=i && ( (y-p[j].y<=24 && y-p[j].y>=0) && (x-p[j].x<=8 && x-p[j].x>=-8 ) ) )
 				return j;
 		}
 	} else if(d == 1) { // Olhando pra direita.
-		for(j=0;j<4;j++) {
+		for(j=0; j<4; ++j) {
 			if(j!=i && ( (y-p[j].y<=8 && y-p[j].y>=-8) && (x-p[j].x<=0 && x-p[j].x>=-32 ) ) )
 				return j;
 		}
 	} else if(d == 2) {
-		for(j=0;j<4;j++) {
+		for(j=0; j<4; ++j) {
 			if(j!=i && ( (y-p[j].y<=8 && y-p[j].y>=-8) && (x-p[j].x<=32 && x-p[j].x>=0 ) ) )
 				return j;
 		}
 	}
 	if(d == 3) { // Olhando pra baixo.
-		for(j=0;j<4;j++) {
+		for(j=0; j<4; ++j) {
 			if(j!=i && ( (y-p[j].y<=0 && y-p[j].y>=-24) && (x-p[j].x<=8 && x-p[j].x>=-8 ) ) )
 				return j;
 		}
@@ -88,7 +88,7 @@ int colisao_fireball(char** map,int x,int y,int d)
 	int ym = y/4;
 	switch(d) {
 		case 0: // Fireball pra cima
-			for(i=0;i<4;i++) {
+			for(i=0; i<4; ++i) {
 				if(map[xm+8+i][ym+1] == '3' || map[xm+8+i][ym+2] == '3')
                        return 1;
 			}
@@ -171,7 +171,7 @@ X X B B B B X X
 */
 {
     int i,j,coordx[5],coordy[5];
-    for(i=0;i<5;i++) {
+    for(i=0; i<5; ++i) {
         coordx[i] = (p[i].x)/4;
         coordy[i] = (p[i].y)/4;
     }
@@ -186,16 +186,16 @@ X X B B B B X X
     switch(caso)
     {
         case BAIXO: // Tentou andar pra baixo.
-            for(i=0;i<4;i++) // Colisoes com o mapa.
+            for(i=0; i<4; ++i) // Colisoes com o mapa.
                 if((map[x+2+i][y+8] =='0')||(map[x+2+i][y+8] == '3'))
                     return 1;
-                for(i=0;i<5;i++) // Colisoes com os chars.
+                for(i=0; i<5; ++i) // Colisoes com os chars.
                     if(coordy[i]-4 == y && ((x==coordx[i]+3)||(x==coordx[i]+2)||(x==coordx[i]+1)||(x==coordx[i])||(x==coordx[i]-1)||(x==coordx[i]-2)||(x==coordx[i]-3))&& i!=eu)
                         return 1;
 
             break;
         case ESQ: // Tentou andar pra esquerda.
-            for(i=0;i<4;i++)
+            for(i=0; i<4; ++i)
                 if(map[x+1][y+4+i] == '3' || map[x+1][y+4+i] == '0')
                     return 1;
             if(x<=0) // Nao deixa ele passar do limite esquerdo do display.
@@ -203,25 +203,25 @@ X X B B B B X X
 			  	return 1;
             }
 
-            for(i=0;i<5;i++) // Colisoes com os chars.
+            for(i=0; i<5; ++i) // Colisoes com os chars.
                 if(coordx[i]+5 == x && ((y==coordy[i]+3)||(y==coordy[i]+2)||(y==coordy[i]+1)||(y==coordy[i])||(y==coordy[i]-1)||(y==coordy[i]-2)||(y==coordy[i]-3)) && i!=eu)
                     return 1;
 
             break;
         case CIMA: // Tentou andar pra cima.
-            for(i=0;i<4;i++)
+            for(i=0; i<4; ++i)
                 if(map[x+2+i][y+3] == '3' || map[x+2+i][y+3] == '0')
                     return 1;
-            for(i=0;i<5;i++) // Colisoes com os chars.
+            for(i=0; i<5; ++i) // Colisoes com os chars.
                 if(coordy[i]+4 == y && ((x==coordx[i]+3)||(x==coordx[i]+2)||(x==coordx[i]+1)||(x==coordx[i])||(x==coordx[i]-1)||(x==coordx[i]-2)||(x==coordx[i]-3))&& i!=eu)
                     return 1;
 
               break;
         case DIR: // Tentou andar pra direita.
-            for(i=0;i<4;i++)
+            for(i=0; i<4; ++i)
                 if(map[x+6][y+4+i] == '3' || map[x+6][y+4+i] == '0')
                     return 1;
-            for(i=0;i<5;i++) // Colisoes com os chars.
+            for(i=0; i<5; ++i) // Colisoes com os chars.
                 if(coordx[i]-5 == x && ((y==coordy[i]+3)||(y==coordy[i]+2)||(y==coordy[i]+1)||(y==coordy[i])||(y==coordy[i]-1)||(y==coordy[i]-2)||(y==coordy[i]-3)) && i!=eu)
                     return 1;
             break;

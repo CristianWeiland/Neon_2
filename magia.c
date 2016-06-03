@@ -1,16 +1,31 @@
 #include "magia.h"
 
+void init_magias(Magias *m) {
+	int i,j;
+	for(i=0; i<4; ++i) {
+		for(j=0; j<2; ++j) {
+			m->fireball[i][j].ativa = false; // Nao foi usada.
+			m->fireball[i][j].dano = 200; // Dano da tecnica.
+			m->fireball[i][j].explosao = false; // Nao colidiu / chegou na distancia limite.
+			m->fireball[i][j].dist = 0; // Nao percorreu nenhuma distancia.
+			m->fireball[i][j].d = -1; // Nao tem direçao.
+			m->explox[i][j] = 280;
+			m->exploy[i][j] = 220;
+		}
+	}
+}
+
 void tira_neon(bool *puxa,bool *temneon, Pessoa *p)
 {
 	int i,j;
-	for(i=0;i<4;i++) {
+	for(i=0; i<4; ++i) {
 		if(puxa[i]) {
 			if(j = contato_proximo(i,j,p) != 5)
 				temneon[j] = false;
 		}
 	}
 
-	for(i=0;i<4;i++) // Pra nao contar como se estivesse sempre tentando puxar.
+	for(i=0; i<4; ++i) // Pra nao contar como se estivesse sempre tentando puxar.
 		puxa[i] = false;
 
 	return ;
@@ -21,7 +36,7 @@ void calcula_energia(Pessoa *p, int njogadores)
 	int i;
 
 	// Para de correr quando acaba energia.
-	for(i=0; i<njogadores; i++)
+	for(i=0; i<njogadores; ++i)
 		if(p[i].energia <= 0)
 			p[i].correr = 1;
 
@@ -38,95 +53,99 @@ void calcula_energia(Pessoa *p, int njogadores)
 	return ;
 }
 
-void usa_fireball(char **matriz,Magia (*fb)[2], Pessoa *p) {
+void usa_fireball(char **matriz, Pessoa *p, Magias *m) {
 	int i,j,k;
 	for(i=0; i<4; ++i) {
-		if(fb[i][0].ativa == false && fb[i][1].ativa == false)
+		if(m->fireball[i][0].ativa == false && m->fireball[i][1].ativa == false)
 			break ;
 		for(j=0; j<2; ++j) { // O mesmo player pode ter jogado duas fireballs.
-			if(fb[i][j].d == -1)
-				fb[i][j].d = calcula_direcao(p,i); /* Numeros de direçao no colisao.h */
+			if(m->fireball[i][j].d == -1)
+				m->fireball[i][j].d = calcula_direcao(p,i); // Numeros de direçao no colisao.h
 			for(k=0; k<4; ++k) {
-				if(contato_proximo_direcionado(fb[i][j].x,fb[i][j].y,i,k,fb[i][j].d,p) == k) {
-					//k = k; // Isso nao faz nada, tem que substituir por tirar vida de k.
-					p[k].hp -= fb[i][j].dano;
-					fb[i][j].ativa = false;
-					fb[i][j].explosao = true;
-					fb[i][j].d = -1;
+				if(contato_proximo_direcionado(m->fireball[i][j].x,m->fireball[i][j].y,i,k,m->fireball[i][j].d,p) == k) {
+					p[k].hp -= m->fireball[i][j].dano;
+					m->fireball[i][j].ativa = false;
+					m->fireball[i][j].explosao = true;
+					m->fireball[i][j].d = -1;
 				}
 			}
-			if(fb[i][j].ativa==true && colisao_fireball(matriz,fb[i][j].x,fb[i][j].y,fb[i][j].d) == 0) { // Nao colidiu com nenhum char, verifica se colidiu com algo do mapa. {
-				/*if(andou_b[i]==1){
-					fb[i][j].y -= 12;
-				}else if(andou_d[i]==1){
-					fb[i][j].x += 12;
-				}else if(andou_e[i]==1){
-					fb[i][j].x -= 12;
-				}else if(andou_b[i]==1){
-					fb[i][j].y += 12;
-				}*/
-				switch(fb[i][j].d) {
+			if(m->fireball[i][j].ativa==true && colisao_fireball(matriz,m->fireball[i][j].x,m->fireball[i][j].y,m->fireball[i][j].d) == 0) { // Nao colidiu com nenhum char, verifica se colidiu com algo do mapa. {
+				// if(andou_b[i]==1){
+					// m->fireball[i][j].y -= 12;
+				// }else if(andou_d[i]==1){
+					// m->fireball[i][j].x += 12;
+				// }else if(andou_e[i]==1){
+					// m->fireball[i][j].x -= 12;
+				// }else if(andou_b[i]==1){
+					// m->fireball[i][j].y += 12;
+				// }
+				switch(m->fireball[i][j].d) {
 					case 0:
-						fb[i][j].y -= 12;
+						m->fireball[i][j].y -= 12;
 						break;
 					case 1:
-						fb[i][j].x += 12;
+						m->fireball[i][j].x += 12;
 						break;
 					case 2:
-						fb[i][j].x -= 12;
+						m->fireball[i][j].x -= 12;
 						break;
 					case 3:
-						fb[i][j].y += 12;
+						m->fireball[i][j].y += 12;
 						break;
 					default:
 						break;
 				}
-				fb[i][j].dist += 12; // Dist eh usado pra limitar a distancia que a fireball vai. No caso, vai ser 300 pixels?
-				if(fb[i][j].dist >= 300) {
-					fb[i][j].ativa = false;
-					fb[i][j].explosao = true;
-					fb[i][j].d = -1;
+				m->fireball[i][j].dist += 12; // Dist eh usado pra limitar a distancia que a fireball vai. No caso, vai ser 300 pixels?
+				if(m->fireball[i][j].dist >= 300) {
+					m->fireball[i][j].d = -1;
+					m->fireball[i][j].ativa = false;
+					m->fireball[i][j].explosao = true;
+					m->fireball[i][j].xexpl = m->fireball[i][j].x;
+					m->fireball[i][j].yexpl = m->fireball[i][j].y;
 				}
 			}
-			else if(fb[i][j].ativa==true) { // Nao tah ativa OU colidiu. Vou considerar que eh a hipotese de ter colidido, entao passa pra falso.
-				fb[i][j].ativa = false;
-				fb[i][j].explosao = true;
-				fb[i][j].d = -1;
+			else if(m->fireball[i][j].ativa==true) { // Nao tah ativa OU colidiu. Vou considerar que eh a hipotese de ter colidido, entao passa pra falso.
+				m->fireball[i][j].d = -1;
+				m->fireball[i][j].ativa = false;
+				m->fireball[i][j].explosao = true;
+				m->fireball[i][j].xexpl = m->fireball[i][j].x;
+				m->fireball[i][j].yexpl = m->fireball[i][j].y;
 			}
 		}
 	}
 }
 
-void explosao(Pessoa *p, int njogadores, Sprite s,int explox[4][2],int exploy[4][2],Magia (*fireball)[2]) {
+void explosao(Pessoa *p, int njogadores, Sprite s, Magias *m) {
 	int i, j;
-	for(i=0;i<njogadores;i++) {
-		for(j=0;j<2;j++) {
-			if(fireball[i][j].ativa == true) {
-				al_draw_bitmap(s.fireballs[fireball[i][j].d],fireball[i][j].x,fireball[i][j].y,0);
+	for(i=0; i<njogadores; ++i) {
+		for(j=0; j<2; ++j) {
+			if(m->fireball[i][j].ativa == true) {
+				al_draw_bitmap(s.fireballs[m->fireball[i][j].d],m->fireball[i][j].x,m->fireball[i][j].y,0);
 			}
-			if(fireball[i][j].explosao == true) { // Enquanto explox = 288 e exploy = 224, ele nao imprime a explosao.
+			if(m->fireball[i][j].explosao == true) { // Enquanto explox = 288 e exploy = 224, ele nao imprime a explosao.
 							// Entao o esquema eh zerar eles e dai o programa começa a contagem e a impressao.
-				explox[i][j] = exploy[i][j] = 0;
-				fireball[i][j].explosao = false;
+				m->explox[i][j] = m->exploy[i][j] = 0;
+				m->fireball[i][j].explosao = false;
 			}
-			if(explox[i][j] < 280 && exploy[i][j] < 220) { // Imprime a explosao.
-				al_draw_bitmap_region(s.explosion,explox[i][j],exploy[i][j],32,32,fireball[i][j].x,fireball[i][j].y,0);
-				explox[i][j] += 32;
-				if(explox[i][j] >= 288) {
-					exploy[i][j] += 32;
-					if(exploy[i][j] < 224)
-						explox[i][j] = 0;
+			if(m->explox[i][j] < 280 && m->exploy[i][j] < 220) { // Imprime a explosao.
+				//al_draw_bitmap_region(s.explosion,m->explox[i][j],m->exploy[i][j],32,32,m->fireball[i][j].x,m->fireball[i][j].y,0);
+				al_draw_bitmap_region(s.explosion,m->explox[i][j],m->exploy[i][j],32,32,m->fireball[i][j].xexpl,m->fireball[i][j].yexpl,0);
+				m->explox[i][j] += 32;
+				if(m->explox[i][j] >= 288) {
+					m->exploy[i][j] += 32;
+					if(m->exploy[i][j] < 224)
+						m->explox[i][j] = 0;
 				}
 			}
 		}
 	}
 }
 
-void usa_magias(char **matriz,Magia (*fb)[2], Pessoa *p, int njogadores, Sprite s,int explox[4][2],int exploy[4][2], int *flash)
+void usa_magias(char **matriz, Pessoa *p, int njogadores, Sprite s, int *flash, Magias *m)
 {
 	usa_flash(p,flash,matriz);
-	usa_fireball(matriz, fb, p);
-	explosao(p,njogadores,s,explox,exploy,fb);
+	usa_fireball(matriz, p, m);
+	explosao(p,njogadores,s, m);
 	return ;
 }
 
@@ -158,12 +177,12 @@ void usa_flash(Pessoa *p,int *flash,char **matriz)
 	   pra sempre, entao pode dar um break/return (cuidar com diagonais dai!)
 	*/
 	int i,j;
-	for(i=0;i<4;i++) {
+	for(i=0; i<4; ++i) {
 		if(flash[i] && p[i].energia >= 50) {
 			flash[i] = 0;
 			p[i].energia -= 50;
 			/* Existem 8 casos (8 direçoes possiveis de andar, 4 sentidos e 4 diagonais). */
-			for(j=0;j<19;j++) {
+			for(j=0; j<19; ++j) {
 				if((p[i].andou_c) && !(p[i].andou_b) && !(p[i].andou_d) && !(p[i].andou_e)) { // Soh pra cima ( /\ ).
 					if(colidiu(matriz,p[i].x/4,p[i].y/4,2,i,p) == 1) {
 					    p[i].y += 4;

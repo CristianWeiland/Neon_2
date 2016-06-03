@@ -23,8 +23,6 @@
 #define LARGURA_CHAR 32
 #define ALTURA_CHAR 32
 
-//extern Pessoa pessoa[4];
-
 void imprime_pessoa(Pessoa p);
 void imprime_char(int cx,int cy,int a,int b,int selx,int sely,Sprite s);
 void imprime_neon(int x,int y,ALLEGRO_BITMAP* neon,bool temneon);
