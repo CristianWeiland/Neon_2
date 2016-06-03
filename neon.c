@@ -33,6 +33,13 @@ int main()
 	/* Arquivos */
     FILE *errext; // errext = error exit (ou saida de erros)
 
+	/* Inicializacao do arquivo */
+	errext = fopen("err.txt","w");
+	if(!errext) {
+		puts("Error opening file.");
+		exit(1);
+	}
+
 	p = (Pessoa *) malloc(sizeof(Pessoa) * NJOGADORES);
 	for(i=0; i<NJOGADORES; ++i) {
 		// Inicializacoes da estrutura Pessoa
@@ -46,13 +53,13 @@ int main()
 		p[i].andou_d = 0;
 		p[i].andou_e = 0;
 		p[i].energia = 100;
-	}
-
-	/* Inicializacao dos arquivos. */
-	errext = fopen("err.txt","w");
-	if(!errext) {
-		puts("Error opening file.");
-		exit(1); // Se deu erro no lugar onde vao ser anotados os erros, ferrou!
+		p[i].nome = (char*) malloc(30*sizeof(char));
+		if(!p[i].nome) {
+			fprintf(errext,"Falha ao alocar memoria para p[%d].nome",i);
+			fclose(errext);
+			exit(1);
+		}
+		sprintf(p[i].nome,"player %d",i+1);
 	}
 
     /* Inicializaçoes do Allegro */
@@ -65,7 +72,7 @@ int main()
 
     al_register_event_source(win.event_queue, al_get_display_event_source(win.display));
 
-	teclas_iniciais(p, errext);
+	teclas_iniciais(p);
 
 /*
 	if( access( Comandos/cmd.txt, F_OK ) != -1 ) {
