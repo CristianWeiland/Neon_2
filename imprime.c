@@ -38,6 +38,7 @@ inline void imprime_neon(int x,int y,ALLEGRO_BITMAP* neon,bool temneon)
 inline void imprime_char(int cx,int cy,int a,int b,int selx,int sely,Sprite s)
 {    // cx e cy indicam qual a posicao do char no mapa. A e B indicam qual o "boneco" deve ser imprimido pela funçao. Selx e Sely indicam qual
      // imagem do "boneco" (ex: mexendo uma perna, ou de costas, etc.)
+	 // A deve ser 0 ou 96. B deve ser 0 ou 128. selx deve ser 0, 32 ou 64. sely deve ser 0, 32, 64 ou 96.
     al_draw_bitmap_region(s.chars,a+selx,b+sely,LARGURA_CHAR,ALTURA_CHAR,cx,cy,0);   // Desenha char 1. | Obs.: Ver 96 como 32x3 e 128 como 32x4.
     return ;
 }
