@@ -68,7 +68,6 @@ public:
     }
 
     void imprime(bool hover) {
-        //ALLEGRO_COLOR cor = hover ? VERDE_LIMAO : AMARELO;
         ALLEGRO_COLOR cor = hover ? BRANCO : CINZA_ESCURO;
         int image_h_sel = hover ? HOVER_BUTTON_DISLOCATION : 0;
         //al_draw_bitmap_region(button_bmp, 0, image_h_sel, BUTTON_WIDTH, BUTTON_HEIGHT, x, y, 0);

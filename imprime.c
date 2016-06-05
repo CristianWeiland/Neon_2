@@ -18,9 +18,6 @@ void imprime_pessoa(Pessoa p) {
 	printf("andou_b = %d, andou_c = %d, andou_d = %d, andou_e = %d\n",
 		   p.andou_b, p.andou_c, p.andou_d, p.andou_e);
 	printf("botoes: b = %s, c = %s, d = %s, e = %s\nbotao_char: ", p.botao_b, p.botao_c, p.botao_d, p.botao_e);
-	/*for(int i=0; i<7; ++i) { // Isso ta errado.
-		printf("(%d): %c, ", i+1, p.botao_char[i]);
-	}*/
 	printf("\nenergia: %d, correr: %d, morto: %d, dash: %d, comp: %d, time: %d\n", p.energia, p.correr, p.morto, p.dash, p.comp, p.time);
 	for(int i=0; i<7; ++i) {
 		printf("(%d): %d, ", i+1, p.botao_char_int[i]);

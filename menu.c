@@ -4,6 +4,8 @@ Window Win;
 Pessoa *Pessoas;
 Sprite Sprites;
 ALLEGRO_FONT *Font;
+ALLEGRO_COLOR Color[PESSOAS]; // PESSOAS == numero jogadores
+int Desx[PESSOAS], Desy[PESSOAS], Time[PESSOAS]; // PESSOAS == numero jogadores
 
 void imprime_menu(Botoes *botoes, int n_botoes, int mx, int my) {
 /* Imprimir o menu eh uma operacao cara. Soh imprima quando ele mudar:
@@ -25,21 +27,22 @@ int fecha_jogo(void) {
 }
 
 void imprime_personagens() {
-	for(int i=0; i<4; ++i) {
-		imprime_char(Pessoas[i].x, Pessoas[i].y, Pessoas[i].desx, Pessoas[i].desy, Pessoas[i].selx, Pessoas[i].sely, Sprites);
+	for(int i=0; i<PESSOAS; ++i) {
+		imprime_char(Pessoas[i].x, Pessoas[i].y, Desx[i], Desy[i], Pessoas[i].selx, Pessoas[i].sely, Sprites);
+		al_draw_textf(Font, Color[Time[i]-1], 155+100*i, 200, 0, "Time %d", Time[i]);
 	}
-	// Falta imprimir o numero do time.
 	// Falta imprimir textos tipo: Escolha seu personagem! Escolha seu time!
 }
 
+// Funcoes que retornam 0 significa que o retorno eh ignorado. Se retorno != 0, vai sair do while.
 int char_next(int i) {
-	Pessoas[i].desx = (Pessoas[i].desx + 96) % 192;
-	Pessoas[i].desy = (Pessoas[i].desx == i) ? (Pessoas[i].desy + 128) % 256 : Pessoas[i].desy;
+	Desx[i] = (Desx[i] + 96) % 192;
+	Desy[i] = (Desx[i] == 0) ? (Desy[i] + 128) % 256 : Desy[i];
 	return 0;
 }
 int char_prev(int i) { // Isso nao funciona. Arrumar.
-	Pessoas[i].desx = (Pessoas[i].desx + 96) % 192;
-	Pessoas[i].desy = (Pessoas[i].desx == i) ? (Pessoas[i].desy + 128) % 256 : Pessoas[i].desy;
+	Desx[i] = (Desx[i] + 96) % 192;
+	Desy[i] = (Desx[i] != 0) ? (Desy[i] + 128) % 256 : Desy[i];
 	return 0;
 }
 
@@ -52,16 +55,26 @@ int char_1_prev() { return char_prev(1); }
 int char_2_prev() { return char_prev(2); }
 int char_3_prev() { return char_prev(3); }
 
-int team_0_next() { Pessoas[0].time = (Pessoas[0].time + 1) % 3; return 0; }
-int team_1_next() { Pessoas[1].time = (Pessoas[1].time + 1) % 3; return 0; }
-int team_2_next() { Pessoas[2].time = (Pessoas[2].time + 1) % 3; return 0; }
-int team_3_next() { Pessoas[3].time = (Pessoas[3].time + 1) % 3; return 0; }
-int team_0_prev() { Pessoas[0].time = (Pessoas[0].time - 1) % 3; return 0; }
-int team_1_prev() { Pessoas[1].time = (Pessoas[1].time - 1) % 3; return 0; }
-int team_2_prev() { Pessoas[2].time = (Pessoas[2].time - 1) % 3; return 0; }
-int team_3_prev() { Pessoas[3].time = (Pessoas[3].time - 1) % 3; return 0; }
+ // Tem que ser numero entre 1 e 4.
+int team_0_next() { Time[0] = (Time[0] % 4) + 1; return 0; }
+int team_1_next() { Time[1] = (Time[1] % 4) + 1; return 0; }
+int team_2_next() { Time[2] = (Time[2] % 4) + 1; return 0; }
+int team_3_next() { Time[3] = (Time[3] % 4) + 1; return 0; }
+int team_0_prev() { Time[0] = ((Time[0] + 2) % 4) + 1; return 0; }
+int team_1_prev() { Time[1] = ((Time[1] + 2) % 4) + 1; return 0; }
+int team_2_prev() { Time[2] = ((Time[2] + 2) % 4) + 1; return 0; }
+int team_3_prev() { Time[3] = ((Time[3] + 2) % 4) + 1; return 0; }
 
-int return_1() { return 1; }
+int back_to_menu() { return 1; }
+
+int salvar_configs() {
+	for(int i=0; i<PESSOAS; ++i) {
+		Pessoas[i].desx = Desx[i];
+		Pessoas[i].desy = Desy[i];
+		Pessoas[i].time = Time[i];
+	}
+	return 0;
+}
 
 int selecao_personagem(void) {
 	int i, tamanho, mx = 0, my = 0, retorno = 0;
@@ -71,25 +84,31 @@ int selecao_personagem(void) {
     for(i=0; i<NUM_BOTOES_SEL_PERSONAGEM; ++i)
         oldHovering[i] = newHovering[i] = false;
 
+	for(i=0; i<PESSOAS; ++i) {
+		Desx[i] = Pessoas[i].desx;
+		Desy[i] = Pessoas[i].desy;
+		Time[i] = Pessoas[i].time;
+	}
+
     /* Provavelmente eu deveria mudar pra deixar os personagens lado a lado. */
     botoes[0].set_position(140,160);
-    botoes[1].set_position(182,160);
+    botoes[1].set_position(210,160);
     botoes[2].set_position(240,160);
-    botoes[3].set_position(282,160);
+    botoes[3].set_position(310,160);
     botoes[4].set_position(340,160);
-    botoes[5].set_position(382,160);
+    botoes[5].set_position(410,160);
     botoes[6].set_position(440,160);
-    botoes[7].set_position(482,160);
+    botoes[7].set_position(510,160);
 
     /* Ta errado, eh soh pra nao dar seg fault. */
     botoes[8].set_position(140,200);
-    botoes[9].set_position(180,200);
+    botoes[9].set_position(210,200);
     botoes[10].set_position(240,200);
-    botoes[11].set_position(280,200);
+    botoes[11].set_position(310,200);
     botoes[12].set_position(340,200);
-    botoes[13].set_position(380,200);
+    botoes[13].set_position(410,200);
     botoes[14].set_position(440,200);
-    botoes[15].set_position(480,200);
+    botoes[15].set_position(510,200);
     botoes[16].set_position(100,500);
     botoes[17].set_position(400,500);
 
@@ -115,8 +134,8 @@ int selecao_personagem(void) {
     botoes[16].set_text("Voltar");
     botoes[17].set_text("Salvar"); // Tenho que criar um backup antes de mudar td.
 
-    for(i=0; i<4; ++i) {
-    	Pessoas[i].x = 150 + (100 * i);
+    for(i=0; i<PESSOAS; ++i) {
+    	Pessoas[i].x = 162 + (100 * i);
     	Pessoas[i].y = 150;
     	Pessoas[i].desx = 0;
     	Pessoas[i].desy = 0;
@@ -140,7 +159,8 @@ int selecao_personagem(void) {
     botoes[13].set_func(team_2_next);
     botoes[14].set_func(team_3_prev);
     botoes[15].set_func(team_3_next);
-    botoes[16].set_func(return_1);
+    botoes[16].set_func(back_to_menu);
+    botoes[17].set_func(salvar_configs);
 
     imprime_menu(botoes, NUM_BOTOES_SEL_PERSONAGEM, mx, my);
     imprime_personagens();
@@ -183,7 +203,7 @@ int selecao_personagem(void) {
                 break ;
         }
     } while(!retorno);
-    return retorno;
+    return 0;
 }
 
 int menu_principal(Window win,Pessoa *p,Sprite s)
@@ -199,6 +219,10 @@ int menu_principal(Window win,Pessoa *p,Sprite s)
     Pessoas = p;
     Sprites = s;
     Font = al_load_font("Fonts/fixed_font.tga",14,0);
+	Color[0] = AMARELO;
+	Color[1] = AZUL_ESCURO;
+	Color[2] = VERDE;
+	Color[3] = VERMELHO;
 
     for(i=0; i<NUM_BOTOES; ++i)
         oldHovering[i] = newHovering[i] = false;
@@ -210,7 +234,7 @@ int menu_principal(Window win,Pessoa *p,Sprite s)
     botoes[4].set_position(30,210);
     botoes[0].set_text("Jogar");
     botoes[1].set_text("Carregar");
-    botoes[2].set_text("Configurações");
+    botoes[2].set_text("Configuracoes");
     botoes[3].set_text("Comandos");
     botoes[4].set_text("Sair");
     botoes[0].set_func(comeca_jogo);
