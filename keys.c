@@ -25,9 +25,9 @@ void teclas_iniciais(Pessoa *p)
 	p[0].botao_char_int[DOWN] = ALLEGRO_KEY_DOWN;
 	p[0].botao_char_int[RIGHT] = ALLEGRO_KEY_RIGHT;
 	p[0].botao_char_int[LEFT] = ALLEGRO_KEY_LEFT;
-	p[0].botao_char_int[CORRE] = ALLEGRO_KEY_RCTRL;
-	p[0].botao_char_int[PUXAR] = ALLEGRO_KEY_ALTGR;
-	//p[0].botao_char_int[FLASH] = ALLEGRO_KEY_ALTGR; // Ta comentado porque falta escolher uma tecla pra isso.
+	p[0].botao_char_int[CORRE] = ALLEGRO_KEY_INSERT;
+	p[0].botao_char_int[PUXAR] = ALLEGRO_KEY_HOME;
+	p[0].botao_char_int[FLASH] = ALLEGRO_KEY_PGUP;
 
 	p[1].botao_char_int[UP] = ALLEGRO_KEY_I;
 	p[1].botao_char_int[DOWN] = ALLEGRO_KEY_K;
@@ -35,7 +35,7 @@ void teclas_iniciais(Pessoa *p)
 	p[1].botao_char_int[LEFT] = ALLEGRO_KEY_J;
 	p[1].botao_char_int[CORRE] = ALLEGRO_KEY_U;
 	p[1].botao_char_int[PUXAR] = ALLEGRO_KEY_O;
-	//p[1].botao_char_int[FLASH] = ALLEGRO_KEY_ALTGR;
+	p[1].botao_char_int[FLASH] = ALLEGRO_KEY_P;
 
 	p[2].botao_char_int[UP] = ALLEGRO_KEY_T;
 	p[2].botao_char_int[DOWN] = ALLEGRO_KEY_G;
@@ -43,7 +43,7 @@ void teclas_iniciais(Pessoa *p)
 	p[2].botao_char_int[LEFT] = ALLEGRO_KEY_F;
 	p[2].botao_char_int[CORRE] = ALLEGRO_KEY_R;
 	p[2].botao_char_int[PUXAR] = ALLEGRO_KEY_Y;
-	//p[2].botao_char_int[FLASH] = ALLEGRO_KEY_ALTGR;
+	p[2].botao_char_int[FLASH] = ALLEGRO_KEY_5;
 
 	p[3].botao_char_int[UP] = ALLEGRO_KEY_W;
 	p[3].botao_char_int[DOWN] = ALLEGRO_KEY_S;
@@ -51,7 +51,8 @@ void teclas_iniciais(Pessoa *p)
 	p[3].botao_char_int[LEFT] = ALLEGRO_KEY_A;
 	p[3].botao_char_int[CORRE] = ALLEGRO_KEY_Q;
 	p[3].botao_char_int[PUXAR] = ALLEGRO_KEY_E;
-	//p[3].botao_char_int[FLASH] = ALLEGRO_KEY_ALTGR;
+	p[3].botao_char_int[FLASH] = ALLEGRO_KEY_2;
+
 	return;
 }
 

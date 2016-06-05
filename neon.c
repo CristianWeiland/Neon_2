@@ -40,6 +40,7 @@ int main()
 		exit(1);
 	}
 
+	// Isso tem que ficar depois do abremenu.
 	p = (Pessoa *) malloc(sizeof(Pessoa) * NJOGADORES);
 	for(i=0; i<NJOGADORES; ++i) {
 		// Inicializacoes da estrutura Pessoa
@@ -91,7 +92,7 @@ int main()
 	fclose(errext);
 
     /* Opera o jogo */
-	if(abremenu(win,p,s)==1) {
+	if(menu_principal(win,p,s)==1) {
 		fase1(win,p,s,m);
 	}
 	graphdeinit(win);

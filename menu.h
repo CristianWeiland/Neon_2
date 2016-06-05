@@ -10,7 +10,8 @@
 char editor_text(ALLEGRO_EVENT ev);
 int botao(char *texto,int x,int y,ALLEGRO_EVENT ev);
 void opcoes(Window win, Pessoa *p);
-int abremenu(Window win,Pessoa *p,Sprite s);
+int selecao_personagem(void);
+int menu_principal(Window win,Pessoa *p,Sprite s);
 
 #define TEXT_SIZE 128
 #define NUM_BOTOES 5
@@ -18,6 +19,7 @@ int abremenu(Window win,Pessoa *p,Sprite s);
 #define BUTTON_HEIGHT 32
 #define HOVER_BUTTON_DISLOCATION 40
 #define CLICK_BUTTON_DISLOCATION 80
+#define NUM_BOTOES_SEL_PERSONAGEM 18 // 16 pra selecionar, 1 pra voltar, 1 pra salvar.
 
 
 class Botoes {
@@ -66,7 +68,6 @@ public:
     }
 
     void imprime(bool hover) {
-        //ALLEGRO_COLOR cor = hover ? VERDE_LIMAO : AMARELO;
         ALLEGRO_COLOR cor = hover ? BRANCO : CINZA_ESCURO;
         int image_h_sel = hover ? HOVER_BUTTON_DISLOCATION : 0;
         //al_draw_bitmap_region(button_bmp, 0, image_h_sel, BUTTON_WIDTH, BUTTON_HEIGHT, x, y, 0);
