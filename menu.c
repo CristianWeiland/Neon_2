@@ -150,9 +150,66 @@ bool configs_nao_salvas() {
 }
 
 /* Função para retornar ao menu principal. Chamada pelo botão "voltar" */
+int return_1() { return 1; }
+int return_0() { return 0; }
+int salvar_e_sair() { salvar_configs(); return 1; }
 int back_to_menu() {
     if(configs_nao_salvas) {
+        int mx,my,retorno;
+        bool oldHovering[3], newHovering[3], devoImprimir = false;
         printf("Vc provavelmente fez cagadinha.\n"); // MUDAR ISSO PELO AMOR DE DEUS
+        al_clear_to_color(PRETO);
+        al_draw_text(Font, CINZA_ESCURO, 200, 200, 0, "Existem alteracoes nao salvas. O que deseja fazer?");
+        Botoes botoes[3];
+        botoes[0].set_text("Voltar para tela de configurações");
+        botoes[1].set_text("Sair sem salvar");
+        botoes[2].set_text("Salvar e sair");
+        botoes[0].set_func(return_0);
+        botoes[1].set_func(return_1);
+        botoes[2].set_func(salvar_e_sair);
+        botoes[0].set_position(200,250);
+        botoes[0].set_position(200,300);
+        botoes[0].set_position(200,350);
+        for(int i=0; i<3; ++i) {
+            botoes[i].imprime(botoes[i].hovering(mx,my));
+        }
+        al_flip_display();
+        do {
+            al_wait_for_event(Win.event_queue, &Ev);
+            switch (Ev.type) {
+                case ALLEGRO_EVENT_DISPLAY_CLOSE:
+                    graphdeinit(Win);
+                    exit(1);
+                    break ;
+                case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
+                    for(int i=0; i<BOTOES_SEL_PERSONAGEM_TOTAL; ++i) {
+                        if(botoes[i].hovering(mx,my)) {
+                            retorno = botoes[i].execute();
+                            imprime_menu(botoes, BOTOES_SEL_PERSONAGEM_TOTAL, mx, my);
+                            al_flip_display();
+                        }
+                    }
+                    break ;
+                case ALLEGRO_EVENT_MOUSE_AXES:
+                    mx = Ev.mouse.x;
+                    my = Ev.mouse.y;
+                    for(int i=0; i<BOTOES_SEL_PERSONAGEM_TOTAL; ++i) {
+                        newHovering[i] = botoes[i].hovering(mx,my);
+                        if(oldHovering[i] != newHovering[i]) { // Se tava em cima do botao, tirou. Se tava fora, colocou em cima.
+                            oldHovering[i] = newHovering[i];
+                            devoImprimir = true;
+                        }
+                        if(devoImprimir) {
+                            imprime_menu(botoes, BOTOES_SEL_PERSONAGEM_TOTAL, mx, my);
+                            imprime_configs();
+                            al_flip_display();
+                            devoImprimir = false;
+                        }
+                    }
+                    break ;
+            }
+        } while(!retorno);
+
     }
     return 1;
 }
