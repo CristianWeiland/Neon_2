@@ -7,7 +7,6 @@ ALLEGRO_EVENT Ev;
 ALLEGRO_FONT *Font;
 ALLEGRO_COLOR Color[PESSOAS]; // PESSOAS == numero jogadores
 int Desx[PESSOAS], Desy[PESSOAS], Time[PESSOAS], Botoes_int[PESSOAS][COMANDOS_POR_PERSONAGEM]; // PESSOAS == numero jogadores
-bool EsperandoTecla;
 
 void imprime_menu(Botoes *botoes, int n_botoes, int mx, int my) {
 /* Imprimir o menu eh uma operacao cara. Soh imprima quando ele mudar:
@@ -29,21 +28,21 @@ int fecha_jogo(void) {
 }
 
 void imprime_configs() {
-	for(int i=0; i<PESSOAS; ++i) {
-        al_draw_textf(Font, AMARELO_QUEIMADO, 140+150*i, 100, 0, "Jogador %d", Time[i]);
-		imprime_char(162+150*i, 150, Desx[i], Desy[i], Pessoas[i].selx, Pessoas[i].sely, Sprites);
-		al_draw_textf(Font, Color[Time[i]-1], 155+150*i, 200, 0, "Time %d", Time[i]);
-		// Esses montes de al_draw_text nao parecem bons (ainda mais que tao num for de 4x).
-		al_draw_text(Font, CINZA_ESCURO, 155+150*i, 250, 0, "Cima :");
-		al_draw_text(Font, CINZA_ESCURO, 155+150*i, 270, 0, "Baixo :");
-		al_draw_text(Font, CINZA_ESCURO, 155+150*i, 290, 0, "Esquerda :");
-		al_draw_text(Font, CINZA_ESCURO, 155+150*i, 310, 0, "Direita :");
-		al_draw_text(Font, CINZA_ESCURO, 155+150*i, 330, 0, "Correr :");
-		al_draw_text(Font, CINZA_ESCURO, 155+150*i, 350, 0, "Puxar :");
-		al_draw_text(Font, CINZA_ESCURO, 155+150*i, 370, 0, "Flash :");
-	}
+    for(int i=0; i<PESSOAS; ++i) {
+        al_draw_textf(Font, AMARELO_QUEIMADO, 90+200*i, 100, 0, "Jogador %d", Time[i]);
+        imprime_char(112+200*i, 150, Desx[i], Desy[i], Pessoas[i].selx, Pessoas[i].sely, Sprites);
+        al_draw_textf(Font, Color[Time[i]-1], 105+200*i, 200, 0, "Time %d", Time[i]);
+        // Esses montes de al_draw_text nao parecem bons (ainda mais que tao num for de 4x).
+        al_draw_text(Font, CINZA_ESCURO, 75+200*i, 250, 0, "Cima :");
+        al_draw_text(Font, CINZA_ESCURO, 75+200*i, 270, 0, "Baixo :");
+        al_draw_text(Font, CINZA_ESCURO, 75+200*i, 290, 0, "Esquerda :");
+        al_draw_text(Font, CINZA_ESCURO, 75+200*i, 310, 0, "Direita :");
+        al_draw_text(Font, CINZA_ESCURO, 75+200*i, 330, 0, "Correr :");
+        al_draw_text(Font, CINZA_ESCURO, 75+200*i, 350, 0, "Puxar :");
+        al_draw_text(Font, CINZA_ESCURO, 75+200*i, 370, 0, "Flash :");
+    }
+
 	// Falta imprimir textos tipo: Escolha seu personagem! Escolha seu time!
-    /* if(EsperandoTecla) imprime(esperandoTecla); */
 }
 
 // Funcoes que retornam 0 significa que o retorno eh ignorado. Se retorno != 0, vai sair do while.
@@ -93,10 +92,10 @@ int set_next_key(int indice_pessoa, int indice_tecla) {
     return 0;
 }
 void esperaTecla() {
-    EsperandoTecla = true;
+    al_draw_text(Font, PIXEL(169,68,66), 350, 500, 0, "Aperte alguma tecla...");
+    al_flip_display();
     while(Ev.type != ALLEGRO_EVENT_KEY_DOWN)
         al_wait_for_event(Win.event_queue, &Ev); // Espera usuário apertar uma tecla.
-    EsperandoTecla = false;
 }
 int set_key_0_0() { esperaTecla(); return set_next_key(0,0); }
 int set_key_0_1() { esperaTecla(); return set_next_key(0,1); }
@@ -168,7 +167,6 @@ int selecao_personagem(void) {
     for(i=0; i<BOTOES_SEL_PERSONAGEM_TOTAL; ++i)
         oldHovering[i] = newHovering[i] = false;
 
-    EsperandoTecla = false;
 	for(i=0; i<PESSOAS; ++i) {
 		Desx[i] = Pessoas[i].desx;
 		Desy[i] = Pessoas[i].desy;
@@ -179,27 +177,21 @@ int selecao_personagem(void) {
 	}
 
     /* Provavelmente eu deveria mudar pra deixar os personagens lado a lado. */
-    botoes[0].set_position(140,160);
-    botoes[1].set_position(210,160);
-    botoes[2].set_position(290,160);
-    botoes[3].set_position(360,160);
-    botoes[4].set_position(440,160);
-    botoes[5].set_position(510,160);
-    botoes[6].set_position(590,160);
-    botoes[7].set_position(660,160);
-    botoes[8].set_position(140,200);
-    botoes[9].set_position(210,200);
-    botoes[10].set_position(290,200);
-    botoes[11].set_position(360,200);
-    botoes[12].set_position(440,200);
-    botoes[13].set_position(510,200);
-    botoes[14].set_position(590,200);
-    botoes[15].set_position(660,200);
-    botoes[16].set_position(100,500);
-    botoes[17].set_position(400,500);
+    int x_inicial[2] = {90,160}; // Posição inicial dos "<" e ">" (botoes pra selecionar personagem e time).
+    int x_variacao = 200; // Distancia entre dois "<"
+    for(i=0; i<BOTOES_SEL_PERSONAGEM/2; ++i) {
+        botoes[2*i].set_position(x_inicial[0] + i*x_variacao, 160);
+        botoes[2*i+1].set_position(x_inicial[1] + i*x_variacao, 160);
+    }
+    for(i=0; i<BOTOES_SEL_TIME/2; ++i) {
+        botoes[2*i   + BOTOES_SEL_PERSONAGEM].set_position(x_inicial[0] + i*x_variacao, 200);
+        botoes[2*i+1 + BOTOES_SEL_PERSONAGEM].set_position(x_inicial[1] + i*x_variacao, 200);
+    }
+    botoes[16].set_position(70,500);
+    botoes[17].set_position(800,500);
     for(i=0; i<PESSOAS; ++i) {
         for(j=0; j<COMANDOS_POR_PERSONAGEM; ++j) {
-            botoes[18+i*COMANDOS_POR_PERSONAGEM+j].set_position(250+150*i, 250+20*j);
+            botoes[18+i*COMANDOS_POR_PERSONAGEM+j].set_position(170+200*i, 250+20*j);
         }
     }
 
