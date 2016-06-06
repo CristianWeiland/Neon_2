@@ -26,10 +26,26 @@ int fecha_jogo(void) {
     return 0;
 }
 
-void imprime_personagens() {
+void imprime_configs() {
 	for(int i=0; i<PESSOAS; ++i) {
-		imprime_char(Pessoas[i].x, Pessoas[i].y, Desx[i], Desy[i], Pessoas[i].selx, Pessoas[i].sely, Sprites);
-		al_draw_textf(Font, Color[Time[i]-1], 155+100*i, 200, 0, "Time %d", Time[i]);
+		imprime_char(162+150*i, 150, Desx[i], Desy[i], Pessoas[i].selx, Pessoas[i].sely, Sprites);
+		al_draw_textf(Font, Color[Time[i]-1], 155+150*i, 200, 0, "Time %d", Time[i]);
+		// Esses montes de al_draw_text nao parecem bons (ainda mais que tao num for de 4x).
+		al_draw_text(Font, CINZA_ESCURO, 155+150*i, 250, 0, "Cima :");
+		al_draw_text(Font, CINZA_ESCURO, 155+150*i, 270, 0, "Baixo :");
+		al_draw_text(Font, CINZA_ESCURO, 155+150*i, 290, 0, "Esquerda :");
+		al_draw_text(Font, CINZA_ESCURO, 155+150*i, 310, 0, "Direita :");
+		al_draw_text(Font, CINZA_ESCURO, 155+150*i, 330, 0, "Correr :");
+		al_draw_text(Font, CINZA_ESCURO, 155+150*i, 350, 0, "Puxar :");
+		al_draw_text(Font, CINZA_ESCURO, 155+150*i, 370, 0, "Flash :");
+		// Esses textf na verdade tem que ser botoes.
+		al_draw_textf(Font, CINZA_ESCURO, 250+150*i, 250, 0, "a");
+		al_draw_textf(Font, CINZA_ESCURO, 250+150*i, 270, 0, "a");
+		al_draw_textf(Font, CINZA_ESCURO, 250+150*i, 290, 0, "a");
+		al_draw_textf(Font, CINZA_ESCURO, 250+150*i, 310, 0, "a");
+		al_draw_textf(Font, CINZA_ESCURO, 250+150*i, 330, 0, "a");
+		al_draw_textf(Font, CINZA_ESCURO, 250+150*i, 350, 0, "a");
+		al_draw_textf(Font, CINZA_ESCURO, 250+150*i, 370, 0, "a");
 	}
 	// Falta imprimir textos tipo: Escolha seu personagem! Escolha seu time!
 }
@@ -93,22 +109,20 @@ int selecao_personagem(void) {
     /* Provavelmente eu deveria mudar pra deixar os personagens lado a lado. */
     botoes[0].set_position(140,160);
     botoes[1].set_position(210,160);
-    botoes[2].set_position(240,160);
-    botoes[3].set_position(310,160);
-    botoes[4].set_position(340,160);
-    botoes[5].set_position(410,160);
-    botoes[6].set_position(440,160);
-    botoes[7].set_position(510,160);
-
-    /* Ta errado, eh soh pra nao dar seg fault. */
+    botoes[2].set_position(290,160);
+    botoes[3].set_position(360,160);
+    botoes[4].set_position(440,160);
+    botoes[5].set_position(510,160);
+    botoes[6].set_position(590,160);
+    botoes[7].set_position(660,160);
     botoes[8].set_position(140,200);
     botoes[9].set_position(210,200);
-    botoes[10].set_position(240,200);
-    botoes[11].set_position(310,200);
-    botoes[12].set_position(340,200);
-    botoes[13].set_position(410,200);
-    botoes[14].set_position(440,200);
-    botoes[15].set_position(510,200);
+    botoes[10].set_position(290,200);
+    botoes[11].set_position(360,200);
+    botoes[12].set_position(440,200);
+    botoes[13].set_position(510,200);
+    botoes[14].set_position(590,200);
+    botoes[15].set_position(660,200);
     botoes[16].set_position(100,500);
     botoes[17].set_position(400,500);
 
@@ -135,8 +149,6 @@ int selecao_personagem(void) {
     botoes[17].set_text("Salvar"); // Tenho que criar um backup antes de mudar td.
 
     for(i=0; i<PESSOAS; ++i) {
-    	Pessoas[i].x = 162 + (100 * i);
-    	Pessoas[i].y = 150;
     	Pessoas[i].desx = 0;
     	Pessoas[i].desy = 0;
     	Pessoas[i].selx = 32;
@@ -163,7 +175,7 @@ int selecao_personagem(void) {
     botoes[17].set_func(salvar_configs);
 
     imprime_menu(botoes, NUM_BOTOES_SEL_PERSONAGEM, mx, my);
-    imprime_personagens();
+    imprime_configs();
     al_flip_display();
 
     ALLEGRO_EVENT ev;
@@ -179,7 +191,7 @@ int selecao_personagem(void) {
                     if(botoes[i].hovering(mx,my)) {
                         retorno = botoes[i].execute();
                         imprime_menu(botoes, NUM_BOTOES_SEL_PERSONAGEM, mx, my);
-    					imprime_personagens();
+    					imprime_configs();
     					al_flip_display();
                     }
                 }
@@ -195,7 +207,7 @@ int selecao_personagem(void) {
                     }
                     if(devoImprimir) {
                         imprime_menu(botoes, NUM_BOTOES_SEL_PERSONAGEM, mx, my);
-    					imprime_personagens();
+    					imprime_configs();
     					al_flip_display();
                         devoImprimir = false;
                     }
