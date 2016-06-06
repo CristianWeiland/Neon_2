@@ -29,7 +29,7 @@ int fecha_jogo(void) {
 
 void imprime_configs() {
     for(int i=0; i<PESSOAS; ++i) {
-        al_draw_textf(Font, AMARELO_QUEIMADO, 90+200*i, 100, 0, "Jogador %d", Time[i]);
+        al_draw_textf(Font, AMARELO_QUEIMADO, 90+200*i, 100, 0, "Jogador %d", i+1);
         imprime_char(112+200*i, 150, Desx[i], Desy[i], Pessoas[i].selx, Pessoas[i].sely, Sprites);
         al_draw_textf(Font, Color[Time[i]-1], 105+200*i, 200, 0, "Time %d", Time[i]);
         // Esses montes de al_draw_text nao parecem bons (ainda mais que tao num for de 4x).
@@ -140,13 +140,20 @@ int salvar_configs() {
 }
 bool configs_nao_salvas() {
     for(int i=0; i<PESSOAS; ++i) {
-        if(Pessoas[i].desx != Desx[i]) return true;
-        if(Pessoas[i].desy != Desy[i]) return true;
-        if(Pessoas[i].time != Time[i]) return true;
+        if(Pessoas[i].desx != Desx[i]) {
+        	return true;
+        }
+        if(Pessoas[i].desy != Desy[i]) {
+        	return true;
+        }
+        if(Pessoas[i].time != Time[i]) {
+        	return true;
+        }
         for(int j=0; j<COMANDOS_POR_PERSONAGEM; ++j) {
             if(Pessoas[i].botao_char_int[j] != Botoes_int[i][j]) return true;
         }
     }
+    return false;
 }
 
 /* Função para retornar ao menu principal. Chamada pelo botão "voltar" */
@@ -154,22 +161,24 @@ int return_1() { return 1; }
 int return_0() { return 0; }
 int salvar_e_sair() { salvar_configs(); return 1; }
 int back_to_menu() {
-    if(configs_nao_salvas) {
-        int mx,my,retorno;
+    if(configs_nao_salvas()) {
+        int mx,my,retorno = 0;
         bool oldHovering[3], newHovering[3], devoImprimir = false;
+	    for(int i=0; i<3; ++i)
+	        oldHovering[i] = newHovering[i] = false;
         printf("Vc provavelmente fez cagadinha.\n"); // MUDAR ISSO PELO AMOR DE DEUS
         al_clear_to_color(PRETO);
-        al_draw_text(Font, CINZA_ESCURO, 200, 200, 0, "Existem alteracoes nao salvas. O que deseja fazer?");
+        al_draw_text(Font, PIXEL(169,68,66), 200, 200, 0, "Existem alteracoes nao salvas. O que deseja fazer?");
         Botoes botoes[3];
-        botoes[0].set_text("Voltar para tela de configurações");
+        botoes[0].set_text("Voltar para tela de configuracoes");
         botoes[1].set_text("Sair sem salvar");
         botoes[2].set_text("Salvar e sair");
         botoes[0].set_func(return_0);
         botoes[1].set_func(return_1);
         botoes[2].set_func(salvar_e_sair);
         botoes[0].set_position(200,250);
-        botoes[0].set_position(200,300);
-        botoes[0].set_position(200,350);
+        botoes[1].set_position(200,300);
+        botoes[2].set_position(200,350);
         for(int i=0; i<3; ++i) {
             botoes[i].imprime(botoes[i].hovering(mx,my));
         }
@@ -182,29 +191,35 @@ int back_to_menu() {
                     exit(1);
                     break ;
                 case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
-                    for(int i=0; i<BOTOES_SEL_PERSONAGEM_TOTAL; ++i) {
+                	printf("Clicou\n");
+                    for(int i=0; i<3; ++i) {
                         if(botoes[i].hovering(mx,my)) {
+                    		printf("CLICOU NI MIM!\n");
                             retorno = botoes[i].execute();
-                            imprime_menu(botoes, BOTOES_SEL_PERSONAGEM_TOTAL, mx, my);
+					        for(int i=0; i<3; ++i) {
+					            botoes[i].imprime(botoes[i].hovering(mx,my));
+					        }
                             al_flip_display();
                         }
                     }
                     break ;
                 case ALLEGRO_EVENT_MOUSE_AXES:
+                	printf("Atualizando...\n");
                     mx = Ev.mouse.x;
                     my = Ev.mouse.y;
-                    for(int i=0; i<BOTOES_SEL_PERSONAGEM_TOTAL; ++i) {
+                    for(int i=0; i<3; ++i) {
                         newHovering[i] = botoes[i].hovering(mx,my);
                         if(oldHovering[i] != newHovering[i]) { // Se tava em cima do botao, tirou. Se tava fora, colocou em cima.
                             oldHovering[i] = newHovering[i];
                             devoImprimir = true;
                         }
-                        if(devoImprimir) {
-                            imprime_menu(botoes, BOTOES_SEL_PERSONAGEM_TOTAL, mx, my);
-                            imprime_configs();
-                            al_flip_display();
-                            devoImprimir = false;
-                        }
+                    }
+                    if(devoImprimir) {
+				        for(int i=0; i<3; ++i) {
+				            botoes[i].imprime(botoes[i].hovering(mx,my));
+				        }
+                        al_flip_display();
+                        devoImprimir = false;
                     }
                     break ;
             }
@@ -363,12 +378,12 @@ int selecao_personagem(void) {
                         oldHovering[i] = newHovering[i];
                         devoImprimir = true;
                     }
-                    if(devoImprimir) {
-                        imprime_menu(botoes, BOTOES_SEL_PERSONAGEM_TOTAL, mx, my);
-    					imprime_configs();
-    					al_flip_display();
-                        devoImprimir = false;
-                    }
+                }
+                if(devoImprimir) {
+                    imprime_menu(botoes, BOTOES_SEL_PERSONAGEM_TOTAL, mx, my);
+					imprime_configs();
+					al_flip_display();
+                    devoImprimir = false;
                 }
                 break ;
         }
