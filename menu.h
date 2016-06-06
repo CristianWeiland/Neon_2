@@ -19,8 +19,13 @@ int menu_principal(Window win,Pessoa *p,Sprite s);
 #define BUTTON_HEIGHT 32
 #define HOVER_BUTTON_DISLOCATION 40
 #define CLICK_BUTTON_DISLOCATION 80
-#define NUM_BOTOES_SEL_PERSONAGEM 18 // 16 pra selecionar, 1 pra voltar, 1 pra salvar.
+#define BOTOES_SEL_PERSONAGEM 8
+#define BOTOES_SEL_TIME 8
+#define OUTROS_BOTOES 2
+#define COMANDOS_POR_PERSONAGEM 7 // 4 setas, correr, puxar, flash
 
+// 16 pra selecionar, 1 pra voltar, 1 pra salvar, 28 teclas (7 pra cada jogador, 4 jogadores) -> Total = 46.
+#define BOTOES_SEL_PERSONAGEM_TOTAL BOTOES_SEL_PERSONAGEM + BOTOES_SEL_TIME + OUTROS_BOTOES + PESSOAS*COMANDOS_POR_PERSONAGEM
 
 class Botoes {
 public:
