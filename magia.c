@@ -31,13 +31,14 @@ void tira_neon(bool *puxa,bool *temneon, Pessoa *p)
 	return ;
 }
 
-void calcula_energia(Pessoa *p, int njogadores)
+void calcula_status(Pessoa *p, int njogadores)
 {
 	int i;
 
 	// Para de correr quando acaba energia.
 	for(i=0; i<njogadores; ++i)
 		if(p[i].energia <= 0)
+		//if(p[i].energia <= 0 || p[i].freeze > 0)
 			p[i].correr = 1;
 
 	// Desconta energia
@@ -49,6 +50,11 @@ void calcula_energia(Pessoa *p, int njogadores)
   	for(i=0; i<njogadores; ++i)
   		if(p[i].energia < 100)
 			p[i].energia++;
+
+	// Diminui tempo de congelamento.
+	for(i=0; i<njogadores; ++i)
+		if(p[i].freeze > 0)
+			--(p[i].freeze);
 
 	return ;
 }
@@ -65,6 +71,7 @@ void usa_fireball(char **matriz, Pessoa *p, Magias *m) {
 			for(k=0; k<4; ++k) {
 				if(contato_proximo_direcionado(m->fireball[i][j].x,m->fireball[i][j].y,i,k,m->fireball[i][j].d,p) == k) {
 					p[k].hp -= m->fireball[i][j].dano;
+					//p[k].freeze = 30; // Quem recebeu a bola de fogo fica congelado.
 					m->fireball[i][j].ativa = false;
 					m->fireball[i][j].explosao = true;
 					m->fireball[i][j].xexpl = m->fireball[i][j].x;

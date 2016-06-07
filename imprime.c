@@ -83,6 +83,7 @@ int imprime_4_chars_for(int cont,char** matriz,int *cor,bool *temneon,int njogad
 
 	 	if((p[i].andou_b) == 1) {
 	 		if(!(colidiu(matriz,p[i].x/4,p[i].y/4,BAIXO,i,p) == 1)) {
+	 		//if(!(colidiu(matriz,p[i].x/4,p[i].y/4,BAIXO,i,p) == 1) && p[i].freeze <= 0) {
 		 		p[i].y += 4 * p[i].correr;
 		 		p[i].yneon += 4 * p[i].correr;
 	 		}
@@ -92,6 +93,7 @@ int imprime_4_chars_for(int cont,char** matriz,int *cor,bool *temneon,int njogad
 	    }
 	    if((p[i].andou_e) == 1) {
 	        if(!(colidiu(matriz,p[i].x/4,p[i].y/4,ESQ,i,p) == 1)) { // O 1(um) tah ali porque eh o caso de andar pra esquerda.
+	        //if(!(colidiu(matriz,p[i].x/4,p[i].y/4,ESQ,i,p) == 1) && p[i].freeze <= 0) { // O 1(um) tah ali porque eh o caso de andar pra esquerda.
 			    p[i].x -= 4 * p[i].correr;
 		 		p[i].xneon -= 4 * p[i].correr;
 	        }
@@ -101,6 +103,7 @@ int imprime_4_chars_for(int cont,char** matriz,int *cor,bool *temneon,int njogad
 	    }
 	    if((p[i].andou_d) == 1) {
 	        if(!(colidiu(matriz,p[i].x/4,p[i].y/4,DIR,i,p) == 1)) { // O 3(tres) tah ali porque eh o caso de andar pra direita.
+	        //if(!(colidiu(matriz,p[i].x/4,p[i].y/4,DIR,i,p) == 1) && p[i].freeze <= 0) { // O 3(tres) tah ali porque eh o caso de andar pra direita.
 		        p[i].x += 4 * p[i].correr;
 		 		p[i].xneon += 4 * p[i].correr;
 			}
@@ -110,6 +113,7 @@ int imprime_4_chars_for(int cont,char** matriz,int *cor,bool *temneon,int njogad
 	    }
 	    if((p[i].andou_c) == 1) {
 	        if(!(colidiu(matriz,p[i].x/4,p[i].y/4,CIMA,i,p) == 1)) { // O 2(dois) tah ali porque eh o caso de andar pra cima.
+	        //if(!(colidiu(matriz,p[i].x/4,p[i].y/4,CIMA,i,p) == 1) && p[i].freeze <= 0) { // O 2(dois) tah ali porque eh o caso de andar pra cima.
 		        p[i].y -= 4 * p[i].correr;
 		 		p[i].yneon -= 4 * p[i].correr;
 	        }

@@ -28,6 +28,7 @@ typedef struct Pessoa {
 	int energia,correr,morto,dash;
 	int comp;
 	int botao_char_int[7],time;
+	int freeze; // Congelado não pode usar magias nem andar. Freeze <= 0 -> não está mais congelado. Freeze > 0, congelado.
 } Pessoa;
 
 typedef struct Magia {

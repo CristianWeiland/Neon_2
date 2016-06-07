@@ -84,6 +84,7 @@ void keyboard_down(int evkeyboardkeycode,bool *puxa,int *flash, Pessoa *p, Magia
         /* Magias */
         case ALLEGRO_KEY_Z:
         	if(m->fireball[0][0].ativa == true && p[0].energia >= 50 && m->fireball[0][1].ativa == false) {
+			//if(m->fireball[0][0].ativa == true && p[0].energia >= 50 && m->fireball[0][1].ativa == false && p[0].freeze <= 0) {
         		m->fireball[0][1].ativa = true;
         		m->fireball[0][1].x = p[0].x;
         		m->fireball[0][1].y = p[0].y;
@@ -91,6 +92,7 @@ void keyboard_down(int evkeyboardkeycode,bool *puxa,int *flash, Pessoa *p, Magia
         		p[0].energia -= 50;
         	}
         	else if(p[0].energia >= 50) {
+        	//else if(p[0].energia >= 50 && p[0].freeze <= 0) {
         		m->fireball[0][0].ativa = true;
         		m->fireball[0][0].x = p[0].x;
         		m->fireball[0][0].y = p[0].y;

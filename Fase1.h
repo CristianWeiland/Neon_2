@@ -75,7 +75,7 @@ int fase1(Window win, Pessoa *p, Sprite s, Magias m, int JOGADORES)
 
 			tira_neon(puxa,temneon,p);
 
-            calcula_energia(p,JOGADORES);
+            calcula_status(p,JOGADORES);
 
 		  	cont = (cont + 1) % CONT;
 
