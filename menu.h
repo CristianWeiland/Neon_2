@@ -5,27 +5,26 @@
 #include "imprime.h"
 #include "grafico.h"
 
-//extern Pessoa pessoa[4];
-
 char editor_text(ALLEGRO_EVENT ev);
 int botao(char *texto,int x,int y,ALLEGRO_EVENT ev);
 void opcoes(Window win, Pessoa *p);
 int selecao_personagem(void);
-int menu_principal(Window win,Pessoa *p,Sprite s);
+int menu_principal(Window win,Pessoa *p,Sprite s,int *num_jogadores, int vencedor);
 
 #define TEXT_SIZE 128
-#define NUM_BOTOES 5
+#define NUM_BOTOES 3
 #define BUTTON_WIDTH 122
 #define BUTTON_HEIGHT 32
 #define HOVER_BUTTON_DISLOCATION 40
 #define CLICK_BUTTON_DISLOCATION 80
 #define BOTOES_SEL_PERSONAGEM 8
 #define BOTOES_SEL_TIME 8
-#define OUTROS_BOTOES 2
+#define BOTOES_SEL_N_JOGADORES 2
+#define OUTROS_BOTOES 1 // voltar
 #define COMANDOS_POR_PERSONAGEM 7 // 4 setas, correr, puxar, flash
 
-// 16 pra selecionar, 1 pra voltar, 1 pra salvar, 28 teclas (7 pra cada jogador, 4 jogadores) -> Total = 46.
-#define BOTOES_SEL_PERSONAGEM_TOTAL BOTOES_SEL_PERSONAGEM + BOTOES_SEL_TIME + OUTROS_BOTOES + PESSOAS*COMANDOS_POR_PERSONAGEM
+// 16 pra selecionar, 1 pra voltar, 28 teclas (7 pra cada jogador, 4 jogadores), 2 pra selec. nº jogadores -> Total = 47.
+#define BOTOES_SEL_PERSONAGEM_TOTAL BOTOES_SEL_PERSONAGEM + BOTOES_SEL_TIME + OUTROS_BOTOES + PESSOAS*COMANDOS_POR_PERSONAGEM + BOTOES_SEL_N_JOGADORES
 
 class Botoes {
 public:
@@ -56,14 +55,28 @@ public:
         y = posy;
     }
 
-    void set_func(int (*fun)()) {
+    void set_func(int (*fun)(void *)) {
         func = fun;
+    }
+
+    void set_button(const char *str, int posx, int posy, int (*fun)(void *), void *param, int tam_param) {
+        /* A função que o botão pode executar é genérica. Isso significa que ela deve receber parâmetros genéricos (void*).
+         * Assim, eu posso receber qualquer parâmetro quando crio o botão, que vem através de 'param' e tem 'tam_param' bytes.
+         * Se a função não recebe nenhum parâmetro, 'param' deve ser igual a NULL ou 'tam_param' igual a 0.
+         */
+        set_position(posx, posy);
+        set_text(str);
+        set_func(fun);
+        if(tam_param >= 0 && param != NULL) {
+            params = malloc(tam_param);
+            memcpy(params, param, tam_param);
+        }
     }
 
     int execute() {
         if(!func)
             return -1;
-        return func();
+        return func(params);
     }
 
     bool hovering(int mousex, int mousey) {
@@ -81,7 +94,8 @@ public:
 private:
     int x, y, width, height, sumx, sumy;
     char text[TEXT_SIZE];
-    int (*func)();
+    int (*func)(void *);
+    void *params;
     ALLEGRO_FONT *font;
     ALLEGRO_BITMAP *button_bmp;
 };

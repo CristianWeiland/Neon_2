@@ -52,6 +52,63 @@ typedef struct Sprite {
 	ALLEGRO_BITMAP *chars, *dead;
 } Sprite;
 
+/* Se der vontade, vou fazer depois usando uma classe.
+class Fireball {
+public:
+    Fireball() {
+        x = y = 0;
+        d = -1;
+        ativa = false;
+        explosao = false;
+        xexpl = yexpl = 0;
+        dano = 200;
+    }
+
+    void set_position(int posx, int posy) {
+        x = posx;
+        y = posy;
+    }
+
+    void set_dir(int direction) {
+        d = direction;
+    }
+
+    int execute() {
+    }
+
+    bool hovering(int mousex, int mousey) {
+    }
+
+    void imprime(Sprite s, Pessoa *p, int index) {
+    // A pessoa que usou a fireball é p[index].
+    	if(!ativa)
+    		return;
+
+    	int i;
+    	for(i=0; i<4; ++i) {
+	    	if(contato_proximo_direcionado(x,y,index,k,d,p) == k) {
+				p[k].hp -= dano;
+				ativa = false;
+				explosao = true;
+				d = -1;
+			}
+		}
+
+		if(dist >= 300) {
+			ativa = false;
+			explosao = true; // cria_explosao(x,y);
+			d = -1;
+		}
+
+		if(ativa)
+        	al_draw_bitmap(s.fireballs[d],x,y,0);
+    }
+private:
+	int dano, x, y, dist, xexpl, yexpl, d; // D significa a direcao (0 = /\, 1 = ->, 2 = <-, 3 = \/)
+	bool ativa,explosao;
+};
+*/
+
 #define CONT 2
 #define NEONAMARELO 1
 #define NEONAZUL 2

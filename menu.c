@@ -6,27 +6,32 @@ Sprite Sprites;
 ALLEGRO_EVENT Ev;
 ALLEGRO_FONT *Font;
 ALLEGRO_COLOR Color[PESSOAS]; // PESSOAS == numero jogadores
+int Njogadores;
 
-void imprime_menu(Botoes *botoes, int n_botoes, int mx, int my) {
+void imprime_menu(Botoes *botoes, int n_botoes, int mx, int my, int vencedor) {
 /* Imprimir o menu eh uma operacao cara. Soh imprima quando ele mudar:
 o jogador passar o mouse por cima de um botao ou clicar em um botao. */
     al_clear_to_color(PRETO);
     for(int i=0; i<n_botoes; ++i) {
         botoes[i].imprime(botoes[i].hovering(mx,my));
     }
+    if(vencedor != -1) {
+        al_draw_textf(Font, VERDE, 350, 50, 0, "O jogador %d venceu! Parabazi!", vencedor+1);
+    }
 }
-
-int comeca_jogo() {
+/*
+int comeca_jogo(void *param) {
     return 1;
 }
-
-int fecha_jogo(void) {
+*/
+int fecha_jogo(void *param) {
     graphdeinit(Win);
     exit(0);
     return 0;
 }
 
 void imprime_configs() {
+    al_draw_textf(Font, AMARELO_QUEIMADO, 350, 50, 0, "Numero de Jogadores  %d", Njogadores);
     for(int i=0; i<PESSOAS; ++i) {
         al_draw_textf(Font, AMARELO_QUEIMADO, 90+200*i, 100, 0, "Jogador %d", i+1);
         imprime_char(112+200*i, 150, Pessoas[i].desx, Pessoas[i].desy, Pessoas[i].selx, Pessoas[i].sely, Sprites);
@@ -46,27 +51,32 @@ void imprime_configs() {
 // Funcoes que retornam 0 significa que o retorno eh ignorado. Se retorno != 0, vai sair do while.
 
 /* Funções que cuidam da seleção de personagem. */
-int char_next(int i) {
+int char_next(void *param) {
+    int i = *((int*) param);
 	Pessoas[i].desx = (Pessoas[i].desx + 96) % 192;
 	Pessoas[i].desy = (Pessoas[i].desx == 0) ? (Pessoas[i].desy + 128) % 256 : Pessoas[i].desy;
 	return 0;
 }
-int char_prev(int i) { // Isso nao funciona. Arrumar.
+int char_prev(void *param) {
+    int i = *((int*) param);
 	Pessoas[i].desx = (Pessoas[i].desx + 96) % 192;
 	Pessoas[i].desy = (Pessoas[i].desx != 0) ? (Pessoas[i].desy + 128) % 256 : Pessoas[i].desy;
 	return 0;
 }
 
-int char_0_next() { return char_next(0); }
-int char_1_next() { return char_next(1); }
-int char_2_next() { return char_next(2); }
-int char_3_next() { return char_next(3); }
-int char_0_prev() { return char_prev(0); }
-int char_1_prev() { return char_prev(1); }
-int char_2_prev() { return char_prev(2); }
-int char_3_prev() { return char_prev(3); }
 
 /* Funções que cuidam da seleção de time. */
+int team_next(void *param) {
+    int i = *((int*) param);
+    Pessoas[i].time = (Pessoas[i].time % 4) + 1;
+    return 0;
+}
+int team_prev(void *param) {
+    int i = *((int*) param);
+    Pessoas[i].time = ((Pessoas[i].time + 2) % 4) + 1;
+    return 0;
+}
+/*
 int team_0_next() { Pessoas[0].time = (Pessoas[0].time % 4) + 1; return 0; }
 int team_1_next() { Pessoas[1].time = (Pessoas[1].time % 4) + 1; return 0; }
 int team_2_next() { Pessoas[2].time = (Pessoas[2].time % 4) + 1; return 0; }
@@ -75,168 +85,88 @@ int team_0_prev() { Pessoas[0].time = ((Pessoas[0].time + 2) % 4) + 1; return 0;
 int team_1_prev() { Pessoas[1].time = ((Pessoas[1].time + 2) % 4) + 1; return 0; }
 int team_2_prev() { Pessoas[2].time = ((Pessoas[2].time + 2) % 4) + 1; return 0; }
 int team_3_prev() { Pessoas[3].time = ((Pessoas[3].time + 2) % 4) + 1; return 0; }
-
+*/
 /* Funções para selecionar as teclas para cada personagem. */
 void set_buttons(Botoes botoes[BOTOES_SEL_PERSONAGEM_TOTAL]) {
 /* Muda o texto dos botoes para as letras que representam as teclas dos jogadores. */
     for(int i=0; i<PESSOAS; ++i) {
         for(int j=0; j<COMANDOS_POR_PERSONAGEM; ++j) {
-            botoes[18+i*COMANDOS_POR_PERSONAGEM+j].set_text(al_keycode_to_name(Pessoas[i].botao_char_int[j]));
+            botoes[17+i*COMANDOS_POR_PERSONAGEM+j].set_text(al_keycode_to_name(Pessoas[i].botao_char_int[j]));
         }
     }
 }
-int set_next_key(int indice_pessoa, int indice_tecla) {
-    Pessoas[indice_pessoa].botao_char_int[indice_tecla] = Ev.keyboard.keycode;
-    return 0;
-}
+//int set_next_key(int indice_pessoa, int indice_tecla) {
 void esperaTecla() {
     al_draw_text(Font, PIXEL(169,68,66), 350, 500, 0, "Aperte alguma tecla...");
     al_flip_display();
     while(Ev.type != ALLEGRO_EVENT_KEY_DOWN)
         al_wait_for_event(Win.event_queue, &Ev); // Espera usuário apertar uma tecla.
 }
-int set_key_0_0() { esperaTecla(); return set_next_key(0,0); }
-int set_key_0_1() { esperaTecla(); return set_next_key(0,1); }
-int set_key_0_2() { esperaTecla(); return set_next_key(0,2); }
-int set_key_0_3() { esperaTecla(); return set_next_key(0,3); }
-int set_key_0_4() { esperaTecla(); return set_next_key(0,4); }
-int set_key_0_5() { esperaTecla(); return set_next_key(0,5); }
-int set_key_0_6() { esperaTecla(); return set_next_key(0,6); }
-int set_key_1_0() { esperaTecla(); return set_next_key(1,0); }
-int set_key_1_1() { esperaTecla(); return set_next_key(1,1); }
-int set_key_1_2() { esperaTecla(); return set_next_key(1,2); }
-int set_key_1_3() { esperaTecla(); return set_next_key(1,3); }
-int set_key_1_4() { esperaTecla(); return set_next_key(1,4); }
-int set_key_1_5() { esperaTecla(); return set_next_key(1,5); }
-int set_key_1_6() { esperaTecla(); return set_next_key(1,6); }
-int set_key_2_0() { esperaTecla(); return set_next_key(2,0); }
-int set_key_2_1() { esperaTecla(); return set_next_key(2,1); }
-int set_key_2_2() { esperaTecla(); return set_next_key(2,2); }
-int set_key_2_3() { esperaTecla(); return set_next_key(2,3); }
-int set_key_2_4() { esperaTecla(); return set_next_key(2,4); }
-int set_key_2_5() { esperaTecla(); return set_next_key(2,5); }
-int set_key_2_6() { esperaTecla(); return set_next_key(2,6); }
-int set_key_3_0() { esperaTecla(); return set_next_key(3,0); }
-int set_key_3_1() { esperaTecla(); return set_next_key(3,1); }
-int set_key_3_2() { esperaTecla(); return set_next_key(3,2); }
-int set_key_3_3() { esperaTecla(); return set_next_key(3,3); }
-int set_key_3_4() { esperaTecla(); return set_next_key(3,4); }
-int set_key_3_5() { esperaTecla(); return set_next_key(3,5); }
-int set_key_3_6() { esperaTecla(); return set_next_key(3,6); }
+int set_next_key(void *params) {
+    int indice_pessoa = (int) ((int*)params)[0];
+    int indice_tecla = (int) ((int*)params)[1];
+    esperaTecla();
+    Pessoas[indice_pessoa].botao_char_int[indice_tecla] = Ev.keyboard.keycode;
+    return 0;
+}
+
+int num_jogadores_inc(void *params) { Njogadores = (Njogadores % 4) + 1; return 0; }
+int num_jogadores_dec(void *params) { Njogadores = ((Njogadores + 2) % 4) + 1; return 0; }
 
 /* Função para retornar ao menu principal. Chamada pelo botão "voltar" */
-int return_1() { return 1; }
+int return_int(void *params) {
+    return *((int*) params);
+}
 
 
 
 /* Menu de seleção de personagens, times e teclas. */
-int selecao_personagem(void) {
+int selecao_personagem(void *) {
 	int i, j, tamanho, mx = 0, my = 0, retorno = 0;
-	Botoes botoes[BOTOES_SEL_PERSONAGEM_TOTAL];
+    int x_inicial[2] = {90,160}; // Posição inicial dos "<" e ">" (botoes pra selecionar personagem e time).
+    int x_variacao = 200; // Distancia entre dois "<"
+    int param[2];
+    Botoes botoes[BOTOES_SEL_PERSONAGEM_TOTAL];
     bool oldHovering[BOTOES_SEL_PERSONAGEM_TOTAL], newHovering[BOTOES_SEL_PERSONAGEM_TOTAL], devoImprimir = false;
 
     for(i=0; i<BOTOES_SEL_PERSONAGEM_TOTAL; ++i)
         oldHovering[i] = newHovering[i] = false;
 
-    /* Provavelmente eu deveria mudar pra deixar os personagens lado a lado. */
-    int x_inicial[2] = {90,160}; // Posição inicial dos "<" e ">" (botoes pra selecionar personagem e time).
-    int x_variacao = 200; // Distancia entre dois "<"
-    for(i=0; i<BOTOES_SEL_PERSONAGEM/2; ++i) {
-        botoes[2*i].set_position(x_inicial[0] + i*x_variacao, 160);
-        botoes[2*i+1].set_position(x_inicial[1] + i*x_variacao, 160);
+    /* Inicialização da estrutura Pessoas. */
+    for(i=0; i<PESSOAS; ++i) {
+        Pessoas[i].desx = 0;
+        Pessoas[i].desy = 0;
+        Pessoas[i].selx = 32;
+        Pessoas[i].sely = 0;
     }
-    for(i=0; i<BOTOES_SEL_TIME/2; ++i) {
-        botoes[2*i   + BOTOES_SEL_PERSONAGEM].set_position(x_inicial[0] + i*x_variacao, 200);
-        botoes[2*i+1 + BOTOES_SEL_PERSONAGEM].set_position(x_inicial[1] + i*x_variacao, 200);
+
+    for(i=0; i<PESSOAS; ++i) {
+        param[0] = i;
+        /* Botoes para selecionar personagens. */
+        botoes[2*i  ].set_button("<", x_inicial[0] + i*x_variacao, 160, char_prev, (void*) param, sizeof(int)) ;
+        botoes[2*i+1].set_button(">", x_inicial[1] + i*x_variacao, 160, char_next, (void*) param, sizeof(int)) ;
+        /* Botoes para selecionar times. */
+        botoes[2*i+8].set_button("<", x_inicial[0] + i*x_variacao, 200, team_prev, (void*) param, sizeof(int)) ;
+        botoes[2*i+9].set_button(">", x_inicial[1] + i*x_variacao, 200, team_next, (void*) param, sizeof(int)) ;
     }
-    botoes[16].set_position(70,500);
-    botoes[17].set_position(800,500);
+    /* Botao para voltar para o menu inicial. */
+    param[0] = 1;
+    botoes[16].set_button("Voltar", 70, 500, return_int, (void*) param, sizeof(int));
+    /* Botoes para selecionar as teclas que executam os comandos de cada personagem. */
     for(i=0; i<PESSOAS; ++i) {
         for(j=0; j<COMANDOS_POR_PERSONAGEM; ++j) {
-            botoes[18+i*COMANDOS_POR_PERSONAGEM+j].set_position(170+200*i, 250+20*j);
+            param[0] = i;
+            param[1] = j;
+            botoes[17+i*COMANDOS_POR_PERSONAGEM+j].set_button("", 170+200*i, 250+20*j, set_next_key, (void*) param, sizeof(int) * 2);
         }
     }
+    /* Botoes pra selecionar numero de jogadores */
+    botoes[45].set_button("<", 510, 50, num_jogadores_dec, NULL, 0);
+    botoes[46].set_button(">", 540, 50, num_jogadores_inc, NULL, 0);
 
-    /* Para selecionar o personagem. */
-    botoes[0].set_text("<");
-    botoes[1].set_text(">");
-    botoes[2].set_text("<");
-    botoes[3].set_text(">");
-    botoes[4].set_text("<");
-    botoes[5].set_text(">");
-    botoes[6].set_text("<");
-    botoes[7].set_text(">");
-
-    /* Pra selecionar a cor do neon. */
-    botoes[8].set_text("<");
-    botoes[9].set_text(">");
-    botoes[10].set_text("<");
-    botoes[11].set_text(">");
-    botoes[12].set_text("<");
-    botoes[13].set_text(">");
-    botoes[14].set_text("<");
-    botoes[15].set_text(">");
-    botoes[16].set_text("Voltar");
-    botoes[17].set_text(""); // To com preguica de remover o botao, entao ele fica "invisivel" e nao faz nd.
-
-    for(i=0; i<PESSOAS; ++i) {
-    	Pessoas[i].desx = 0;
-    	Pessoas[i].desy = 0;
-    	Pessoas[i].selx = 32;
-    	Pessoas[i].sely = 0;
-    }
-
-    botoes[0].set_func(char_0_prev);
-    botoes[1].set_func(char_0_next);
-    botoes[2].set_func(char_1_prev);
-    botoes[3].set_func(char_1_next);
-    botoes[4].set_func(char_2_prev);
-    botoes[5].set_func(char_2_next);
-    botoes[6].set_func(char_3_prev);
-    botoes[7].set_func(char_3_next);
-
-    botoes[8].set_func(team_0_prev);
-    botoes[9].set_func(team_0_next);
-    botoes[10].set_func(team_1_prev);
-    botoes[11].set_func(team_1_next);
-    botoes[12].set_func(team_2_prev);
-    botoes[13].set_func(team_2_next);
-    botoes[14].set_func(team_3_prev);
-    botoes[15].set_func(team_3_next);
-
-    botoes[16].set_func(return_1);
-
-    botoes[18].set_func(set_key_0_0);
-    botoes[19].set_func(set_key_0_1);
-    botoes[20].set_func(set_key_0_2);
-    botoes[21].set_func(set_key_0_3);
-    botoes[22].set_func(set_key_0_4);
-    botoes[23].set_func(set_key_0_5);
-    botoes[24].set_func(set_key_0_6);
-    botoes[25].set_func(set_key_1_0);
-    botoes[26].set_func(set_key_1_1);
-    botoes[27].set_func(set_key_1_2);
-    botoes[28].set_func(set_key_1_3);
-    botoes[29].set_func(set_key_1_4);
-    botoes[30].set_func(set_key_1_5);
-    botoes[31].set_func(set_key_1_6);
-    botoes[32].set_func(set_key_2_0);
-    botoes[33].set_func(set_key_2_1);
-    botoes[34].set_func(set_key_2_2);
-    botoes[35].set_func(set_key_2_3);
-    botoes[36].set_func(set_key_2_4);
-    botoes[37].set_func(set_key_2_5);
-    botoes[38].set_func(set_key_2_6);
-    botoes[39].set_func(set_key_3_0);
-    botoes[40].set_func(set_key_3_1);
-    botoes[41].set_func(set_key_3_2);
-    botoes[42].set_func(set_key_3_3);
-    botoes[43].set_func(set_key_3_4);
-    botoes[44].set_func(set_key_3_5);
-    botoes[45].set_func(set_key_3_6);
 
     set_buttons(botoes);
-    imprime_menu(botoes, BOTOES_SEL_PERSONAGEM_TOTAL, mx, my);
+    imprime_menu(botoes, BOTOES_SEL_PERSONAGEM_TOTAL, mx, my, -1);
     imprime_configs();
     al_flip_display();
 
@@ -252,7 +182,7 @@ int selecao_personagem(void) {
                     if(botoes[i].hovering(mx,my)) {
                         retorno = botoes[i].execute();
                         set_buttons(botoes);
-                        imprime_menu(botoes, BOTOES_SEL_PERSONAGEM_TOTAL, mx, my);
+                        imprime_menu(botoes, BOTOES_SEL_PERSONAGEM_TOTAL, mx, my, -1);
     					imprime_configs();
     					al_flip_display();
                     }
@@ -269,7 +199,7 @@ int selecao_personagem(void) {
                     }
                 }
                 if(devoImprimir) {
-                    imprime_menu(botoes, BOTOES_SEL_PERSONAGEM_TOTAL, mx, my);
+                    imprime_menu(botoes, BOTOES_SEL_PERSONAGEM_TOTAL, mx, my, -1);
 					imprime_configs();
 					al_flip_display();
                     devoImprimir = false;
@@ -280,9 +210,11 @@ int selecao_personagem(void) {
     return 0;
 }
 
-int menu_principal(Window win,Pessoa *p,Sprite s)
+int menu_principal(Window win,Pessoa *p,Sprite s,int *num_jogadores, int vencedor)
 {
-	int i, tamanho, mx = 0, my = 0, retorno = 0;
+    Njogadores = PESSOAS;
+    *num_jogadores = PESSOAS;
+	int i, tamanho, mx = 0, my = 0, retorno = 0, params[1];
     Botoes botoes[NUM_BOTOES];
     bool oldHovering[NUM_BOTOES], newHovering[NUM_BOTOES], devoImprimir = false;
 
@@ -301,21 +233,12 @@ int menu_principal(Window win,Pessoa *p,Sprite s)
     for(i=0; i<NUM_BOTOES; ++i)
         oldHovering[i] = newHovering[i] = false;
 
-    botoes[0].set_position(30,50);
-    botoes[1].set_position(30,90);
-    botoes[2].set_position(30,130);
-    botoes[3].set_position(30,170);
-    botoes[4].set_position(30,210);
-    botoes[0].set_text("Jogar");
-    botoes[1].set_text("");
-    botoes[2].set_text("Configuracoes");
-    botoes[3].set_text("");
-    botoes[4].set_text("Sair");
-    botoes[0].set_func(comeca_jogo);
-    botoes[2].set_func(selecao_personagem);
-    botoes[4].set_func(fecha_jogo);
+    params[0] = 1;
+    botoes[0].set_button("Jogar", 400, 300, return_int, (void*) params, sizeof(int));
+    botoes[1].set_button("Configuracoes", 400, 350, selecao_personagem, NULL, 0);
+    botoes[2].set_button("Sair", 400, 400, fecha_jogo, NULL, 0);
 
-    imprime_menu(botoes, NUM_BOTOES, mx, my);
+    imprime_menu(botoes, NUM_BOTOES, mx, my, vencedor);
     al_flip_display();
 
     ALLEGRO_EVENT ev;
@@ -331,9 +254,10 @@ int menu_principal(Window win,Pessoa *p,Sprite s)
                     if(botoes[i].hovering(mx,my)) {
                         retorno = botoes[i].execute();
                         if(retorno == 1) { // Começa jogo
+                            *num_jogadores = Njogadores;
                         	return 1;
                         }
-                        imprime_menu(botoes, NUM_BOTOES, mx, my);
+                        imprime_menu(botoes, NUM_BOTOES, mx, my, vencedor);
 					    al_flip_display();
                     }
                 }
@@ -352,7 +276,7 @@ int menu_principal(Window win,Pessoa *p,Sprite s)
                         devoImprimir = true;
                     }
                     if(devoImprimir) {
-                        imprime_menu(botoes, NUM_BOTOES, mx, my);
+                        imprime_menu(botoes, NUM_BOTOES, mx, my, vencedor);
                         al_flip_display();
                         devoImprimir = false;
                     }
@@ -360,5 +284,6 @@ int menu_principal(Window win,Pessoa *p,Sprite s)
                 break ;
         }
     } while(!retorno);
+    *num_jogadores = Njogadores;
     return retorno;
 }

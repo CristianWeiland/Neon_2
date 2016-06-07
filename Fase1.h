@@ -8,18 +8,17 @@
 #include <allegro5/allegro_ttf.h>
 #endif
 
-void fase1(Window win, Pessoa *p, Sprite s, Magias m)
+int fase1(Window win, Pessoa *p, Sprite s, Magias m, int JOGADORES)
 {
-	int njogadores = 4;
-
+	printf("Começando com %d\n", JOGADORES);
 	char** matriz;
 	int mapsize,xtile[TAM],ytile[TAM],xcorte[TAM],ycorte[TAM];
 	FILE *mapa,*errext,*auxFile;
 	ALLEGRO_BITMAP *map;
-	int i, j, k, cont = 0, flash[njogadores], cor[njogadores];
-	bool sair=false, puxa[njogadores], temneon[njogadores];
+	int i, j, k, cont = 0, flash[JOGADORES], cor[JOGADORES], mortos, vivo = 0;
+	bool sair=false, puxa[JOGADORES], temneon[JOGADORES];
 
-	for(i=0; i<njogadores; ++i) {
+	for(i=0; i<JOGADORES; ++i) {
 		p[i].x = 100 + 50*i;
 		p[i].y = 200;
 		cor[i] = i+1;
@@ -72,19 +71,32 @@ void fase1(Window win, Pessoa *p, Sprite s, Magias m)
 			al_clear_to_color(PRETO);
 			al_draw_bitmap(map,0,0,0);
 
-			usa_magias(matriz,p,njogadores,s,flash,&m);
+			usa_magias(matriz,p,JOGADORES,s,flash,&m);
 
 			tira_neon(puxa,temneon,p);
 
-            calcula_energia(p,njogadores);
+            calcula_energia(p,JOGADORES);
 
 		  	cont = (cont + 1) % CONT;
 
-            imprime_4_chars_for(cont,matriz,cor,temneon,njogadores,p,s);
+            imprime_4_chars_for(cont,matriz,cor,temneon,JOGADORES,p,s);
 
             IA(p);
 
 			al_flip_display();
 		}
+
+		mortos = 0;
+		for(i=0; i<JOGADORES; ++i) {
+			if(p[i].hp == 0) {
+				++mortos;
+			} else {
+				vivo = i;
+			}
+		}
+		if(mortos == JOGADORES-1)
+			sair = true;
 	}
+
+	return vivo;
 }
