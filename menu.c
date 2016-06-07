@@ -6,7 +6,6 @@ Sprite Sprites;
 ALLEGRO_EVENT Ev;
 ALLEGRO_FONT *Font;
 ALLEGRO_COLOR Color[PESSOAS]; // PESSOAS == numero jogadores
-int Desx[PESSOAS], Desy[PESSOAS], Time[PESSOAS], Botoes_int[PESSOAS][COMANDOS_POR_PERSONAGEM]; // PESSOAS == numero jogadores
 
 void imprime_menu(Botoes *botoes, int n_botoes, int mx, int my) {
 /* Imprimir o menu eh uma operacao cara. Soh imprima quando ele mudar:
@@ -30,9 +29,8 @@ int fecha_jogo(void) {
 void imprime_configs() {
     for(int i=0; i<PESSOAS; ++i) {
         al_draw_textf(Font, AMARELO_QUEIMADO, 90+200*i, 100, 0, "Jogador %d", i+1);
-        imprime_char(112+200*i, 150, Desx[i], Desy[i], Pessoas[i].selx, Pessoas[i].sely, Sprites);
-        al_draw_textf(Font, Color[Time[i]-1], 105+200*i, 200, 0, "Time %d", Time[i]);
-        // Esses montes de al_draw_text nao parecem bons (ainda mais que tao num for de 4x).
+        imprime_char(112+200*i, 150, Pessoas[i].desx, Pessoas[i].desy, Pessoas[i].selx, Pessoas[i].sely, Sprites);
+        al_draw_textf(Font, Color[Pessoas[i].time-1], 105+200*i, 200, 0, "Time %d", Pessoas[i].time);
         al_draw_text(Font, CINZA_ESCURO, 75+200*i, 250, 0, "Cima :");
         al_draw_text(Font, CINZA_ESCURO, 75+200*i, 270, 0, "Baixo :");
         al_draw_text(Font, CINZA_ESCURO, 75+200*i, 290, 0, "Esquerda :");
@@ -49,13 +47,13 @@ void imprime_configs() {
 
 /* Funções que cuidam da seleção de personagem. */
 int char_next(int i) {
-	Desx[i] = (Desx[i] + 96) % 192;
-	Desy[i] = (Desx[i] == 0) ? (Desy[i] + 128) % 256 : Desy[i];
+	Pessoas[i].desx = (Pessoas[i].desx + 96) % 192;
+	Pessoas[i].desy = (Pessoas[i].desx == 0) ? (Pessoas[i].desy + 128) % 256 : Pessoas[i].desy;
 	return 0;
 }
 int char_prev(int i) { // Isso nao funciona. Arrumar.
-	Desx[i] = (Desx[i] + 96) % 192;
-	Desy[i] = (Desx[i] != 0) ? (Desy[i] + 128) % 256 : Desy[i];
+	Pessoas[i].desx = (Pessoas[i].desx + 96) % 192;
+	Pessoas[i].desy = (Pessoas[i].desx != 0) ? (Pessoas[i].desy + 128) % 256 : Pessoas[i].desy;
 	return 0;
 }
 
@@ -69,26 +67,26 @@ int char_2_prev() { return char_prev(2); }
 int char_3_prev() { return char_prev(3); }
 
 /* Funções que cuidam da seleção de time. */
-int team_0_next() { Time[0] = (Time[0] % 4) + 1; return 0; }
-int team_1_next() { Time[1] = (Time[1] % 4) + 1; return 0; }
-int team_2_next() { Time[2] = (Time[2] % 4) + 1; return 0; }
-int team_3_next() { Time[3] = (Time[3] % 4) + 1; return 0; }
-int team_0_prev() { Time[0] = ((Time[0] + 2) % 4) + 1; return 0; }
-int team_1_prev() { Time[1] = ((Time[1] + 2) % 4) + 1; return 0; }
-int team_2_prev() { Time[2] = ((Time[2] + 2) % 4) + 1; return 0; }
-int team_3_prev() { Time[3] = ((Time[3] + 2) % 4) + 1; return 0; }
+int team_0_next() { Pessoas[0].time = (Pessoas[0].time % 4) + 1; return 0; }
+int team_1_next() { Pessoas[1].time = (Pessoas[1].time % 4) + 1; return 0; }
+int team_2_next() { Pessoas[2].time = (Pessoas[2].time % 4) + 1; return 0; }
+int team_3_next() { Pessoas[3].time = (Pessoas[3].time % 4) + 1; return 0; }
+int team_0_prev() { Pessoas[0].time = ((Pessoas[0].time + 2) % 4) + 1; return 0; }
+int team_1_prev() { Pessoas[1].time = ((Pessoas[1].time + 2) % 4) + 1; return 0; }
+int team_2_prev() { Pessoas[2].time = ((Pessoas[2].time + 2) % 4) + 1; return 0; }
+int team_3_prev() { Pessoas[3].time = ((Pessoas[3].time + 2) % 4) + 1; return 0; }
 
 /* Funções para selecionar as teclas para cada personagem. */
 void set_buttons(Botoes botoes[BOTOES_SEL_PERSONAGEM_TOTAL]) {
 /* Muda o texto dos botoes para as letras que representam as teclas dos jogadores. */
     for(int i=0; i<PESSOAS; ++i) {
         for(int j=0; j<COMANDOS_POR_PERSONAGEM; ++j) {
-            botoes[18+i*COMANDOS_POR_PERSONAGEM+j].set_text(al_keycode_to_name(Botoes_int[i][j]));
+            botoes[18+i*COMANDOS_POR_PERSONAGEM+j].set_text(al_keycode_to_name(Pessoas[i].botao_char_int[j]));
         }
     }
 }
 int set_next_key(int indice_pessoa, int indice_tecla) {
-    Botoes_int[indice_pessoa][indice_tecla] = Ev.keyboard.keycode;
+    Pessoas[indice_pessoa].botao_char_int[indice_tecla] = Ev.keyboard.keycode;
     return 0;
 }
 void esperaTecla() {
@@ -126,108 +124,9 @@ int set_key_3_4() { esperaTecla(); return set_next_key(3,4); }
 int set_key_3_5() { esperaTecla(); return set_next_key(3,5); }
 int set_key_3_6() { esperaTecla(); return set_next_key(3,6); }
 
-/* Função para salvar as configurações. */
-int salvar_configs() {
-    for(int i=0; i<PESSOAS; ++i) {
-        Pessoas[i].desx = Desx[i];
-        Pessoas[i].desy = Desy[i];
-        Pessoas[i].time = Time[i];
-        for(int j=0; j<COMANDOS_POR_PERSONAGEM; ++j) {
-            Pessoas[i].botao_char_int[j] = Botoes_int[i][j];
-        }
-    }
-    return 0;
-}
-bool configs_nao_salvas() {
-    for(int i=0; i<PESSOAS; ++i) {
-        if(Pessoas[i].desx != Desx[i]) {
-        	return true;
-        }
-        if(Pessoas[i].desy != Desy[i]) {
-        	return true;
-        }
-        if(Pessoas[i].time != Time[i]) {
-        	return true;
-        }
-        for(int j=0; j<COMANDOS_POR_PERSONAGEM; ++j) {
-            if(Pessoas[i].botao_char_int[j] != Botoes_int[i][j]) return true;
-        }
-    }
-    return false;
-}
-
 /* Função para retornar ao menu principal. Chamada pelo botão "voltar" */
 int return_1() { return 1; }
-int return_0() { return 0; }
-int salvar_e_sair() { salvar_configs(); return 1; }
-int back_to_menu() {
-    if(configs_nao_salvas()) {
-        int mx,my,retorno = 0;
-        bool oldHovering[3], newHovering[3], devoImprimir = false;
-	    for(int i=0; i<3; ++i)
-	        oldHovering[i] = newHovering[i] = false;
-        printf("Vc provavelmente fez cagadinha.\n"); // MUDAR ISSO PELO AMOR DE DEUS
-        al_clear_to_color(PRETO);
-        al_draw_text(Font, PIXEL(169,68,66), 200, 200, 0, "Existem alteracoes nao salvas. O que deseja fazer?");
-        Botoes botoes[3];
-        botoes[0].set_text("Voltar para tela de configuracoes");
-        botoes[1].set_text("Sair sem salvar");
-        botoes[2].set_text("Salvar e sair");
-        botoes[0].set_func(return_0);
-        botoes[1].set_func(return_1);
-        botoes[2].set_func(salvar_e_sair);
-        botoes[0].set_position(200,250);
-        botoes[1].set_position(200,300);
-        botoes[2].set_position(200,350);
-        for(int i=0; i<3; ++i) {
-            botoes[i].imprime(botoes[i].hovering(mx,my));
-        }
-        al_flip_display();
-        do {
-            al_wait_for_event(Win.event_queue, &Ev);
-            switch (Ev.type) {
-                case ALLEGRO_EVENT_DISPLAY_CLOSE:
-                    graphdeinit(Win);
-                    exit(1);
-                    break ;
-                case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
-                	printf("Clicou\n");
-                    for(int i=0; i<3; ++i) {
-                        if(botoes[i].hovering(mx,my)) {
-                    		printf("CLICOU NI MIM!\n");
-                            retorno = botoes[i].execute();
-					        for(int i=0; i<3; ++i) {
-					            botoes[i].imprime(botoes[i].hovering(mx,my));
-					        }
-                            al_flip_display();
-                        }
-                    }
-                    break ;
-                case ALLEGRO_EVENT_MOUSE_AXES:
-                	printf("Atualizando...\n");
-                    mx = Ev.mouse.x;
-                    my = Ev.mouse.y;
-                    for(int i=0; i<3; ++i) {
-                        newHovering[i] = botoes[i].hovering(mx,my);
-                        if(oldHovering[i] != newHovering[i]) { // Se tava em cima do botao, tirou. Se tava fora, colocou em cima.
-                            oldHovering[i] = newHovering[i];
-                            devoImprimir = true;
-                        }
-                    }
-                    if(devoImprimir) {
-				        for(int i=0; i<3; ++i) {
-				            botoes[i].imprime(botoes[i].hovering(mx,my));
-				        }
-                        al_flip_display();
-                        devoImprimir = false;
-                    }
-                    break ;
-            }
-        } while(!retorno);
 
-    }
-    return 1;
-}
 
 
 /* Menu de seleção de personagens, times e teclas. */
@@ -238,15 +137,6 @@ int selecao_personagem(void) {
 
     for(i=0; i<BOTOES_SEL_PERSONAGEM_TOTAL; ++i)
         oldHovering[i] = newHovering[i] = false;
-
-	for(i=0; i<PESSOAS; ++i) {
-		Desx[i] = Pessoas[i].desx;
-		Desy[i] = Pessoas[i].desy;
-		Time[i] = Pessoas[i].time;
-        for(j=0; j<COMANDOS_POR_PERSONAGEM; ++j) {
-            Botoes_int[i][j] = Pessoas[i].botao_char_int[j];
-        }
-	}
 
     /* Provavelmente eu deveria mudar pra deixar os personagens lado a lado. */
     int x_inicial[2] = {90,160}; // Posição inicial dos "<" e ">" (botoes pra selecionar personagem e time).
@@ -287,7 +177,7 @@ int selecao_personagem(void) {
     botoes[14].set_text("<");
     botoes[15].set_text(">");
     botoes[16].set_text("Voltar");
-    botoes[17].set_text("Salvar"); // Tenho que criar um backup antes de mudar td.
+    botoes[17].set_text(""); // To com preguica de remover o botao, entao ele fica "invisivel" e nao faz nd.
 
     for(i=0; i<PESSOAS; ++i) {
     	Pessoas[i].desx = 0;
@@ -314,8 +204,7 @@ int selecao_personagem(void) {
     botoes[14].set_func(team_3_prev);
     botoes[15].set_func(team_3_next);
 
-    botoes[16].set_func(back_to_menu);
-    botoes[17].set_func(salvar_configs);
+    botoes[16].set_func(return_1);
 
     botoes[18].set_func(set_key_0_0);
     botoes[19].set_func(set_key_0_1);
@@ -418,9 +307,9 @@ int menu_principal(Window win,Pessoa *p,Sprite s)
     botoes[3].set_position(30,170);
     botoes[4].set_position(30,210);
     botoes[0].set_text("Jogar");
-    botoes[1].set_text("Carregar");
+    botoes[1].set_text("");
     botoes[2].set_text("Configuracoes");
-    botoes[3].set_text("Comandos");
+    botoes[3].set_text("");
     botoes[4].set_text("Sair");
     botoes[0].set_func(comeca_jogo);
     botoes[2].set_func(selecao_personagem);
