@@ -59,13 +59,16 @@ void usa_fireball(char **matriz, Pessoa *p, Magias *m) {
 		if(m->fireball[i][0].ativa == false && m->fireball[i][1].ativa == false)
 			break ;
 		for(j=0; j<2; ++j) { // O mesmo player pode ter jogado duas fireballs.
-			if(m->fireball[i][j].d == -1)
+			if(m->fireball[i][j].d == -1) {
 				m->fireball[i][j].d = calcula_direcao(p,i); // Numeros de direçao no colisao.h
+			}
 			for(k=0; k<4; ++k) {
 				if(contato_proximo_direcionado(m->fireball[i][j].x,m->fireball[i][j].y,i,k,m->fireball[i][j].d,p) == k) {
 					p[k].hp -= m->fireball[i][j].dano;
 					m->fireball[i][j].ativa = false;
 					m->fireball[i][j].explosao = true;
+					m->fireball[i][j].xexpl = m->fireball[i][j].x;
+					m->fireball[i][j].yexpl = m->fireball[i][j].y;
 					m->fireball[i][j].d = -1;
 				}
 			}

@@ -23,7 +23,7 @@ Problemas:
 int main()
 {
     /* Coisas relacionadas aos chars */
-    int i,j;
+    int i,j,JOGADORES,vencedor;
 	/* Coisas relacionadas as tecnicas/magias */
 	Magias m;
 	/* Pessoas, que contem quase todos os dados (ver colisao.h) */
@@ -92,9 +92,13 @@ int main()
 	fclose(errext);
 
     /* Opera o jogo */
-	if(menu_principal(win,p,s)==1) {
-		fase1(win,p,s,m);
+    vencedor = -1;
+    while(1) {
+		if(menu_principal(win,p,s,&JOGADORES,vencedor)==1) {
+			vencedor = fase1(win,p,s,m,JOGADORES);
+		}
 	}
+
 	graphdeinit(win);
 	exit(1);
 }
