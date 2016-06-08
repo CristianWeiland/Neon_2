@@ -62,23 +62,24 @@ void keyboard_down(int evkeyboardkeycode,bool *puxa,int *flash, Pessoa *p, Magia
 {
 	for(int i=0; i<4; ++i) {
 		//if(p[i].comp==0) {
-		// Se estiver congelado não pode fazer nada.
-		if(p[i].freeze <= 0) {
-			if(evkeyboardkeycode == p[i].botao_char_int[0]) {
-				p[i].andou_c = 1;
-			} else if(evkeyboardkeycode == p[i].botao_char_int[1]) {
-				p[i].andou_b = 1;
-			} else if(evkeyboardkeycode == p[i].botao_char_int[2]) {
-				p[i].andou_d = 1;
-			} else if(evkeyboardkeycode == p[i].botao_char_int[3]) {
-				p[i].andou_e = 1;
-			} else if(evkeyboardkeycode == p[i].botao_char_int[4]) {
-				p[i].correr = 2;
-			} else if(evkeyboardkeycode == p[i].botao_char_int[5]) {
-				puxa[i] = true;
-			} else if(evkeyboardkeycode == p[i].botao_char_int[6]) {
-				flash[i] = 1;
-			}
+		// Se estiver congelado não pode fazer nada, mas indica que quer fazer com 2..
+		if(evkeyboardkeycode == p[i].botao_char_int[0]) {
+			p[i].andou_c = (p[i].freeze <= 0) ? 1 : 2;
+		} else if(evkeyboardkeycode == p[i].botao_char_int[1]) {
+			p[i].andou_b = 1;
+			p[i].andou_b = (p[i].freeze <= 0) ? 1 : 2;
+		} else if(evkeyboardkeycode == p[i].botao_char_int[2]) {
+			p[i].andou_d = 1;
+			p[i].andou_d = (p[i].freeze <= 0) ? 1 : 2;
+		} else if(evkeyboardkeycode == p[i].botao_char_int[3]) {
+			p[i].andou_e = 1;
+			p[i].andou_e = (p[i].freeze <= 0) ? 1 : 2;
+		} else if(evkeyboardkeycode == p[i].botao_char_int[4]) {
+			p[i].correr = 2;
+		} else if(evkeyboardkeycode == p[i].botao_char_int[5]) {
+			puxa[i] = true;
+		} else if(evkeyboardkeycode == p[i].botao_char_int[6]) {
+			flash[i] = 1;
 		}
 	}
 	switch(evkeyboardkeycode) {

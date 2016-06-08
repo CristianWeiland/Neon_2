@@ -89,6 +89,7 @@ int main()
 	    teclas_iniciais(p);
 	}
 */
+
 	fclose(errext);
 
     /* Opera o jogo */

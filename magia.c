@@ -20,8 +20,6 @@ void init_magias(Magias *m) {
 			m->iceball[i][j].explosao = false; // Nao colidiu / chegou na distancia limite.
 			m->iceball[i][j].dist = 0; // Nao percorreu nenhuma distancia.
 			m->iceball[i][j].d = -1; // Nao tem direçao.
-			m->gelox[i][j] = 280;
-			m->geloy[i][j] = 220;
 		}
 	}
 }
@@ -48,8 +46,8 @@ void calcula_status(Pessoa *p, int njogadores)
 
 	// Para de correr quando acaba energia.
 	for(i=0; i<njogadores; ++i)
-		if(p[i].energia <= 0)
-		//if(p[i].energia <= 0 || p[i].freeze > 0)
+		// if(p[i].energia <= 0)
+		if(p[i].energia <= 0 || p[i].freeze > 0)
 			p[i].correr = 1;
 
 	// Desconta energia
@@ -64,8 +62,16 @@ void calcula_status(Pessoa *p, int njogadores)
 
 	// Diminui tempo de congelamento.
 	for(i=0; i<njogadores; ++i)
-		if(p[i].freeze > 0)
+		if(p[i].freeze > 0) {
 			--(p[i].freeze);
+			if(p[i].freeze <= 0) {
+				printf("Descongelou.\n");
+				if(p[i].andou_b == 2) p[i].andou_b = 1;
+				if(p[i].andou_c == 2) {p[i].andou_c = 1;printf("Mudei andou_c\n");}
+				if(p[i].andou_d == 2) p[i].andou_d = 1;
+				if(p[i].andou_e == 2) p[i].andou_e = 1;
+			}
+		}
 
 	return ;
 }
@@ -89,7 +95,7 @@ void usa_fireball(char **matriz, Pessoa *p, Magias *m) {
 					m->fireball[i][j].d = -1;
 				}
 			}
-			// Nao colidiu com nenhum char, verifica se colidiu com algo do mapa. {
+			// Nao colidiu com nenhum char, verifica se colidiu com algo do mapa.
 			if(m->fireball[i][j].ativa==true && colisao_fireball(matriz,m->fireball[i][j].x,m->fireball[i][j].y,m->fireball[i][j].d) == 0) {
 				// if(andou_b[i]==1){
 					// m->fireball[i][j].y -= 12;
@@ -161,7 +167,8 @@ void explosao(Pessoa *p, int njogadores, Sprite s, Magias *m) {
 		}
 	}
 }
-void usa_iceball(char **matriz, Pessoa *p, Magias *m) {
+
+void usa_iceball(char **matriz, Pessoa *p, Magias *m, Sprite s) {
 	int i,j,k;
 	for(i=0; i<4; ++i) {
 		if(m->iceball[i][0].ativa == false && m->iceball[i][1].ativa == false)
@@ -174,9 +181,6 @@ void usa_iceball(char **matriz, Pessoa *p, Magias *m) {
 				if(contato_proximo_direcionado(m->iceball[i][j].x,m->iceball[i][j].y,i,k,m->iceball[i][j].d,p) == k) {
 					p[k].freeze = m->iceball[i][j].dano;
 					m->iceball[i][j].ativa = false;
-					m->iceball[i][j].explosao = true;
-					m->iceball[i][j].xexpl = m->iceball[i][j].x;
-					m->iceball[i][j].yexpl = m->iceball[i][j].y;
 					m->iceball[i][j].d = -1;
 				}
 			}
@@ -202,45 +206,15 @@ void usa_iceball(char **matriz, Pessoa *p, Magias *m) {
 				if(m->iceball[i][j].dist >= 300) {
 					m->iceball[i][j].d = -1;
 					m->iceball[i][j].ativa = false;
-					m->iceball[i][j].explosao = true;
-					m->iceball[i][j].xexpl = m->iceball[i][j].x;
-					m->iceball[i][j].yexpl = m->iceball[i][j].y;
 				}
 			}
 			else if(m->iceball[i][j].ativa==true) { // Nao tah ativa OU colidiu. Vou considerar que eh a hipotese de ter colidido, entao passa pra falso.
 				m->iceball[i][j].d = -1;
 				m->iceball[i][j].ativa = false;
-				m->iceball[i][j].explosao = true;
-				m->iceball[i][j].xexpl = m->iceball[i][j].x;
-				m->iceball[i][j].yexpl = m->iceball[i][j].y;
 			}
-		}
-	}
-}
-
-void gelo(Pessoa *p, int njogadores, Sprite s, Magias *m) {
-	int i, j;
-	for(i=0; i<njogadores; ++i) {
-		for(j=0; j<2; ++j) {
 			if(m->iceball[i][j].ativa == true) {
 				al_draw_bitmap(s.iceballs[m->iceball[i][j].d],m->iceball[i][j].x,m->iceball[i][j].y,0);
 			}
-			/*
-			if(m->iceball[i][j].explosao == true) { // Enquanto gelox = 288 e geloy = 224, ele nao imprime a explosao.
-							// Entao o esquema eh zerar eles e dai o programa começa a contagem e a impressao.
-				m->gelox[i][j] = m->geloy[i][j] = 0;
-				m->iceball[i][j].explosao = false;
-			}
-			if(m->gelox[i][j] < 280 && m->geloy[i][j] < 220) { // Imprime a explosao.
-				//al_draw_bitmap_region(s.explosion,m->gelox[i][j],m->geloy[i][j],32,32,m->iceball[i][j].x,m->iceball[i][j].y,0);
-				al_draw_bitmap_region(s.explosion,m->gelox[i][j],m->geloy[i][j],32,32,m->iceball[i][j].xexpl,m->iceball[i][j].yexpl,0);
-				m->gelox[i][j] += 32;
-				if(m->gelox[i][j] >= 288) {
-					m->geloy[i][j] += 32;
-					if(m->geloy[i][j] < 224)
-						m->gelox[i][j] = 0;
-				}
-			}*/
 		}
 	}
 }
@@ -250,8 +224,7 @@ void usa_magias(char **matriz, Pessoa *p, int njogadores, Sprite s, int *flash, 
 	usa_flash(p,flash,matriz);
 	usa_fireball(matriz, p, m);
 	explosao(p,njogadores,s, m);
-	usa_iceball(matriz, p, m);
-	gelo(p,njogadores,s, m);
+	usa_iceball(matriz, p, m, s);
 	return ;
 }
 

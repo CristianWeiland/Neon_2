@@ -41,13 +41,11 @@ typedef struct Magia {
 
 typedef struct Magias {
 	int explox[4][2], exploy[4][2]; // Selecionam a posicao da explosao no bitmap explo.bmp.
-	int gelox[4][2], geloy[4][2]; // Selecionam a posicao da explosao no bitmap explo.bmp.
 	Magia fireball[4][2];
 	Magia iceball[4][2];
 } Magias;
 
 typedef struct Sprite {
-	//*tiles,*chars,*map,*frente,**neons,**fireballs,*explosion;
 	ALLEGRO_BITMAP *tiles; // Usado pra coisas dos mapas.
 	ALLEGRO_BITMAP **fireballs, *explosion; // Sprite da bola de fogo (cima, dir, esq, baixo) + explosao da fireball.
 	ALLEGRO_BITMAP **iceballs, *gelos; // Sprite da bola de fogo (cima, dir, esq, baixo) + explosao da fireball.
