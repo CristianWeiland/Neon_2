@@ -40,6 +40,14 @@ inline void imprime_char(int cx,int cy,int a,int b,int selx,int sely,Sprite s)
     return ;
 }
 
+inline void imprime_char_congelado(int cx,int cy,int a,int b,int selx,int sely,Sprite s)
+{    // cx e cy indicam qual a posicao do char no mapa. A e B indicam qual o "boneco" deve ser imprimido pela funçao. Selx e Sely indicam qual
+     // imagem do "boneco" (ex: mexendo uma perna, ou de costas, etc.)
+	 // A deve ser 0 ou 96. B deve ser 0 ou 128. selx deve ser 0, 32 ou 64. sely deve ser 0, 32, 64 ou 96.
+    al_draw_bitmap_region(s.chars_congelados,a+selx,b+sely,LARGURA_CHAR,ALTURA_CHAR,cx,cy,0);   // Desenha char 1. | Obs.: Ver 96 como 32x3 e 128 como 32x4.
+    return ;
+}
+
 int imprime_4_chars_for(int cont,char** matriz,int *cor,bool *temneon,int njogadores,Pessoa *p,Sprite s)
 {
 	int i,j,selecx,selecy,char4;
@@ -89,7 +97,11 @@ int imprime_4_chars_for(int cont,char** matriz,int *cor,bool *temneon,int njogad
 	 		}
 	        p[i].sely = 0 + 128*char4;
 			if(!(p[i].andou_e) && !(p[i].andou_d) && !(p[i].andou_c))
-				imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,s);
+				if(p[i].freeze <= 0) {
+					imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,s);
+				} else {
+					imprime_char_congelado(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,s);
+				}
 	    }
 	    if((p[i].andou_e) == 1) {
 	        if(!(colidiu(matriz,p[i].x/4,p[i].y/4,ESQ,i,p) == 1)) { // O 1(um) tah ali porque eh o caso de andar pra esquerda.
@@ -99,7 +111,11 @@ int imprime_4_chars_for(int cont,char** matriz,int *cor,bool *temneon,int njogad
 	        }
 	        p[i].sely = 32 + 128*char4;
 	        if(!(p[i].andou_d) && !(p[i].andou_c))
-	         	imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,s);
+	         	if(p[i].freeze <= 0) {
+	         		imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,s);
+	         	} else {
+	         		imprime_char_congelado(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,s);
+	         	}
 	    }
 	    if((p[i].andou_d) == 1) {
 	        if(!(colidiu(matriz,p[i].x/4,p[i].y/4,DIR,i,p) == 1)) { // O 3(tres) tah ali porque eh o caso de andar pra direita.
@@ -109,7 +125,11 @@ int imprime_4_chars_for(int cont,char** matriz,int *cor,bool *temneon,int njogad
 			}
 	        p[i].sely = 64 + 128*char4;
 	        if(!(p[i].andou_c))
-	            imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,s);
+	            if(p[i].freeze <= 0) {
+	            	imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,s);
+	            } else {
+	            	imprime_char_congelado(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,s);
+	            }
 	    }
 	    if((p[i].andou_c) == 1) {
 	        if(!(colidiu(matriz,p[i].x/4,p[i].y/4,CIMA,i,p) == 1)) { // O 2(dois) tah ali porque eh o caso de andar pra cima.
@@ -118,11 +138,19 @@ int imprime_4_chars_for(int cont,char** matriz,int *cor,bool *temneon,int njogad
 		 		p[i].yneon -= 4 * p[i].correr;
 	        }
 	        p[i].sely = 96 + 128*char4;
-	        imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,s);
+	        if(p[i].freeze <= 0) {
+	        	imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,s);
+	        } else {
+	        	imprime_char_congelado(p[i].x,p[i].y,p[i].desx,p[i].desy,p[i].selx,p[i].sely,s);
+	        }
        		imprime_neon(p[i].xneon,p[i].yneon,s.neons[i],temneon[i]);
 	    }
 	    if(!(p[i].andou_b) && !(p[i].andou_c) && !(p[i].andou_d) && !(p[i].andou_e)) { // Nao andou.
-			imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,32,96,s);
+			if(p[i].freeze <= 0) {
+				imprime_char(p[i].x,p[i].y,p[i].desx,p[i].desy,32,96,s);
+			} else {
+				imprime_char_congelado(p[i].x,p[i].y,p[i].desx,p[i].desy,32,96,s);
+			}
 			imprime_neon(p[i].xneon,p[i].yneon,s.neons[p[i].time-1],temneon[i]);
 	    }
 	}

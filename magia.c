@@ -13,6 +13,17 @@ void init_magias(Magias *m) {
 			m->exploy[i][j] = 220;
 		}
 	}
+	for(i=0; i<4; ++i) {
+		for(j=0; j<2; ++j) {
+			m->iceball[i][j].ativa = false; // Nao foi usada.
+			m->iceball[i][j].dano = 25; // Dano da tecnica.
+			m->iceball[i][j].explosao = false; // Nao colidiu / chegou na distancia limite.
+			m->iceball[i][j].dist = 0; // Nao percorreu nenhuma distancia.
+			m->iceball[i][j].d = -1; // Nao tem direçao.
+			m->gelox[i][j] = 280;
+			m->geloy[i][j] = 220;
+		}
+	}
 }
 
 void tira_neon(bool *puxa,bool *temneon, Pessoa *p)
@@ -71,7 +82,6 @@ void usa_fireball(char **matriz, Pessoa *p, Magias *m) {
 			for(k=0; k<4; ++k) {
 				if(contato_proximo_direcionado(m->fireball[i][j].x,m->fireball[i][j].y,i,k,m->fireball[i][j].d,p) == k) {
 					p[k].hp -= m->fireball[i][j].dano;
-					//p[k].freeze = 30; // Quem recebeu a bola de fogo fica congelado.
 					m->fireball[i][j].ativa = false;
 					m->fireball[i][j].explosao = true;
 					m->fireball[i][j].xexpl = m->fireball[i][j].x;
@@ -79,7 +89,8 @@ void usa_fireball(char **matriz, Pessoa *p, Magias *m) {
 					m->fireball[i][j].d = -1;
 				}
 			}
-			if(m->fireball[i][j].ativa==true && colisao_fireball(matriz,m->fireball[i][j].x,m->fireball[i][j].y,m->fireball[i][j].d) == 0) { // Nao colidiu com nenhum char, verifica se colidiu com algo do mapa. {
+			// Nao colidiu com nenhum char, verifica se colidiu com algo do mapa. {
+			if(m->fireball[i][j].ativa==true && colisao_fireball(matriz,m->fireball[i][j].x,m->fireball[i][j].y,m->fireball[i][j].d) == 0) {
 				// if(andou_b[i]==1){
 					// m->fireball[i][j].y -= 12;
 				// }else if(andou_d[i]==1){
@@ -150,12 +161,97 @@ void explosao(Pessoa *p, int njogadores, Sprite s, Magias *m) {
 		}
 	}
 }
+void usa_iceball(char **matriz, Pessoa *p, Magias *m) {
+	int i,j,k;
+	for(i=0; i<4; ++i) {
+		if(m->iceball[i][0].ativa == false && m->iceball[i][1].ativa == false)
+			break ;
+		for(j=0; j<2; ++j) { // O mesmo player pode ter jogado duas iceballs.
+			if(m->iceball[i][j].d == -1) {
+				m->iceball[i][j].d = calcula_direcao(p,i); // Numeros de direçao no colisao.h
+			}
+			for(k=0; k<4; ++k) {
+				if(contato_proximo_direcionado(m->iceball[i][j].x,m->iceball[i][j].y,i,k,m->iceball[i][j].d,p) == k) {
+					p[k].freeze = m->iceball[i][j].dano;
+					m->iceball[i][j].ativa = false;
+					m->iceball[i][j].explosao = true;
+					m->iceball[i][j].xexpl = m->iceball[i][j].x;
+					m->iceball[i][j].yexpl = m->iceball[i][j].y;
+					m->iceball[i][j].d = -1;
+				}
+			}
+			// Nao colidiu com nenhum char, verifica se colidiu com algo do mapa.
+			if(m->iceball[i][j].ativa==true && colisao_fireball(matriz,m->iceball[i][j].x,m->iceball[i][j].y,m->iceball[i][j].d) == 0) {
+				switch(m->iceball[i][j].d) {
+					case 0:
+						m->iceball[i][j].y -= 12;
+						break;
+					case 1:
+						m->iceball[i][j].x += 12;
+						break;
+					case 2:
+						m->iceball[i][j].x -= 12;
+						break;
+					case 3:
+						m->iceball[i][j].y += 12;
+						break;
+					default:
+						break;
+				}
+				m->iceball[i][j].dist += 12; // Dist eh usado pra limitar a distancia que a iceball vai. No caso, vai ser 300 pixels?
+				if(m->iceball[i][j].dist >= 300) {
+					m->iceball[i][j].d = -1;
+					m->iceball[i][j].ativa = false;
+					m->iceball[i][j].explosao = true;
+					m->iceball[i][j].xexpl = m->iceball[i][j].x;
+					m->iceball[i][j].yexpl = m->iceball[i][j].y;
+				}
+			}
+			else if(m->iceball[i][j].ativa==true) { // Nao tah ativa OU colidiu. Vou considerar que eh a hipotese de ter colidido, entao passa pra falso.
+				m->iceball[i][j].d = -1;
+				m->iceball[i][j].ativa = false;
+				m->iceball[i][j].explosao = true;
+				m->iceball[i][j].xexpl = m->iceball[i][j].x;
+				m->iceball[i][j].yexpl = m->iceball[i][j].y;
+			}
+		}
+	}
+}
+
+void gelo(Pessoa *p, int njogadores, Sprite s, Magias *m) {
+	int i, j;
+	for(i=0; i<njogadores; ++i) {
+		for(j=0; j<2; ++j) {
+			if(m->iceball[i][j].ativa == true) {
+				al_draw_bitmap(s.iceballs[m->iceball[i][j].d],m->iceball[i][j].x,m->iceball[i][j].y,0);
+			}
+			/*
+			if(m->iceball[i][j].explosao == true) { // Enquanto gelox = 288 e geloy = 224, ele nao imprime a explosao.
+							// Entao o esquema eh zerar eles e dai o programa começa a contagem e a impressao.
+				m->gelox[i][j] = m->geloy[i][j] = 0;
+				m->iceball[i][j].explosao = false;
+			}
+			if(m->gelox[i][j] < 280 && m->geloy[i][j] < 220) { // Imprime a explosao.
+				//al_draw_bitmap_region(s.explosion,m->gelox[i][j],m->geloy[i][j],32,32,m->iceball[i][j].x,m->iceball[i][j].y,0);
+				al_draw_bitmap_region(s.explosion,m->gelox[i][j],m->geloy[i][j],32,32,m->iceball[i][j].xexpl,m->iceball[i][j].yexpl,0);
+				m->gelox[i][j] += 32;
+				if(m->gelox[i][j] >= 288) {
+					m->geloy[i][j] += 32;
+					if(m->geloy[i][j] < 224)
+						m->gelox[i][j] = 0;
+				}
+			}*/
+		}
+	}
+}
 
 void usa_magias(char **matriz, Pessoa *p, int njogadores, Sprite s, int *flash, Magias *m)
 {
 	usa_flash(p,flash,matriz);
 	usa_fireball(matriz, p, m);
 	explosao(p,njogadores,s, m);
+	usa_iceball(matriz, p, m);
+	gelo(p,njogadores,s, m);
 	return ;
 }
 
@@ -193,7 +289,8 @@ void usa_flash(Pessoa *p,int *flash,char **matriz)
 			p[i].energia -= 50;
 			/* Existem 8 casos (8 direçoes possiveis de andar, 4 sentidos e 4 diagonais). */
 			for(j=0; j<19; ++j) {
-				if((p[i].andou_c) && !(p[i].andou_b) && !(p[i].andou_d) && !(p[i].andou_e)) { // Soh pra cima ( /\ ).
+				// Antes tinha if(p[i].andou_c), mas, quando ele ficar parado, ele também deve dar flash pra cima.
+				if(!(p[i].andou_b) && !(p[i].andou_d) && !(p[i].andou_e)) { // Soh pra cima ( /\ ).
 					if(colidiu(matriz,p[i].x/4,p[i].y/4,2,i,p) == 1) {
 					    p[i].y += 4;
 		            }

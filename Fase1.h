@@ -10,7 +10,6 @@
 
 int fase1(Window win, Pessoa *p, Sprite s, Magias m, int JOGADORES)
 {
-	printf("Começando com %d\n", JOGADORES);
 	char** matriz;
 	int mapsize,xtile[TAM],ytile[TAM],xcorte[TAM],ycorte[TAM];
 	FILE *mapa,*errext,*auxFile;
