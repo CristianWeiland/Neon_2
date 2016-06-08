@@ -89,11 +89,19 @@ Sprite init_sprites(FILE *errext) {
     Sprite s;
 
     s.neons = (ALLEGRO_BITMAP**) malloc(4*sizeof(ALLEGRO_BITMAP*));
+    s.iceballs = (ALLEGRO_BITMAP**) malloc(4*sizeof(ALLEGRO_BITMAP*));
     s.fireballs = (ALLEGRO_BITMAP**) malloc(4*sizeof(ALLEGRO_BITMAP*));
 
     s.chars = al_load_bitmap("Imgs/chars.bmp"); // Obs: Cada imagem de cada char eh 32x32
     if(!(s.chars)) {
         fprintf(errext,"Falha ao abrir a imagem chars.");
+        fclose(errext);
+        exit(1);
+    }
+
+    s.chars_congelados = al_load_bitmap("Imgs/chars_congelados.bmp"); // Obs: Cada imagem de cada char eh 32x32
+    if(!(s.chars_congelados)) {
+        fprintf(errext,"Falha ao abrir a imagem chars_congelados.");
         fclose(errext);
         exit(1);
     }
@@ -192,6 +200,34 @@ Sprite init_sprites(FILE *errext) {
         exit(1);
     }
 
+    s.iceballs[0] = al_load_bitmap("Imgs/Iceballc.bmp");
+    if(!s.iceballs[0]) {
+        fprintf(errext,"Falha ao abrir a imagem s.iceballs[0].");
+        fclose(errext);
+        exit(1);
+    }
+
+    s.iceballs[1] = al_load_bitmap("Imgs/Iceballd.bmp");
+    if(!s.iceballs[1]) {
+        fprintf(errext,"Falha ao abrir a imagem s.iceballs[1].");
+        fclose(errext);
+        exit(1);
+    }
+
+    s.iceballs[2] = al_load_bitmap("Imgs/Iceballe.bmp");
+    if(!s.iceballs[2]) {
+        fprintf(errext,"Falha ao abrir a imagem s.iceballs[2].");
+        fclose(errext);
+        exit(1);
+    }
+
+    s.iceballs[3] = al_load_bitmap("Imgs/Iceballb.bmp");
+    if(!s.iceballs[3]) {
+        fprintf(errext,"Falha ao abrir a imagem s.iceballs[3].");
+        fclose(errext);
+        exit(1);
+    }
+
     al_convert_mask_to_alpha(s.bar,al_map_rgb(255,0,255));
     al_convert_mask_to_alpha(s.dead,al_map_rgb(255,0,255));
     al_convert_mask_to_alpha(s.tiles,al_map_rgb(255,0,255));
@@ -199,9 +235,11 @@ Sprite init_sprites(FILE *errext) {
     al_convert_mask_to_alpha(s.explosion,al_map_rgb(255,0,255));
     al_convert_mask_to_alpha(s.healthbar,al_map_rgb(255,0,255));
     al_convert_mask_to_alpha(s.energybar,al_map_rgb(255,0,255));
+    al_convert_mask_to_alpha(s.chars_congelados,al_map_rgb(255,0,255));
     for(i=0;i<4;i++) {
         al_convert_mask_to_alpha(s.neons[i],al_map_rgb(255,0,255));
         al_convert_mask_to_alpha(s.fireballs[i],al_map_rgb(255,0,255));
+        al_convert_mask_to_alpha(s.iceballs[i],al_map_rgb(255,0,255));
     }
 
     return s;

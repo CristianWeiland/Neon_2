@@ -6,7 +6,6 @@ char** le_matriz(FILE *fp)
 {
 	char** matriz;
 	int i,j;
-	//FILE *fp = ;
 
 	matriz = (char**)calloc(TAM,sizeof(char*));
 	for(i=0; i<TAM; ++i)

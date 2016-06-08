@@ -62,29 +62,33 @@ void keyboard_down(int evkeyboardkeycode,bool *puxa,int *flash, Pessoa *p, Magia
 {
 	for(int i=0; i<4; ++i) {
 		//if(p[i].comp==0) {
-			if(evkeyboardkeycode == p[i].botao_char_int[0]) {
-				p[i].andou_c = 1;
-			} else if(evkeyboardkeycode == p[i].botao_char_int[1]) {
-				p[i].andou_b = 1;
-			} else if(evkeyboardkeycode == p[i].botao_char_int[2]) {
-				p[i].andou_d = 1;
-			} else if(evkeyboardkeycode == p[i].botao_char_int[3]) {
-				p[i].andou_e = 1;
-			} else if(evkeyboardkeycode == p[i].botao_char_int[4]) {
-				p[i].correr = 2;
-			} else if(evkeyboardkeycode == p[i].botao_char_int[5]) {
-				puxa[i] = true;
-			} else if(evkeyboardkeycode == p[i].botao_char_int[6]) {
-				flash[i] = 1;
-			}
-		//}
+		// Se estiver congelado não pode fazer nada, mas indica que quer fazer com 2..
+		if(evkeyboardkeycode == p[i].botao_char_int[0]) {
+			p[i].andou_c = (p[i].freeze <= 0) ? 1 : 2;
+		} else if(evkeyboardkeycode == p[i].botao_char_int[1]) {
+			p[i].andou_b = 1;
+			p[i].andou_b = (p[i].freeze <= 0) ? 1 : 2;
+		} else if(evkeyboardkeycode == p[i].botao_char_int[2]) {
+			p[i].andou_d = 1;
+			p[i].andou_d = (p[i].freeze <= 0) ? 1 : 2;
+		} else if(evkeyboardkeycode == p[i].botao_char_int[3]) {
+			p[i].andou_e = 1;
+			p[i].andou_e = (p[i].freeze <= 0) ? 1 : 2;
+		} else if(evkeyboardkeycode == p[i].botao_char_int[4]) {
+			p[i].correr = 2;
+		} else if(evkeyboardkeycode == p[i].botao_char_int[5]) {
+			puxa[i] = true;
+		} else if(evkeyboardkeycode == p[i].botao_char_int[6]) {
+			flash[i] = 1;
+		}
 	}
 	switch(evkeyboardkeycode) {
 		/* Primeiro Player */
         /* Magias */
-        case ALLEGRO_KEY_Z:
+
+        /* Fireball */
+        case ALLEGRO_KEY_X:
         	if(m->fireball[0][0].ativa == true && p[0].energia >= 50 && m->fireball[0][1].ativa == false) {
-			//if(m->fireball[0][0].ativa == true && p[0].energia >= 50 && m->fireball[0][1].ativa == false && p[0].freeze <= 0) {
         		m->fireball[0][1].ativa = true;
         		m->fireball[0][1].x = p[0].x;
         		m->fireball[0][1].y = p[0].y;
@@ -92,13 +96,30 @@ void keyboard_down(int evkeyboardkeycode,bool *puxa,int *flash, Pessoa *p, Magia
         		p[0].energia -= 50;
         	}
         	else if(p[0].energia >= 50) {
-        	//else if(p[0].energia >= 50 && p[0].freeze <= 0) {
         		m->fireball[0][0].ativa = true;
         		m->fireball[0][0].x = p[0].x;
         		m->fireball[0][0].y = p[0].y;
         		m->fireball[0][0].dist = 0;
         		p[0].energia -= 50;
         	}
+        	break;
+        /* Iceball */
+        case ALLEGRO_KEY_Z:
+			if(m->iceball[0][0].ativa == true && p[0].energia >= 50 && m->iceball[0][1].ativa == false && p[0].freeze <= 0) {
+        		m->iceball[0][1].ativa = true;
+        		printf("Ativa\n");
+        		m->iceball[0][1].x = p[0].x;
+        		m->iceball[0][1].y = p[0].y;
+        		m->iceball[0][1].dist = 0;
+        		p[0].energia -= 50;
+        	} else if(p[0].energia >= 50 && p[0].freeze <= 0) {
+        		m->iceball[0][0].ativa = true;
+        		m->iceball[0][0].x = p[0].x;
+        		m->iceball[0][0].y = p[0].y;
+        		m->iceball[0][0].dist = 0;
+        		p[0].energia -= 50;
+        	}
+        	break;
 		/* Segundo Player */
 		/* Terceiro Player */
 		/* Quarto Player */
