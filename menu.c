@@ -19,11 +19,7 @@ o jogador passar o mouse por cima de um botao ou clicar em um botao. */
         al_draw_textf(Font, VERDE, 350, 50, 0, "O jogador %d venceu! Parabazi!", vencedor+1);
     }
 }
-/*
-int comeca_jogo(void *param) {
-    return 1;
-}
-*/
+
 int fecha_jogo(void *param) {
     graphdeinit(Win);
     exit(0);
@@ -76,16 +72,7 @@ int team_prev(void *param) {
     Pessoas[i].time = ((Pessoas[i].time + 2) % 4) + 1;
     return 0;
 }
-/*
-int team_0_next() { Pessoas[0].time = (Pessoas[0].time % 4) + 1; return 0; }
-int team_1_next() { Pessoas[1].time = (Pessoas[1].time % 4) + 1; return 0; }
-int team_2_next() { Pessoas[2].time = (Pessoas[2].time % 4) + 1; return 0; }
-int team_3_next() { Pessoas[3].time = (Pessoas[3].time % 4) + 1; return 0; }
-int team_0_prev() { Pessoas[0].time = ((Pessoas[0].time + 2) % 4) + 1; return 0; }
-int team_1_prev() { Pessoas[1].time = ((Pessoas[1].time + 2) % 4) + 1; return 0; }
-int team_2_prev() { Pessoas[2].time = ((Pessoas[2].time + 2) % 4) + 1; return 0; }
-int team_3_prev() { Pessoas[3].time = ((Pessoas[3].time + 2) % 4) + 1; return 0; }
-*/
+
 /* Funções para selecionar as teclas para cada personagem. */
 void set_buttons(Botoes botoes[BOTOES_SEL_PERSONAGEM_TOTAL]) {
 /* Muda o texto dos botoes para as letras que representam as teclas dos jogadores. */
@@ -95,7 +82,6 @@ void set_buttons(Botoes botoes[BOTOES_SEL_PERSONAGEM_TOTAL]) {
         }
     }
 }
-//int set_next_key(int indice_pessoa, int indice_tecla) {
 void esperaTecla() {
     al_draw_text(Font, PIXEL(169,68,66), 350, 500, 0, "Aperte alguma tecla...");
     al_flip_display();
@@ -163,7 +149,6 @@ int selecao_personagem(void *) {
     /* Botoes pra selecionar numero de jogadores */
     botoes[45].set_button("<", 510, 50, num_jogadores_dec, NULL, 0);
     botoes[46].set_button(">", 540, 50, num_jogadores_inc, NULL, 0);
-
 
     set_buttons(botoes);
     imprime_menu(botoes, BOTOES_SEL_PERSONAGEM_TOTAL, mx, my, -1);
