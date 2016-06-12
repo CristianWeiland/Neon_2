@@ -77,7 +77,7 @@ int main() {
     ALLEGRO_BITMAP *tileiso = al_load_bitmap("tile_iso.bmp");
     ALLEGRO_BITMAP *tilemenu = al_load_bitmap("menu_iso.bmp");
     ALLEGRO_FONT *font = al_load_font("font.tga", 12, 0);
-    int i, j;
+    int i, j, largura = 1;
     int xtile[n], ytile[n], xcorte[n], ycorte[n];
     int xcorte_aux = 0, ycorte_aux = 32;
     int aux = -1, pos = 0;
@@ -85,7 +85,7 @@ int main() {
     int mouse_x, mouse_y;
     unsigned int mouse_b = 0;
     FILE *arquivo;
-    bool redraw = true, sair = false;
+    bool redraw = true, sair = false, salvo = true;
 
     if(!tileiso) {
         puts("Nao consegui abrir tileiso.");
@@ -117,6 +117,7 @@ int main() {
                 }   
                 ++pos;
                 redraw = true;
+                salvo = false;
             }
             if(ev.keyboard.keycode == ALLEGRO_KEY_LEFT) {
                 for(j=0; j<n; ++j) {
@@ -124,6 +125,7 @@ int main() {
                 }
                 --pos;
                 redraw = true;
+                salvo = false;
             }
 
             /*
@@ -169,6 +171,16 @@ int main() {
             }
 
 
+            if(ev.keyboard.keycode == ALLEGRO_KEY_Q) {
+                if(largura <= 7)
+                    largura += 2;
+                redraw = true;
+            }
+            if(ev.keyboard.keycode == ALLEGRO_KEY_W) {
+                if(largura > 1)
+                    largura -=2;
+                redraw = true;
+            }
             if(ev.keyboard.keycode == ALLEGRO_KEY_A) {
                 arquivo = fopen("lago.txt", "r");
                 if(arquivo) {
@@ -188,7 +200,7 @@ int main() {
                     }
                 }
                 //fprintf(arquivo,"%i\n",index+1);
-                fprintf(arquivo,"%i\n",aux);
+                fprintf(arquivo,"%i\n",aux+1);
                 // for(i=0; i<index+1; ++i) {
                 for(i=0; i<index; ++i) {
                     if(xtile[i] >= 0 && ytile[i] >= 0) {
@@ -196,6 +208,7 @@ int main() {
                     }
                 }
                 fclose(arquivo);
+                salvo = true;
             }
         } else if(ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
             mouse_x = ev.mouse.x;
@@ -213,12 +226,38 @@ int main() {
             redraw = true;
         }
 
-        if(mouse_b & 1) { // Clicou com o botão esquerdo. Adiciona um tile.
+        if(mouse_b & 1) { // Clicou com o botão esquerdo. Adiciona um tile. Funciona. Fazer pra + de 1 tile simultaneo.
+            /* Funciona pra 1 tile.
             xtile[index] = pos_x;
             ytile[index] = pos_y;
             xcorte[index] = xcorte_aux;
             ycorte[index] = ycorte_aux;
             ++index;
+            */
+            /*
+            352 208
+            384 192
+            416 176
+            +32 -16
+
+            384 224
+            416 208
+            448 192
+            +32 -16
+
+            416 240
+            448 224
+            480 208            
+            */
+            for(i=0; i<largura; ++i) {
+                for(j=0; j<largura; ++j) {
+                    xtile[index] = pos_x+32*(j+i);
+                    ytile[index] = pos_y-16*j+16*   i;
+                    xcorte[index] = xcorte_aux;
+                    ycorte[index] = ycorte_aux;
+                    ++index;
+                }
+            }
         } else if(mouse_b & 2) {
             for(aux = 0; aux < index; ++aux) {
                 xtile[index] = pos_x;
@@ -243,17 +282,28 @@ int main() {
                 if(xtile[j] >= 0)
                     al_draw_bitmap_region(tileiso, xcorte[j], ycorte[j], 64, 32, xtile[j], ytile[j], 0);
             }
-
+            /* Funciona pra 1 quadrado, mas não pra multiplos.
             al_draw_line((float) pos_x   , (float) pos_y+16, (float) pos_x+32, (float) pos_y   , al_map_rgb(0,0,255), 1);
             al_draw_line((float) pos_x+32, (float) pos_y   , (float) pos_x+64, (float) pos_y+16, al_map_rgb(0,0,255), 1);
             al_draw_line((float) pos_x+64, (float) pos_y+16, (float) pos_x+32, (float) pos_y+32, al_map_rgb(0,0,255), 1);
             al_draw_line((float) pos_x+32, (float) pos_y+32, (float) pos_x   , (float) pos_y+16, al_map_rgb(0,0,255), 1);
+            */
+            /* Desenha os quadrados azuis pra indicar onde vou inserir o(s) tile(s). Funciona, aparentemente. */
+            al_draw_line((float) pos_x   , (float) pos_y+16, (float) pos_x+32*largura, (float) pos_y-16*(largura-1)   , al_map_rgb(0,0,255), 1);
+            al_draw_line((float) pos_x+32*(largura), (float) pos_y-16*(largura-1)   , (float) pos_x+64+64*(largura-1), (float) pos_y+16, al_map_rgb(0,0,255), 1);
+            al_draw_line((float) pos_x+64+64*(largura-1), (float) pos_y+16, (float) pos_x+32*largura, (float) pos_y+16+16*(largura), al_map_rgb(0,0,255), 1);
+            al_draw_line((float) pos_x+32*(largura), (float) pos_y+16+16*(largura), (float) pos_x   , (float) pos_y+16, al_map_rgb(0,0,255), 1);
+
             al_draw_bitmap(tilemenu, xmenu, ymenu, 0);
             al_draw_rectangle((float) (xmenu - 1), (float) (ymenu + 4), (float) (xmenu + 640/5 + 1), (float) (ymenu + 1024/5 + 5), BRONZE, 1);
             al_draw_rectangle(((float) xcorte_aux)/5+xmenu, ((float)ycorte_aux)/5+ymenu+8, ((float) xcorte_aux/5)+12+xmenu, ((float) ycorte_aux)/5+ymenu-2, al_map_rgb(0,0,255), 1);
-            al_draw_textf(font, CARMESIM, 20, 20, 0, "Comandos: S (Salvar), Seta <-- e -->, A (Carregar)");
+            al_draw_textf(font, CARMESIM, 20, 20, 0, "Comandos: S (Salvar), Seta <-- e -->, A (Carregar), Q (Expandir), W (Diminuir)");
             al_draw_textf(font, CARMESIM, 20, 40, 0, "H (Esquerda), J (Baixo), K (Cima), L (Direita)");
             al_draw_textf(font, CARMESIM, 20, 60, 0, "Y (Esquerda Total), U (Baixo Total), I (Cima Total), O (Direita Total)");
+            if(salvo)
+                al_draw_text(font, CARMESIM, 20, 100, 0, "Todas as alteracoes foram salvas.");
+            else
+                al_draw_text(font, CARMESIM, 20, 100, 0, "Existem alteracoes nao salvas!");
             //al_draw_textf(font, al_map_rgb(255,0,0), 100, 70, 0, "Xcorte = %d, ycorte = %d", xcorte_aux, ycorte_aux);
             al_flip_display();
             redraw = false;
