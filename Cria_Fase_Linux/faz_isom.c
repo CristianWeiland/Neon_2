@@ -117,7 +117,6 @@ int main() {
                 }   
                 ++pos;
                 redraw = true;
-                salvo = false;
             }
             if(ev.keyboard.keycode == ALLEGRO_KEY_LEFT) {
                 for(j=0; j<n; ++j) {
@@ -125,7 +124,6 @@ int main() {
                 }
                 --pos;
                 redraw = true;
-                salvo = false;
             }
 
             /*
@@ -224,6 +222,7 @@ int main() {
         } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
             mouse_b = ev.mouse.button;
             redraw = true;
+            salvo = false;
         }
 
         if(mouse_b & 1) { // Clicou com o botão esquerdo. Adiciona um tile. Funciona. Fazer pra + de 1 tile simultaneo.
