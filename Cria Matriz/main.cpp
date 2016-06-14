@@ -1,5 +1,5 @@
 #include <unistd.h>
-#include <windows.h>
+//#include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -102,20 +102,20 @@ int main()
 {
     char **map;
     int mapsize,*colunas,*linhas,*xcorte,*ycorte,*tilex,*tiley;
-    int i,j,k,l,nada;
+    int i,j;
     FILE* mapa = fopen("map.txt","r");
-    
+
     /* Allocando memoria dinamicamente pro map (permite um maior tamanho) */
     map = (char**)calloc(TAM,sizeof(char*));
-    for(i=0;i<TAM;i++)
+    for(i=0;i<TAM;++i)
     	map[i] = (char*)calloc(TAM,sizeof(char));
-    for(i=0;i<TAM;i++)
+    for(i=0;i<TAM;++i)
     {
         for(j=0;j<TAM;j++)
             map[i][j] = '0';
         map[i][0] = 'F';
     }
-    
+
     /* Lendo a quantidade de tiles pra alocar dinamicamente e economizar memoria */
     fscanf(mapa,"%i\n",&mapsize);
     colunas = (int*)calloc(mapsize,sizeof(int));
@@ -124,9 +124,9 @@ int main()
     ycorte = (int*)calloc(mapsize,sizeof(int));
     tilex = (int*)calloc(mapsize,sizeof(int));
     tiley = (int*)calloc(mapsize,sizeof(int));
-    
+
     /* Leitura do map.txt e atualizando a matriz map, para poder salva-la no arquivo matriz.txt */
-    for(i=0;i<mapsize;i++)
+    for(i=0;i<mapsize;++i)
     {
     	fscanf(mapa,"%i %i %i %i\n",&colunas[i],&linhas[i],&xcorte[i],&ycorte[i]);
     	
@@ -521,22 +521,22 @@ char** escreve_tile_1_1(char **map,int linhas,int colunas)
 */
 {
 	int i;
-	for(i=0;i<4;i++)
+	for(i=0;i<4;++i)
     {
     	map[linhas][colunas+6+i] = '1';
     	map[linhas+7][colunas+6+i] = '1';
     }
-    for(i=0;i<8;i++)
+    for(i=0;i<8;++i)
     {
     	map[linhas+1][colunas+4+i] = '1';
     	map[linhas+6][colunas+4+i] = '1';
     }
-    for(i=0;i<12;i++)
+    for(i=0;i<12;++i)
     {
     	map[linhas+2][colunas+2+i] = '1';
     	map[linhas+5][colunas+2+i] = '1';
     }
-    for(i=0;i<16;i++)
+    for(i=0;i<16;++i)
     {
     	map[linhas+3][colunas+i] = '1';
     	map[linhas+4][colunas+i] = '1';
@@ -547,23 +547,23 @@ char** escreve_tile_1_1(char **map,int linhas,int colunas)
 char** escreve_tile_4_1(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<2;i++)
+	for(i=0;i<2;++i)
     	map[linhas][colunas+7+i] = '1';
-    for(i=0;i<4;i++)
+    for(i=0;i<4;++i)
     	map[linhas+1][colunas+6+i] = '1';
-    for(i=0;i<6;i++)
+    for(i=0;i<6;++i)
     {
     	map[linhas+2][colunas+5+i] = '1';
     	map[linhas+3][colunas+5+i] = '1';
     }
-    for(i=0;i<8;i++)
+    for(i=0;i<8;++i)
     	map[linhas+4][colunas+4+i] = '1';
-    for(i=0;i<10;i++)
+    for(i=0;i<10;++i)
     {
     	map[linhas+5][colunas+3+i] = '1';
     	map[linhas+6][colunas+3+i] = '1';
     }
-    for(i=0;i<12;i++)
+    for(i=0;i<12;++i)
     	map[linhas+7][colunas+2+i] = '1';
     return map;
 }
@@ -571,35 +571,35 @@ char** escreve_tile_4_1(char **map,int linhas,int colunas)
 char** escreve_tile_4_2(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<3;i++)
+	for(i=0;i<3;++i)
     {
     	map[linhas][colunas+7+i] = '2';
     }
-    for(i=0;i<4;i++)
+    for(i=0;i<4;++i)
     {
     	map[linhas+1][colunas+7+i] = '2';
     }
-    for(i=0;i<8;i++)
+    for(i=0;i<8;++i)
     {
     	map[linhas+2][colunas+6+i] = '2';
     }
-    for(i=0;i<12;i++)
+    for(i=0;i<12;++i)
     {
     	map[linhas+3][colunas+4+i] = '2';
     	map[linhas+4][colunas+4+i] = '2';
     }
-    for(i=0;i<12;i++)
+    for(i=0;i<12;++i)
     {
     	map[linhas+5][colunas+3+i] = '2';
     }
     map[linhas+5][colunas+15] = '3';
-    for(i=0;i<12;i++)
+    for(i=0;i<12;++i)
     {
     	map[linhas+6][colunas+2+i] = '2';
     }
     map[linhas+6][colunas+14] = '3';
     map[linhas+6][colunas+15] = '3';
-    for(i=0;i<11;i++)
+    for(i=0;i<11;++i)
     {
     	map[linhas+7][colunas+2+i] = '2';
     }
@@ -613,29 +613,29 @@ char** escreve_tile_4_2(char **map,int linhas,int colunas)
 char** escreve_tile_4_3(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<3;i++)
+	for(i=0;i<3;++i)
     	map[linhas][colunas+6+i] = '2';
-    for(i=0;i<5;i++)
+    for(i=0;i<5;++i)
     	map[linhas+1][colunas+5+i] = '2';
-    for(i=0;i<8;i++)
+    for(i=0;i<8;++i)
     	map[linhas+2][colunas+3+i] = '2';
-    for(i=0;i<11;i++)
+    for(i=0;i<11;++i)
     	map[linhas+3][colunas+1+i] = '2';
-    for(i=0;i<12;i++)
+    for(i=0;i<12;++i)
     	map[linhas+4][colunas+i] = '2';
-   	for(i=0;i<2;i++)
+   	for(i=0;i<2;++i)
    	{
    	    map[linhas+5][colunas+i] = '3';
    	    map[linhas+6][colunas+i] = '3';
     }
-    for(i=0;i<11;i++)
+    for(i=0;i<11;++i)
     {
         map[linhas+5][colunas+2+i] = '2';
         map[linhas+6][colunas+2+i] = '2';
     }
-    for(i=0;i<3;i++)
+    for(i=0;i<3;++i)
         map[linhas+7][colunas+i] = '3';
-    for(i=0;i<11;i++)
+    for(i=0;i<11;++i)
         map[linhas+7][colunas+3+i] = '2';
         
     /* Essas proximas atribuiçoes fazem a "linha" de colisao pra nao atravessar a parte da direita do tile. */
@@ -654,18 +654,18 @@ char** escreve_tile_4_3(char **map,int linhas,int colunas)
 char** escreve_tile_4_4(char **map,int linhas,int colunas)
 {
        int i;
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+4][colunas+12+i] = '2';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
            map[linhas+5][colunas+10+i] = '2';
        map[linhas+5][colunas+15] = '3';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
            map[linhas+6][colunas+9+i] = '2';
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas+6][colunas+14+i] = '3';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
            map[linhas+7][colunas+8+i] = '2';
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
            map[linhas+7][colunas+13+i] = '3';
        
        return map;
@@ -675,36 +675,36 @@ char** escreve_tile_4_5(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas][colunas+7+i] = '4';
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
            map[linhas+1][colunas+5+i] = '4';
-       for(i=0;i<10;i++)
+       for(i=0;i<10;++i)
            map[linhas+2][colunas+3+i] = '4';
-       for(i=0;i<14;i++)
+       for(i=0;i<14;++i)
            map[linhas+3][colunas+1+i] = '4';
-       for(i=0;i<16;i++)
+       for(i=0;i<16;++i)
            map[linhas+4][colunas+i] = '4';
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
        {
            map[linhas+5][colunas+i] = '3';
            map[linhas+5][colunas+13+i] = '3';
        }
-       for(i=0;i<10;i++)
+       for(i=0;i<10;++i)
            map[linhas+5][colunas+3+i] = '4';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
        {
            map[linhas+6][colunas+i] = '3';
            map[linhas+6][colunas+11+i] = '3';
        }
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
            map[linhas+6][colunas+5+i] = '4';
-       for(i=0;i<7;i++)
+       for(i=0;i<7;++i)
        {
            map[linhas+7][colunas+i] = '3';
            map[linhas+7][colunas+10+i] = '3';
        }
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
            map[linhas+7][colunas+7+i] = '4';
                   
        return map;
@@ -714,17 +714,17 @@ char** escreve_tile_4_6(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+4][colunas+i] = '2';
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas+5][colunas+i] = '3';
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+5][colunas+2+i] = '2';
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
            map[linhas+6][colunas+i] = '3';
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+6][colunas+3+i] = '2';
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
        {
            map[linhas+7][colunas+i] = '3';
            map[linhas+7][colunas+4+i] = '2';
@@ -738,21 +738,21 @@ char** escreve_tile_4_7(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
            map[linhas+4][colunas+12+i] = '2';
        map[linhas+4][colunas+15] = '3';
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+5][colunas+9+i] = '2';
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
            map[linhas+5][colunas+13+i] = '3';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
        {
            map[linhas+6][colunas+6+i] = '2';
            map[linhas+6][colunas+11+i] = '3';
        }
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
            map[linhas+7][colunas+4+i] = '2';
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
            map[linhas+7][colunas+9+i] = '3';
        
        return map;
@@ -762,19 +762,19 @@ char** escreve_tile_4_8(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
             map[linhas+4][colunas+i] = '2';
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
             map[linhas+5][colunas+i] = '3';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
             map[linhas+5][colunas+2+i] = '2';
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
             map[linhas+6][colunas+i] = '3';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
             map[linhas+6][colunas+4+i] = '2';
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
             map[linhas+7][colunas+i] = '3';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
             map[linhas+7][colunas+6+i] = '2';
        
        return map;
@@ -788,22 +788,22 @@ char** escreve_tile_4_9(char **map,int linhas,int colunas)
 char** escreve_tile_5_1(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<14;i++)
+	for(i=0;i<14;++i)
     {
     	map[linhas][colunas+1+i] = '1';
     	map[linhas+1][colunas+1+i] = '1';
     	map[linhas+4][colunas+1+i] = '1';
     }
-    for(i=0;i<16;i++)
+    for(i=0;i<16;++i)
     {
     	map[linhas+2][colunas+i] = '1';
     	map[linhas+3][colunas+i] = '1';
     }
-    for(i=0;i<10;i++)
+    for(i=0;i<10;++i)
     	map[linhas+5][colunas+3+i] = '1';
-    for(i=0;i<6;i++)
+    for(i=0;i<6;++i)
     	map[linhas+6][colunas+5+i] = '1';
-    for(i=0;i<2;i++)
+    for(i=0;i<2;++i)
     	map[linhas+7][colunas+7+i] = '1';
 
     return map;
@@ -812,47 +812,47 @@ char** escreve_tile_5_1(char **map,int linhas,int colunas)
 char** escreve_tile_5_2(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<11;i++)
+	for(i=0;i<11;++i)
 	{
 	    map[linhas][colunas+1+i] = '2';
 	    map[linhas+1][colunas+1+i] = '2';
 	}
-    for(i=0;i<4;i++)
+    for(i=0;i<4;++i)
     {
         map[linhas][colunas+i+11] = '3';
         map[linhas+1][colunas+i+11] = '3';
     }
     
-    for(i=0;i<10;i++)
+    for(i=0;i<10;++i)
     {
     	map[linhas+2][colunas+1+i] = '2';
     }
-    for(i=0;i<5;i++)
+    for(i=0;i<5;++i)
     {
     	map[linhas+2][colunas+10+i] = '3';
     }
     
-    for(i=0;i<10;i++)
+    for(i=0;i<10;++i)
     	map[linhas+3][colunas+i] = '2';
-    for(i=0;i<6;i++)
+    for(i=0;i<6;++i)
     	map[linhas+3][colunas+9+i] = '3';
     	
-    for(i=0;i<9;i++)
+    for(i=0;i<9;++i)
         map[linhas+4][colunas+1+i] = '2';
-    for(i=0;i<6;i++)
+    for(i=0;i<6;++i)
         map[linhas+4][colunas+9+i] = '3';
         
-    for(i=0;i<6;i++)
+    for(i=0;i<6;++i)
         map[linhas+5][colunas+3+i] = '2';
-    for(i=0;i<5;i++)
+    for(i=0;i<5;++i)
         map[linhas+5][colunas+9+i] = '3';
     
-    for(i=0;i<5;i++)
+    for(i=0;i<5;++i)
         map[linhas+6][colunas+4+i] = '2';
-    for(i=0;i<3;i++)
+    for(i=0;i<3;++i)
         map[linhas+6][colunas+9+i] = '3';
         
-    for(i=0;i<3;i++)
+    for(i=0;i<3;++i)
         map[linhas+7][colunas+6+i] = '2';
         
     return map;
@@ -861,40 +861,40 @@ char** escreve_tile_5_2(char **map,int linhas,int colunas)
 char** escreve_tile_5_3(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<4;i++)
+	for(i=0;i<4;++i)
     	map[linhas][colunas+i] = '3';
-	for(i=0;i<10;i++)
+	for(i=0;i<10;++i)
 	    map[linhas][colunas+4+i] = '2';
-    for(i=0;i<5;i++)
+    for(i=0;i<5;++i)
     {
     	map[linhas+1][colunas+i] = '3';
     	map[linhas+2][colunas+i] = '3';
     }
-    for(i=0;i<10;i++)
+    for(i=0;i<10;++i)
     {
     	map[linhas+1][colunas+5+i] = '2';
     	map[linhas+2][colunas+5+i] = '2';
     }
     map[linhas+2][colunas+15] = '2';
-    for(i=0;i<6;i++)
+    for(i=0;i<6;++i)
     {
     	map[linhas+3][colunas+i] = '3';
         map[linhas+4][colunas+i] = '3';
     }
-    for(i=0;i<10;i++)
+    for(i=0;i<10;++i)
     {
     	map[linhas+3][colunas+6+i] = '2';
         map[linhas+4][colunas+6+i] = '2';
     }
-    for(i=0;i<4;i++)
+    for(i=0;i<4;++i)
     	map[linhas+5][colunas+2+i] = '3';
-   	for(i=0;i<8;i++)
+   	for(i=0;i<8;++i)
    	    map[linhas+5][colunas+7+i] = '2';
-    for(i=0;i<2;i++)
+    for(i=0;i<2;++i)
         map[linhas+6][colunas+5+i] = '3';
-    for(i=0;i<5;i++)
+    for(i=0;i<5;++i)
         map[linhas+6][colunas+7+i] = '2';
-    for(i=0;i<3;i++)
+    for(i=0;i<3;++i)
         map[linhas+7][colunas+8+i] = '2';
 
     /* Arrumar a linha diagonal de colisao. */
@@ -909,35 +909,35 @@ char** escreve_tile_5_4(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
            map[linhas][colunas+7+i] = '2';
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas][colunas+12+i] = '3';
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
            map[linhas+1][colunas+5+i] = '2';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
            map[linhas+1][colunas+11+i] = '3';
-       for(i=0;i<7;i++)
+       for(i=0;i<7;++i)
            map[linhas+2][colunas+3+i] = '2';
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
            map[linhas+2][colunas+10+i] = '3';
-       for(i=0;i<9;i++)
+       for(i=0;i<9;++i)
            map[linhas+3][colunas+1+i] = '2';
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
            map[linhas+3][colunas+10+i] = '3';
-       for(i=0;i<10;i++)
+       for(i=0;i<10;++i)
            map[linhas+4][colunas+i] = '2';
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
            map[linhas+4][colunas+10+i] = '3';
-       for(i=0;i<7;i++)
+       for(i=0;i<7;++i)
            map[linhas+5][colunas+2+i] = '2';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
            map[linhas+5][colunas+9+i] = '3';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
            map[linhas+6][colunas+4+i] = '2';
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
            map[linhas+6][colunas+9+i] = '3';
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
        {
            map[linhas+7][colunas+6+i] = '2';
            map[linhas+7][colunas+8+i] = '3';
@@ -950,22 +950,22 @@ char** escreve_tile_5_5(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<15;i++)
+       for(i=0;i<15;++i)
        {
            map[linhas][colunas+i] = '3';
            map[linhas+1][colunas+i] = '3';
        }
-       for(i=0;i<16;i++)
+       for(i=0;i<16;++i)
        {
            map[linhas+2][colunas+i] = '3';
            map[linhas+3][colunas+i] = '3';
            map[linhas+4][colunas+i] = '3';
        }
-       for(i=0;i<12;i++)
+       for(i=0;i<12;++i)
            map[linhas+5][colunas+2+i] = '3';
-       for(i=0;i<8;i++)
+       for(i=0;i<8;++i)
            map[linhas+6][colunas+4+i] = '3';
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+7][colunas+6+i] = '3';
        
        return map;
@@ -975,38 +975,38 @@ char** escreve_tile_5_6(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas][colunas+i] = '3';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
        {
            map[linhas][colunas+4+i] = '2';
            map[linhas+1][colunas+i] = '3';
            map[linhas+2][colunas+i] = '3';
        }
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
            map[linhas+1][colunas+5+i] = '2';
-       for(i=0;i<8;i++)
+       for(i=0;i<8;++i)
            map[linhas+2][colunas+5+i] = '2';
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
        {
            map[linhas+3][colunas+i] = '3';
            map[linhas+4][colunas+i] = '3';
        }
-       for(i=0;i<10;i++)
+       for(i=0;i<10;++i)
        {
            map[linhas+3][colunas+6+i] = '2';
            map[linhas+4][colunas+6+i] = '2';
        }
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+5][colunas+2+i] = '3';
-       for(i=0;i<8;i++)
+       for(i=0;i<8;++i)
            map[linhas+5][colunas+6+i] = '2';
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
            map[linhas+6][colunas+4+i] = '3';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
            map[linhas+6][colunas+7+i] = '2';
        map[linhas+7][colunas+6] = '3';
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
            map[linhas+7][colunas+7+i] = '2';
        
        return map;
@@ -1016,27 +1016,27 @@ char** escreve_tile_5_7(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
            map[linhas][colunas+3+i] = '2';
-       for(i=0;i<9;i++)
+       for(i=0;i<9;++i)
            map[linhas][colunas+6+i] = '3';
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas+1][colunas+2+i] = '2';
-       for(i=0;i<10;i++)
+       for(i=0;i<10;++i)
            map[linhas+1][colunas+4+i] = '3';
        map[linhas+2][colunas+1] = '2';
-       for(i=0;i<14;i++)
+       for(i=0;i<14;++i)
            map[linhas+2][colunas+2+i] = '3';
        map[linhas+3][colunas] = '2';
-       for(i=0;i<15;i++)
+       for(i=0;i<15;++i)
            map[linhas+3][colunas+1+i] = '3';
-       for(i=0;i<15;i++)
+       for(i=0;i<15;++i)
            map[linhas+4][colunas+1+i] = '3';
-       for(i=0;i<12;i++)
+       for(i=0;i<12;++i)
            map[linhas+5][colunas+2+i] = '3';
-       for(i=0;i<8;i++)
+       for(i=0;i<8;++i)
            map[linhas+6][colunas+4+i] = '3';
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
 	       map[linhas+7][colunas+6+i] = '3'; 
        
        return map;
@@ -1046,29 +1046,29 @@ char** escreve_tile_5_8(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<10;i++)
+       for(i=0;i<10;++i)
            map[linhas][colunas+i] = '3';
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
 	       map[linhas][colunas+10+i] = '2';
-	   for(i=0;i<12;i++)
+	   for(i=0;i<12;++i)
 	       map[linhas+1][colunas+i] = '3';
-	   for(i=0;i<2;i++)
+	   for(i=0;i<2;++i)
 	       map[linhas+1][colunas+12+i] = '2';
-	   for(i=0;i<13;i++)
+	   for(i=0;i<13;++i)
 	       map[linhas+2][colunas+i] = '3';
-	   for(i=0;i<2;i++)
+	   for(i=0;i<2;++i)
 	       map[linhas+2][colunas+13+i] = '2';
-	   for(i=0;i<14;i++)
+	   for(i=0;i<14;++i)
 	       map[linhas+3][colunas+i] = '3';
-	   for(i=0;i<2;i++)
+	   for(i=0;i<2;++i)
 	       map[linhas+3][colunas+14+i] = '2';
-	   for(i=0;i<16;i++)
+	   for(i=0;i<16;++i)
 	       map[linhas+4][colunas+i] = '3';
-	   for(i=0;i<12;i++)
+	   for(i=0;i<12;++i)
 	       map[linhas+5][colunas+2+i] = '3';
-	   for(i=0;i<8;i++)
+	   for(i=0;i<8;++i)
 	       map[linhas+6][colunas+4+i] = '3';
-	   for(i=0;i<4;i++)
+	   for(i=0;i<4;++i)
 	       map[linhas+7][colunas+6+i] = '3';             
        
        return map;
@@ -1078,26 +1078,26 @@ char** escreve_tile_5_9(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
            map[linhas][colunas+5+i] = '3';
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas][colunas+8+i] = '2';
-       for(i=0;i<9;i++)
+       for(i=0;i<9;++i)
            map[linhas+1][colunas+3+i] = '3';
        map[linhas+1][colunas+12] = '2';
-       for(i=0;i<13;i++)
+       for(i=0;i<13;++i)
            map[linhas+2][colunas+1+i] = '3';
        map[linhas+2][colunas+14] = '2';
-       for(i=0;i<15;i++)
+       for(i=0;i<15;++i)
            map[linhas+3][colunas+i] = '3';
        map[linhas+3][colunas+15] = '2';
-       for(i=0;i<16;i++)
+       for(i=0;i<16;++i)
            map[linhas+4][colunas+i] = '3';
-	   for(i=0;i<12;i++)
+	   for(i=0;i<12;++i)
 	       map[linhas+5][colunas+2+i] = '3';
-	   for(i=0;i<8;i++)
+	   for(i=0;i<8;++i)
 	       map[linhas+6][colunas+4+i] = '3';
-	   for(i=0;i<4;i++)
+	   for(i=0;i<4;++i)
 	       map[linhas+7][colunas+6+i] = '3';    
        
        return map;
@@ -1107,32 +1107,32 @@ char** escreve_tile_6_1(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
        {
        	   map[linhas+4][colunas+i] = '2';
        	   map[linhas+4][colunas+12+i] = '2';
        }
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
        {
        	   map[linhas+5][colunas+i] = '3';
        	   map[linhas+5][colunas+13+i] = '3';
        }
-       for(i=0;i<10;i++)
+       for(i=0;i<10;++i)
            map[linhas+5][colunas+3+i] = '2';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
        {
        	   map[linhas+6][colunas+i] = '3';
        	   map[linhas+6][colunas+11+i] = '3';
        }
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
        {
        	   map[linhas+6][colunas+5+i] = '2';
        }
-       for(i=0;i<7;i++)
+       for(i=0;i<7;++i)
            map[linhas+7][colunas+i] = '3';
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
 	       map[linhas+7][colunas+7+i] = '2';
-	   for(i=0;i<6;i++)
+	   for(i=0;i<6;++i)
 	       map[linhas+7][colunas+9+i] = '3'; 
        
        return map;
@@ -1142,26 +1142,26 @@ char** escreve_tile_6_2(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
            map[linhas][colunas+6+i] = '2';
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
 	       map[linhas+1][colunas+4+i] = '2';
-	   for(i=0;i<9;i++)
+	   for(i=0;i<9;++i)
 	       map[linhas+2][colunas+2+i] = '2';
-	   for(i=0;i<12;i++)
+	   for(i=0;i<12;++i)
 	   {
 	   	   map[linhas+3][colunas+i] = '2';
 	   	   map[linhas+4][colunas+i] = '2';
 	   }
-	   for(i=0;i<3;i++)
+	   for(i=0;i<3;++i)
 	       map[linhas+5][colunas+i] = '3';
-	   for(i=0;i<10;i++)
+	   for(i=0;i<10;++i)
 	       map[linhas+5][colunas+3+i] = '2';
-	   for(i=0;i<5;i++)
+	   for(i=0;i<5;++i)
 	       map[linhas+6][colunas+i] = '3';
-	   for(i=0;i<9;i++)
+	   for(i=0;i<9;++i)
 	       map[linhas+6][colunas+5+i] = '2';
-	   for(i=0;i<7;i++)
+	   for(i=0;i<7;++i)
 	   {
 	   	   map[linhas+7][colunas+i] = '3';
 	   	   map[linhas+7][colunas+7+i] = '2';
@@ -1174,34 +1174,34 @@ char** escreve_tile_6_3(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas][colunas+6+i] = '2';
-       for(i=0;i<7;i++)
+       for(i=0;i<7;++i)
            map[linhas+1][colunas+4+i] = '2';
-       for(i=0;i<11;i++)
+       for(i=0;i<11;++i)
 	       map[linhas+2][colunas+3+i] = '2';
-	   for(i=0;i<16;i++)
+	   for(i=0;i<16;++i)
 	   {
 	   	   map[linhas+3][colunas+i] = '2';
 	   	   map[linhas+4][colunas+i] = '2';
 	   } 
 	   map[linhas+5][colunas] = '3';
 	   map[linhas+5][colunas+15] = '3';
-	   for(i=0;i<14;i++)
+	   for(i=0;i<14;++i)
 	       map[linhas+5][colunas+1+i] = '2';
-	   for(i=0;i<2;i++)
+	   for(i=0;i<2;++i)
 	   {
 	   	   map[linhas+6][colunas+i] = '3';
 	   	   map[linhas+6][colunas+14+i] = '3';
 	   } 
-	   for(i=0;i<12;i++)
+	   for(i=0;i<12;++i)
 	       map[linhas+6][colunas+2+i] = '2';
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
        {
        	   map[linhas+7][colunas+i] = '3';
        	   map[linhas+7][colunas+13+i] = '3';
        } 
-       for(i=0;i<10;i++)
+       for(i=0;i<10;++i)
            map[linhas+7][colunas+3+i] = '2';
        
        return map;
@@ -1211,27 +1211,27 @@ char** escreve_tile_6_4(char **map,int linhas,int colunas)
 {
        int i;
 
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
            map[linhas][colunas+7+i] = '2';
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+1][colunas+7+i] = '2';
-       for(i=0;i<9;i++)
+       for(i=0;i<9;++i)
            map[linhas+2][colunas+5+i] = '2';
-       for(i=0;i<11;i++)
+       for(i=0;i<11;++i)
            map[linhas+3][colunas+5+i] = '2';
-       for(i=0;i<12;i++)
+       for(i=0;i<12;++i)
 	       map[linhas+4][colunas+4+i] = '2';    
-       for(i=0;i<10;i++)
+       for(i=0;i<10;++i)
            map[linhas+5][colunas+3+i] = '2';
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
            map[linhas+5][colunas+13+i] = '3';
-       for(i=0;i<10;i++)
+       for(i=0;i<10;++i)
            map[linhas+6][colunas+2+i] = '2';
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+6][colunas+12+i] = '3';
-       for(i=0;i<7;i++)
+       for(i=0;i<7;++i)
            map[linhas+7][colunas+2+i] = '2';
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
            map[linhas+7][colunas+8+i] = '3';
        
        return map;
@@ -1241,20 +1241,20 @@ char** escreve_tile_7_1(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<15;i++)
+       for(i=0;i<15;++i)
            map[linhas][colunas+i] = '3';
-       for(i=0;i<16;i++)
+       for(i=0;i<16;++i)
 	   {
 	   	   map[linhas+1][colunas+i] = '3';
 	   	   map[linhas+2][colunas+i] = '3';
 	   	   map[linhas+3][colunas+i] = '3';
 	   	   map[linhas+4][colunas+i] = '3';
 	   } 
-	   for(i=0;i<12;i++)
+	   for(i=0;i<12;++i)
 	       map[linhas+5][colunas+2+i] = '3';
-	   for(i=0;i<8;i++) 
+	   for(i=0;i<8;++i) 
            map[linhas+6][colunas+4+i] = '3';
-	   for(i=0;i<4;i++)
+	   for(i=0;i<4;++i)
 	       map[linhas+7][colunas+6+i] = '3';
 		   
        return map;
@@ -1264,28 +1264,28 @@ char** escreve_tile_7_2(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<10;i++)
+       for(i=0;i<10;++i)
            map[linhas][colunas+i] = '3';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
 	       map[linhas][colunas+10+i] = '2';
-	   for(i=0;i<13;i++)
+	   for(i=0;i<13;++i)
 	       map[linhas+1][colunas+i] = '3';
-	   for(i=0;i<2;i++)
+	   for(i=0;i<2;++i)
 	       map[linhas+1][colunas+13+i] = '2';
-	   for(i=0;i<14;i++)
+	   for(i=0;i<14;++i)
 	       map[linhas+2][colunas+i] = '3';
-	   for(i=0;i<2;i++)
+	   for(i=0;i<2;++i)
 	       map[linhas+2][colunas+14+i] = '2';
-	   for(i=0;i<15;i++)
+	   for(i=0;i<15;++i)
 	       map[linhas+3][colunas+i] = '3';
 	   map[linhas+3][colunas+15] = '2';
-	   for(i=0;i<16;i++)
+	   for(i=0;i<16;++i)
 	       map[linhas+4][colunas+i] = '3';	       
-	   for(i=0;i<12;i++)
+	   for(i=0;i<12;++i)
 	       map[linhas+5][colunas+2+i] = '3';
-	   for(i=0;i<8;i++) 
+	   for(i=0;i<8;++i) 
            map[linhas+6][colunas+4+i] = '3';
-	   for(i=0;i<4;i++)
+	   for(i=0;i<4;++i)
 	       map[linhas+7][colunas+6+i] = '3';        
        
        return map;
@@ -1295,50 +1295,50 @@ char** escreve_tile_7_3(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
        {
            map[linhas][colunas+i] = '3';
            map[linhas][colunas+12+i] = '3';
            map[linhas+1][colunas+i] = '3';
            map[linhas+1][colunas+12+i] = '3';
        }
-       for(i=0;i<8;i++)
+       for(i=0;i<8;++i)
        {
        	   map[linhas][colunas+4+i] = '2';
        	   map[linhas+1][colunas+4+i] = '2';
        }
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
        {
        	   map[linhas+2][colunas+i] = '3';
        	   map[linhas+3][colunas+i] = '3';
        	   map[linhas+2][colunas+11+i] = '3';
        	   map[linhas+3][colunas+11+i] = '3';
        }
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
        {
        	   map[linhas+2][colunas+5+i] = '2';
        	   map[linhas+3][colunas+5+i] = '2';
        }
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
        {
        	   map[linhas+4][colunas+i] = '3';
        	   map[linhas+4][colunas+10+i] = '3';
        }
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
        {
        	   map[linhas+5][colunas+2+i] = '3';
        	   map[linhas+5][colunas+5+i] = '2';
        }
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
            map[linhas+5][colunas+8+i] = '3';
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
 	   {
 	   	   map[linhas+6][colunas+4+i] = '3';
 	   	   map[linhas+6][colunas+6+i] = '3';
 	   }    
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas+7][colunas+7+i] = '2';
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
 	       map[linhas+7][colunas+6+i] = '2'; 
        
        return map;
@@ -1348,29 +1348,29 @@ char** escreve_tile_7_4(char **map,int linhas,int colunas)
 {
        int i;
  
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
            map[linhas][colunas+1+i] = '2';
-       for(i=0;i<9;i++)
+       for(i=0;i<9;++i)
            map[linhas][colunas+6+i] = '3';
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+1][colunas+1+i] = '2';
-       for(i=0;i<11;i++)
+       for(i=0;i<11;++i)
            map[linhas+1][colunas+5+i] = '3';
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+2][colunas+i] = '2';
-       for(i=0;i<12;i++)
+       for(i=0;i<12;++i)
            map[linhas+2][colunas+4+i] = '3';
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas+3][colunas+i] = '2';
-       for(i=0;i<14;i++)
+       for(i=0;i<14;++i)
            map[linhas+3][colunas+2+i] = '3';
-       for(i=0;i<16;i++)
+       for(i=0;i<16;++i)
            map[linhas+4][colunas+i] = '3';
-       for(i=0;i<12;i++)
+       for(i=0;i<12;++i)
            map[linhas+5][colunas+2+i] = '3';
-       for(i=0;i<8;i++)
+       for(i=0;i<8;++i)
            map[linhas+6][colunas+4+i] = '3';
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+7][colunas+6+i] = '3';
        
        return map;
@@ -1379,15 +1379,15 @@ char** escreve_tile_7_4(char **map,int linhas,int colunas)
 char** escreve_tile_8_1(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<5;i++)
+	for(i=0;i<5;++i)
 	{
 		map[linhas+3][colunas+4+i] = '3';
 		map[linhas+4][colunas+4+i] = '3';
 		map[linhas+5][colunas+4+i] = '3';
 	}
-	for(i=0;i<8;i++)
+	for(i=0;i<8;++i)
 	    map[linhas+6][colunas+4+i] = '3';
-	for(i=0;i<10;i++)
+	for(i=0;i<10;++i)
 	    map[linhas+7][colunas+3+i] = '3';
 	
 	return map;
@@ -1396,17 +1396,17 @@ char** escreve_tile_8_1(char **map,int linhas,int colunas)
 char** escreve_tile_8_2(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<2;i++)
+	for(i=0;i<2;++i)
 	    map[linhas+2][colunas+7+i] = '3';
-	for(i=0;i<4;i++)
+	for(i=0;i<4;++i)
 	    map[linhas+3][colunas+7+i] = '3';
-	for(i=0;i<5;i++)
+	for(i=0;i<5;++i)
 	    map[linhas+4][colunas+6+i] = '3';
-	for(i=0;i<7;i++)
+	for(i=0;i<7;++i)
 	    map[linhas+5][colunas+5+i] = '3';
-	for(i=0;i<8;i++)
+	for(i=0;i<8;++i)
 	    map[linhas+6][colunas+5+i] = '3';
-	for(i=0;i<9;i++)
+	for(i=0;i<9;++i)
 	    map[linhas+7][colunas+4+i] = '3';
 	return map;
 }
@@ -1414,18 +1414,18 @@ char** escreve_tile_8_2(char **map,int linhas,int colunas)
 char** escreve_tile_8_3(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<4;i++)
+	for(i=0;i<4;++i)
 	    map[linhas+2][colunas+5+i] = '3';
-	for(i=0;i<7;i++)
+	for(i=0;i<7;++i)
 	    map[linhas+3][colunas+2+i] = '3';
-	for(i=0;i<8;i++)
+	for(i=0;i<8;++i)
 	    map[linhas+4][colunas+1+i] = '3';
-	for(i=0;i<9;i++)
+	for(i=0;i<9;++i)
 	{
 		map[linhas+5][colunas+1+i] = '3';
 		map[linhas+6][colunas+1+i] = '3';
 	}
-	for(i=0;i<10;i++)
+	for(i=0;i<10;++i)
 	    map[linhas+7][colunas+1+i] = '3';
 	return map;
 }
@@ -1433,14 +1433,14 @@ char** escreve_tile_8_3(char **map,int linhas,int colunas)
 char** escreve_tile_8_4(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<4;i++)
+	for(i=0;i<4;++i)
 	{
 		map[linhas+4][colunas+12+i] = '3';
 		map[linhas+5][colunas+12+i] = '3';
 	}
-	for(i=0;i<10;i++)
+	for(i=0;i<10;++i)
 	    map[linhas+6][colunas+6+i] = '3';
-	for(i=0;i<9;i++)
+	for(i=0;i<9;++i)
 	    map[linhas+7][colunas+7+i] = '3';
 	return map;
 }
@@ -1448,74 +1448,75 @@ char** escreve_tile_8_4(char **map,int linhas,int colunas)
 char** escreve_tile_8_5(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<2;i++)
+	for(i=0;i<2;++i)
 	    map[linhas][colunas+7+i] = '3';
-	for(i=0;i<6;i++)
+	for(i=0;i<6;++i)
 	    map[linhas+1][colunas+5+i] = '3';
-	for(i=0;i<10;i++)
+	for(i=0;i<10;++i)
 	    map[linhas+2][colunas+5+i] = '3';
-	for(i=0;i<14;i++)
+	for(i=0;i<14;++i)
 	    map[linhas+3][colunas+1+i] = '3';
-	for(i=0;i<16;i++)
+	for(i=0;i<16;++i)
 	{
 		map[linhas+4][colunas+i] = '3';
 		map[linhas+5][colunas+i] = '3';
 		map[linhas+6][colunas+i] = '3';
 		map[linhas+7][colunas+i] = '3';
 	}
-	
+
 	return map;
 }
 
 char** escreve_tile_8_6(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<4;i++)
+	for(i=0;i<4;++i)
 	    map[linhas][colunas+7+i] = '3';
-	for(i=0;i<5;i++)
+	for(i=0;i<5;++i)
 	    map[linhas+1][colunas+6+i] = '3';
-	for(i=0;i<11;i++)
+	for(i=0;i<11;++i)
 	    map[linhas+2][colunas+3+i] = '3';
-	for(i=0;i<14;i++)
+	for(i=0;i<14;++i)
 	    map[linhas+3][colunas+1+i] = '3';
-	for(i=0;i<16;i++)
+	for(i=0;i<16;++i)
 	{
 		map[linhas+4][colunas+i] = '3';
 		map[linhas+5][colunas+i] = '3';
 		map[linhas+6][colunas+i] = '3';
 		map[linhas+7][colunas+i] = '3';
 	}
+    return map;
 }
 
 char** escreve_tile_8_7(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<3;i++)
+	for(i=0;i<3;++i)
 		map[linhas+4][colunas+1+i] = '3';
-	for(i=0;i<6;i++)
+	for(i=0;i<6;++i)
 	{
 	    map[linhas+5][colunas+i] = '3';
 	    map[linhas+6][colunas+i] = '3';
     }
-    for(i=0;i<2;i++)
+    for(i=0;i<2;++i)
         map[linhas+6][colunas+8+i] = '3';
-    for(i=0;i<10;i++)
+    for(i=0;i<10;++i)
         map[linhas+7][colunas+i] = '3';
-    
+
 	return map;
 }
 
 char** escreve_tile_8_8(char **map,int linhas,int colunas)
 {
 	int i;
-	
-	for(i=0;i<2;i++)
+
+	for(i=0;i<2;++i)
 	    map[linhas+4][colunas+12+i] = '3';
-	for(i=0;i<9;i++)    
+	for(i=0;i<9;++i)    
 	    map[linhas+5][colunas+7+i] = '3';
-	for(i=0;i<10;i++)
+	for(i=0;i<10;++i)
 	    map[linhas+6][colunas+6+i] = '3';
-	for(i=0;i<13;i++)
+	for(i=0;i<13;++i)
 	    map[linhas+7][colunas+3+i] = '3';
 	
 	return map;
@@ -1524,16 +1525,16 @@ char** escreve_tile_8_8(char **map,int linhas,int colunas)
 char** escreve_tile_8_9(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<3;i++)
+	for(i=0;i<3;++i)
 	    map[linhas+3][colunas+1+i] = '3';
-	for(i=0;i<8;i++)
+	for(i=0;i<8;++i)
 	    map[linhas+4][colunas+1+i] = '3';
-	for(i=0;i<10;i++)
+	for(i=0;i<10;++i)
 	{
 	    map[linhas+5][colunas+i] = '3';
         map[linhas+6][colunas+i] = '3';
     }
-	for(i=0;i<11;i++)
+	for(i=0;i<11;++i)
 	    map[linhas+7][colunas+i] = '3';
 	return map;
 }
@@ -1541,7 +1542,7 @@ char** escreve_tile_8_9(char **map,int linhas,int colunas)
 char** escreve_tile_8_10(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<2;i++)
+	for(i=0;i<2;++i)
 	    map[linhas+7][colunas+8+i] = '3';
 	return map;
 }
@@ -1549,20 +1550,20 @@ char** escreve_tile_8_10(char **map,int linhas,int colunas)
 char** escreve_tile_9_1(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<11;i++)
+	for(i=0;i<11;++i)
 	    map[linhas][colunas+3+i] = '3';
-	for(i=0;i<12;i++)
+	for(i=0;i<12;++i)
 	    map[linhas+1][colunas+2+i] = '3';
-	for(i=0;i<13;i++)
+	for(i=0;i<13;++i)
     {
     	map[linhas+2][colunas+1+i] = '3';
     	map[linhas+3][colunas+1+i] = '3';
     }
-	for(i=0;i<9;i++)
+	for(i=0;i<9;++i)
 	    map[linhas+4][colunas+3+i] = '3';
-	for(i=0;i<6;i++)
+	for(i=0;i<6;++i)
 	    map[linhas+5][colunas+4+i] = '3';
-	for(i=0;i<3;i++)
+	for(i=0;i<3;++i)
 	    map[linhas+6][colunas+7+i] = '3';
 	return map;
 }
@@ -1570,23 +1571,23 @@ char** escreve_tile_9_1(char **map,int linhas,int colunas)
 char** escreve_tile_9_2(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<10;i++)
+	for(i=0;i<10;++i)
         map[linhas][colunas+4+i] = '3';
-    for(i=0;i<12;i++)
+    for(i=0;i<12;++i)
         map[linhas+1][colunas+2+i] = '3';
-    for(i=0;i<13;i++)
+    for(i=0;i<13;++i)
     {
     	map[linhas+2][colunas+1+i] = '3';
     	map[linhas+3][colunas+1+i] = '3';
     }
-	for(i=0;i<11;i++)
+	for(i=0;i<11;++i)
 	    map[linhas+4][colunas+2+i] = '3';
-	for(i=0;i<3;i++)
+	for(i=0;i<3;++i)
 	{
 		map[linhas+5][colunas+3+i] = '3';
 		map[linhas+5][colunas+8+i] = '3';
 	}
-	for(i=0;i<2;i++)
+	for(i=0;i<2;++i)
 	    map[linhas+6][colunas+8+i] = '3';
 	return map;
 }
@@ -1594,19 +1595,19 @@ char** escreve_tile_9_2(char **map,int linhas,int colunas)
 char** escreve_tile_9_3(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<13;i++)
+	for(i=0;i<13;++i)
 	{
 		map[linhas][colunas+i] = '3';
 		map[linhas+1][colunas+i] = '3';
 	}
-	for(i=0;i<14;i++)
+	for(i=0;i<14;++i)
 	{
 		map[linhas+2][colunas+i] = '3';
 		map[linhas+3][colunas+i] = '3';
 	}
-	for(i=0;i<11;i++)
+	for(i=0;i<11;++i)
 	    map[linhas+4][colunas+1+i] = '3';
-	for(i=0;i<6;i++)
+	for(i=0;i<6;++i)
 	    map[linhas+5][colunas+5+i] = '3';
 	map[linhas+6][colunas+8] = '3';
 	return map;
@@ -1615,19 +1616,19 @@ char** escreve_tile_9_3(char **map,int linhas,int colunas)
 char** escreve_tile_9_4(char **map,int linhas,int colunas)
 {
 	int i;	
-	for(i=0;i<11;i++)
+	for(i=0;i<11;++i)
 	    map[linhas][colunas+5+i] = '3';
-	for(i=0;i<13;i++)
+	for(i=0;i<13;++i)
 	{
 		map[linhas+1][colunas+3+i] = '3';
 		map[linhas+2][colunas+3+i] = '3';
 		map[linhas+3][colunas+3+i] = '3';
 	}
-	for(i=0;i<11;i++)
+	for(i=0;i<11;++i)
 	    map[linhas+4][colunas+4+i] = '3';
-	for(i=0;i<8;i++)
+	for(i=0;i<8;++i)
 	    map[linhas+5][colunas+5+i] = '3';
-	for(i=0;i<2;i++)
+	for(i=0;i<2;++i)
 	    map[linhas+6][colunas+8+i] = '3';
 	return map;
 }
@@ -1636,20 +1637,20 @@ char** escreve_tile_9_5(char **map,int linhas,int colunas)
 {
        int i;
        printf("Yay");
-       for(i=0;i<16;i++)
+       for(i=0;i<16;++i)
        {
        	   map[linhas][colunas+i] = '3';
        	   map[linhas+1][colunas+i] = '3';
        	   map[linhas+2][colunas+i] = '3';
        	   map[linhas+3][colunas+i] = '3';
        }
-       for(i=0;i<14;i++)
+       for(i=0;i<14;++i)
            map[linhas+4][colunas+1+i] = '3';
-       for(i=0;i<10;i++)
+       for(i=0;i<10;++i)
            map[linhas+5][colunas+3+i] = '3';
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
            map[linhas+6][colunas+5+i] = '3';
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
            map[linhas+7][colunas+7+i] = '3';
         
        return map;
@@ -1658,19 +1659,19 @@ char** escreve_tile_9_5(char **map,int linhas,int colunas)
 char** escreve_tile_9_7(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<10;i++)
+	for(i=0;i<10;++i)
 	{
 		map[linhas][colunas+1+i] = '3';
 		map[linhas+1][colunas+1+i] = '3';
 		map[linhas+4][colunas+1+i] = '3';
 	}
 	map[linhas+4][colunas+11] = '3';
-	for(i=0;i<13;i++)
+	for(i=0;i<13;++i)
 	{
 		map[linhas+2][colunas+i] = '3';
 		map[linhas+3][colunas+i] = '3';
 	}
-	for(i=0;i<9;i++)
+	for(i=0;i<9;++i)
 	    map[linhas+5][colunas+3+i] = '3';
 	map[linhas+6][colunas+6] = '3';
 	return map;
@@ -1679,21 +1680,21 @@ char** escreve_tile_9_7(char **map,int linhas,int colunas)
 char** escreve_tile_9_8(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<14;i++)
+	for(i=0;i<14;++i)
 	{
 		map[linhas][colunas+2+i] = '3';
 		map[linhas+1][colunas+2+i] = '3';
 		map[linhas+4][colunas+1+i] = '3';
 	}
-	for(i=0;i<15;i++)
+	for(i=0;i<15;++i)
 	    map[linhas+2][colunas+1+i] = '3';
-	for(i=0;i<16;i++)
+	for(i=0;i<16;++i)
 	    map[linhas+3][colunas+i] = '3';
-	for(i=0;i<10;i++)
+	for(i=0;i<10;++i)
 	    map[linhas+5][colunas+3+i] = '3';
-	for(i=0;i<4;i++)
+	for(i=0;i<4;++i)
 	    map[linhas+6][colunas+6+i] = '3';
-	for(i=0;i<2;i++)
+	for(i=0;i<2;++i)
 	    map[linhas+7][colunas+7+i] = '3';
 	return map;
 }
@@ -1701,23 +1702,23 @@ char** escreve_tile_9_8(char **map,int linhas,int colunas)
 char** escreve_tile_9_9(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<13;i++)
+	for(i=0;i<13;++i)
 	{
 		map[linhas][colunas+i] = '3';
 		map[linhas+1][colunas+i] = '3';
 	}
-	for(i=0;i<15;i++)
+	for(i=0;i<15;++i)
 	{
 		map[linhas+2][colunas+i] = '3';
 		map[linhas+3][colunas+i] = '3';
 	}
-	for(i=0;i<12;i++)
+	for(i=0;i<12;++i)
 	    map[linhas+4][colunas+1+i] = '3';
-	for(i=0;i<10;i++)
+	for(i=0;i<10;++i)
 	    map[linhas+5][colunas+3+i] = '3';
-	for(i=0;i<4;i++)
+	for(i=0;i<4;++i)
 	    map[linhas+6][colunas+6+i] = '3';
-	for(i=0;i<2;i++)
+	for(i=0;i<2;++i)
 	    map[linhas+7][colunas+7+i] = '3';
 	return map;
 }
@@ -1725,22 +1726,22 @@ char** escreve_tile_9_9(char **map,int linhas,int colunas)
 char** escreve_tile_9_10(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<5;i++)
+	for(i=0;i<5;++i)
 	    map[linhas][colunas+6+i] = '3';
-	for(i=0;i<8;i++)
+	for(i=0;i<8;++i)
 	    map[linhas+1][colunas+5+i] = '3';
-	for(i=0;i<12;i++)
+	for(i=0;i<12;++i)
 	    map[linhas+2][colunas+3+i] = '3';
-	for(i=0;i<13;i++)
+	for(i=0;i<13;++i)
 	{
 		map[linhas+3][colunas+2+i] = '3';
 		map[linhas+4][colunas+2+i] = '3';
 	}
-	for(i=0;i<10;i++)
+	for(i=0;i<10;++i)
 	    map[linhas+5][colunas+3+i] = '3';
-	for(i=0;i<5;i++)
+	for(i=0;i<5;++i)
 	    map[linhas+6][colunas+6+i] = '3';
-	for(i=0;i<2;i++)
+	for(i=0;i<2;++i)
 	    map[linhas+7][colunas+7+i] = '3';
 	return map;
 }
@@ -1748,15 +1749,15 @@ char** escreve_tile_9_10(char **map,int linhas,int colunas)
 char** escreve_tile_10_1(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<3;i++)
+	for(i=0;i<3;++i)
 	    map[linhas][colunas+8+i] = '3';
-	for(i=0;i<6;i++)
+	for(i=0;i<6;++i)
 	    map[linhas+1][colunas+5+i] = '3';
-	for(i=0;i<12;i++)
+	for(i=0;i<12;++i)
 	    map[linhas+2][colunas+3+i] = '3';
-	for(i=0;i<14;i++)
+	for(i=0;i<14;++i)
 	    map[linhas+3][colunas+1+i] = '3';
-	for(i=0;i<16;i++)
+	for(i=0;i<16;++i)
 	{
 	    map[linhas+4][colunas+i] = '3';
 	    map[linhas+5][colunas+i] = '3';
@@ -1769,13 +1770,13 @@ char** escreve_tile_10_1(char **map,int linhas,int colunas)
 char** escreve_tile_10_2(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<6;i++)
+	for(i=0;i<6;++i)
 	    map[linhas+1][colunas+5+i] = '3';
-	for(i=0;i<10;i++)
+	for(i=0;i<10;++i)
 	    map[linhas+2][colunas+4+i] = '3';
-	for(i=0;i<14;i++)
+	for(i=0;i<14;++i)
 	    map[linhas+3][colunas+1+i] = '3';
-	for(i=0;i<16;i++)
+	for(i=0;i<16;++i)
 	{
 	    map[linhas+4][colunas+i] = '3';
 	    map[linhas+5][colunas+i] = '3';
@@ -1793,15 +1794,15 @@ char** escreve_tile_10_3(char **map,int linhas,int colunas)
 char** escreve_tile_10_4(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<3;i++)
+	for(i=0;i<3;++i)
 	    map[linhas][colunas+8+i] = '3';
-	for(i=0;i<7;i++)
+	for(i=0;i<7;++i)
 	    map[linhas+1][colunas+5+i] = '3';
-	for(i=0;i<12;i++)
+	for(i=0;i<12;++i)
 	    map[linhas+2][colunas+3+i] = '3';
-	for(i=0;i<14;i++)
+	for(i=0;i<14;++i)
 	    map[linhas+3][colunas+1+i] = '3';
-	for(i=0;i<16;i++)
+	for(i=0;i<16;++i)
 	{
 	    map[linhas+4][colunas+i] = '3';
 	    map[linhas+5][colunas+i] = '3';
@@ -1814,15 +1815,15 @@ char** escreve_tile_10_4(char **map,int linhas,int colunas)
 char** escreve_tile_10_5(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<3;i++)
+	for(i=0;i<3;++i)
 	    map[linhas][colunas+8+i] = '3';
-	for(i=0;i<6;i++)
+	for(i=0;i<6;++i)
 	    map[linhas+1][colunas+5+i] = '3';
-	for(i=0;i<11;i++)
+	for(i=0;i<11;++i)
 	    map[linhas+2][colunas+3+i] = '3';
-	for(i=0;i<14;i++)
+	for(i=0;i<14;++i)
 	    map[linhas+3][colunas+1+i] = '3';
-	for(i=0;i<16;i++)
+	for(i=0;i<16;++i)
 	{
 	    map[linhas+4][colunas+i] = '3';
 	    map[linhas+5][colunas+i] = '3';
@@ -1835,13 +1836,13 @@ char** escreve_tile_10_5(char **map,int linhas,int colunas)
 char** escreve_tile_10_6(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<6;i++)
+	for(i=0;i<6;++i)
 	    map[linhas+1][colunas+5+i] = '3';
-	for(i=0;i<11;i++)
+	for(i=0;i<11;++i)
 	    map[linhas+2][colunas+3+i] = '3';
-	for(i=0;i<14;i++)
+	for(i=0;i<14;++i)
 	    map[linhas+3][colunas+1+i] = '3';
-	for(i=0;i<16;i++)
+	for(i=0;i<16;++i)
 	{
 	    map[linhas+4][colunas+i] = '3';
 	    map[linhas+5][colunas+i] = '3';
@@ -1854,9 +1855,9 @@ char** escreve_tile_10_6(char **map,int linhas,int colunas)
 char** escreve_tile_10_7(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<2;i++)
+	for(i=0;i<2;++i)
 	    map[linhas+6][colunas+7+i] = '3';
-	for(i=0;i<3;i++)
+	for(i=0;i<3;++i)
 	    map[linhas+7][colunas+6+i] = '3';
 	return map;
 }
@@ -1870,7 +1871,7 @@ char** escreve_tile_10_9(char **map,int linhas,int colunas)
 {
 	int i;
     map[linhas+6][colunas+7] = '3';
-	for(i=0;i<2;i++)
+	for(i=0;i<2;++i)
 	    map[linhas+7][colunas+7+i] = '3';
 	return map;
 }
@@ -1883,12 +1884,12 @@ char** escreve_tile_10_10(char **map,int linhas,int colunas)
 char** escreve_tile_11_7(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<4;i++)
+	for(i=0;i<4;++i)
 	{
 		map[linhas][colunas+6+i] = '3';
 		map[linhas+1][colunas+6+i] = '3';
 	}
-	for(i=0;i<2;i++)
+	for(i=0;i<2;++i)
 	    map[linhas+2][colunas+7+i] ='3';
 	return map;
 }
@@ -1896,7 +1897,7 @@ char** escreve_tile_11_7(char **map,int linhas,int colunas)
 
 char** escreve_tile_11_8(char **map,int linhas,int colunas)
 {
-	for(int i=0;i<3;i++)
+	for(int i=0;i<3;++i)
 	{
 		map[linhas+1][colunas+11+i] = '3';
 		map[linhas+2][colunas+11+i] = '3';
@@ -1908,12 +1909,12 @@ char** escreve_tile_11_8(char **map,int linhas,int colunas)
 char** escreve_tile_11_9(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<4;i++)
+	for(i=0;i<4;++i)
 	{
 		map[linhas][colunas+6+i] = '3';
 		map[linhas+1][colunas+6+i] = '3';
 	}
-	for(i=0;i<2;i++)
+	for(i=0;i<2;++i)
 	    map[linhas+2][colunas+7+i] = '3';
 	return map;
 }
@@ -1922,16 +1923,16 @@ char** escreve_tile_11_9(char **map,int linhas,int colunas)
 char** escreve_tile_11_10(char **map,int linhas,int colunas)
 {
 	int i;
-	for(i=0;i<11;i++)
+	for(i=0;i<11;++i)
 	    map[linhas+1][colunas+3+i] = '3';
-	for(i=0;i<12;i++)
+	for(i=0;i<12;++i)
 	{
 		map[linhas+2][colunas+2+i] = '3';
 		map[linhas+3][colunas+2+i] = '3';
 	}
-	for(i=0;i<9;i++)
+	for(i=0;i<9;++i)
 	    map[linhas+4][colunas+4+i] = '3';
-	for(i=0;i<5;i++)
+	for(i=0;i<5;++i)
 	    map[linhas+5][colunas+6+i] = '3';
 	return map;
 }
@@ -1940,7 +1941,7 @@ char** escreve_tile_12_1(char **map,int linhas,int colunas)
 {
 	int i;
 	
-	for(i=0;i<4;i++)
+	for(i=0;i<4;++i)
 	    map[linhas+7][colunas+4+i] = '3';
 	
 	return map;
@@ -1950,32 +1951,32 @@ char** escreve_tile_12_2(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas][colunas+6+i] = '2';
-       for(i=0;i<8;i++)
+       for(i=0;i<8;++i)
 	       map[linhas+1][colunas+4+i] = '2';
-	   for(i=0;i<10;i++)
+	   for(i=0;i<10;++i)
 	       map[linhas+2][colunas+3+i] = '2';
-	   for(i=0;i<14;i++)
+	   for(i=0;i<14;++i)
 	       map[linhas+3][colunas+1+i] = '2';
-       for(i=0;i<16;i++)
+       for(i=0;i<16;++i)
            map[linhas+4][colunas+i] = '2';
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas+5][colunas+i] = '3';
-       for(i=0;i<13;i++)
+       for(i=0;i<13;++i)
            map[linhas+5][colunas+2+i] = '2';
        map[linhas+5][colunas+15] = '3';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
            map[linhas+6][colunas+i] = '3';
-       for(i=0;i<8;i++)
+       for(i=0;i<8;++i)
            map[linhas+6][colunas+5+i] = '2';
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
            map[linhas+6][colunas+13+i] = '3';
-       for(i=0;i<7;i++)
+       for(i=0;i<7;++i)
            map[linhas+7][colunas+i] = '3';
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+7][colunas+7+i] = '2';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
            map[linhas+7][colunas+11+i] = '3';
 	   
        return map;
@@ -1985,21 +1986,21 @@ char** escreve_tile_13_1(char **map,int linhas,int colunas)
 {
 	int i;
 	
-	for(i=0;i<6;i++)
+	for(i=0;i<6;++i)
 	    map[linhas][colunas+4+i] = '3';
-	for(i=0;i<8;i++)
+	for(i=0;i<8;++i)
 	    map[linhas+1][colunas+3+i] = '3';
-	for(i=0;i<9;i++)
+	for(i=0;i<9;++i)
 	    map[linhas+2][colunas+3+i] = '3';
-	for(i=0;i<10;i++)
+	for(i=0;i<10;++i)
 	    map[linhas+3][colunas+2+i] = '3';
 	map[linhas+3][colunas+13] = '3';
-	for(i=0;i<9;i++)
+	for(i=0;i<9;++i)
 	    map[linhas+4][colunas+3+i] = '3';
 	map[linhas+4][colunas+13] = '3'; // Tava = '4' antes.
-	for(i=0;i<6;i++)
+	for(i=0;i<6;++i)
 	    map[linhas+5][colunas+5+i] = '3';
-	for(i=0;i<2;i++)
+	for(i=0;i<2;++i)
 	    map[linhas+6][colunas+7+i] = '3';
 	
 	return map;
@@ -2009,21 +2010,21 @@ char** escreve_tile_14_1(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
        {
        	   map[linhas][colunas+7+i] = '3';
        	   map[linhas+6][colunas+7+i] = '3';
        }
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+1][colunas+6+i] = '3';
-       for(i=0;i<8;i++)
+       for(i=0;i<8;++i)
            map[linhas+2][colunas+4+i] = '3';
-       for(i=0;i<12;i++)
+       for(i=0;i<12;++i)
        {
        	   map[linhas+3][colunas+2+i] = '3';
        	   map[linhas+4][colunas+2+i] = '3';
        }
-       for(i=0;i<7;i++)
+       for(i=0;i<7;++i)
            map[linhas+5][colunas+5+i] = '3';
        
        
@@ -2034,20 +2035,20 @@ char** escreve_tile_14_2(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas][colunas+7+i] = '3';
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+1][colunas+6+i] = '3';
-       for(i=0;i<8;i++)
+       for(i=0;i<8;++i)
        {
        	   map[linhas+2][colunas+4+i] = '3';
        	   map[linhas+3][colunas+6+i] = '3';
        }
-       for(i=0;i<11;i++)
+       for(i=0;i<11;++i)
            map[linhas+4][colunas+4+i] = '3';
-       for(i=0;i<9;i++)
+       for(i=0;i<9;++i)
            map[linhas+5][colunas+4+i] = '3';
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas+6][colunas+9+i] = '3';
        
        return map;
@@ -2057,19 +2058,19 @@ char** escreve_tile_14_3(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas][colunas+7+i] = '3';
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+1][colunas+6+i] = '3';
-       for(i=0;i<8;i++)
+       for(i=0;i<8;++i)
            map[linhas+2][colunas+4+i] = '3';
-       for(i=0;i<12;i++)
+       for(i=0;i<12;++i)
            map[linhas+3][colunas+2+i] = '3';
-       for(i=0;i<12;i++)
+       for(i=0;i<12;++i)
            map[linhas+4][colunas+1+i] = '3';
-       for(i=0;i<9;i++)
+       for(i=0;i<9;++i)
            map[linhas+5][colunas+3+i] = '3';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
            map[linhas+6][colunas+5+i] = '3';
        
        return map;
@@ -2080,15 +2081,15 @@ char** escreve_tile_14_4(char **map,int linhas,int colunas)
        int i;
        
        map[linhas+1][colunas+9] = '3';
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
            map[linhas+2][colunas+6+i] = '3';
-       for(i=0;i<11;i++)
+       for(i=0;i<11;++i)
            map[linhas+3][colunas+3+i] = '3';
-       for(i=0;i<12;i++)
+       for(i=0;i<12;++i)
            map[linhas+4][colunas+3+i] = '3';
-       for(i=0;i<9;i++)
+       for(i=0;i<9;++i)
            map[linhas+5][colunas+4+i] = '3';
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+6][colunas+7+i] = '3';
        
        return map;
@@ -2098,22 +2099,22 @@ char** escreve_tile_14_5(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
        {
 	       map[linhas][colunas+7+i] = '3';
 	       map[linhas+7][colunas+7+i] = '3';
 	   }
-	   for(i=0;i<4;i++)
+	   for(i=0;i<4;++i)
 	   {
 	   	   map[linhas+1][colunas+6+i] = '3';
 	   	   map[linhas+6][colunas+6+i] = '3';
 	   }
-	   for(i=0;i<8;i++)
+	   for(i=0;i<8;++i)
 	   {
 	       map[linhas+2][colunas+4+i] = '3';
 	       map[linhas+5][colunas+4+i] = '3';
        }
-	   for(i=0;i<14;i++)
+	   for(i=0;i<14;++i)
 	   {
 	   	   map[linhas+3][colunas+1+i] = '3';
 	   	   map[linhas+4][colunas+1+i] = '3';
@@ -2126,17 +2127,17 @@ char** escreve_tile_14_7(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas+1][colunas+6+i] = '3';
-       for(i=0;i<9;i++)
+       for(i=0;i<9;++i)
            map[linhas+2][colunas+4+i] = '3';
-       for(i=0;i<12;i++)
+       for(i=0;i<12;++i)
            map[linhas+3][colunas+2+i] = '3';
-       for(i=0;i<13;i++)
+       for(i=0;i<13;++i)
            map[linhas+4][colunas+1+i] = '3';
-       for(i=0;i<9;i++)
+       for(i=0;i<9;++i)
            map[linhas+5][colunas+3+i] = '3';
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+6][colunas+5+i] = '3';
        
        return map;
@@ -2146,19 +2147,19 @@ char** escreve_tile_14_8(char** map,int linhas,int colunas)
 {
 	int i;
 	
-	for(i=0;i<3;i++)
+	for(i=0;i<3;++i)
 	    map[linhas+1][colunas+7+i] = '3';
-	for(i=0;i<5;i++)
+	for(i=0;i<5;++i)
 	    map[linhas+2][colunas+7+i] = '3';
-	for(i=0;i<11;i++)
+	for(i=0;i<11;++i)
 	    map[linhas+3][colunas+3+i] = '3';
-	for(i=0;i<14;i++)
+	for(i=0;i<14;++i)
 	    map[linhas+4][colunas+2+i] = '3';
-	for(i=0;i<10;i++)
+	for(i=0;i<10;++i)
 	    map[linhas+5][colunas+3+i] = '3';
-	for(i=0;i<6;i++)
+	for(i=0;i<6;++i)
 	    map[linhas+6][colunas+5+i] = '3';
-	for(i=0;i<2;i++)
+	for(i=0;i<2;++i)
 	    map[linhas+7][colunas+7+i] = '3';
 	
 	return map;
@@ -2168,20 +2169,20 @@ char** escreve_tile_14_9(char** map,int linhas,int colunas)
 {
 	int i;
 	
-	for(i=0;i<3;i++)
+	for(i=0;i<3;++i)
 	    map[linhas+1][colunas+6+i] = '3';
-	for(i=0;i<8;i++)
+	for(i=0;i<8;++i)
 	    map[linhas+2][colunas+4+i] = '3';
-	for(i=0;i<13;i++)
+	for(i=0;i<13;++i)
 	{
 		map[linhas+3][colunas+1+i] = '3';
 		map[linhas+4][colunas+1+i] = '3';
 	}
-	for(i=0;i<10;i++)
+	for(i=0;i<10;++i)
 	    map[linhas+5][colunas+3+i] = '3';
-	for(i=0;i<6;i++)
+	for(i=0;i<6;++i)
 	    map[linhas+6][colunas+5+i] = '3';
-	for(i=0;i<2;i++)
+	for(i=0;i<2;++i)
 	    map[linhas+7][colunas+7+i] = '3';
     
 	return map;
@@ -2191,19 +2192,19 @@ char** escreve_tile_14_10(char** map,int linhas,int colunas)
 {
 	int i;
 	
-	for(i=0;i<3;i++)
+	for(i=0;i<3;++i)
 	    map[linhas+1][colunas+7+i] = '3';
-	for(i=0;i<7;i++)
+	for(i=0;i<7;++i)
 	    map[linhas+2][colunas+4+i] = '3';
-	for(i=0;i<11;i++)
+	for(i=0;i<11;++i)
 	    map[linhas+3][colunas+3+i] = '3';
-	for(i=0;i<13;i++)
+	for(i=0;i<13;++i)
 	    map[linhas+4][colunas+2+i] = '3';
-	for(i=0;i<10;i++)
+	for(i=0;i<10;++i)
 	    map[linhas+5][colunas+3+i] = '3';
-	for(i=0;i<6;i++)
+	for(i=0;i<6;++i)
 	    map[linhas+6][colunas+5+i] = '3';
-	for(i=0;i<2;i++)
+	for(i=0;i<2;++i)
 	    map[linhas+7][colunas+7+i] = '3';
 	
 	return map;
@@ -2213,19 +2214,19 @@ char** escreve_tile_15_1(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas][colunas+7+i] = '3';
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+1][colunas+6+i] = '3';
-       for(i=0;i<8;i++)
+       for(i=0;i<8;++i)
            map[linhas+2][colunas+4+i] = '3';
-       for(i=0;i<14;i++)
+       for(i=0;i<14;++i)
            map[linhas+3][colunas+1+i] = '3';
-       for(i=0;i<12;i++)
+       for(i=0;i<12;++i)
            map[linhas+4][colunas+2+i] = '3';
-       for(i=0;i<7;i++)
+       for(i=0;i<7;++i)
            map[linhas+5][colunas+5+i] = '3';
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas+6][colunas+8+i] = '3';
        
        return map;
@@ -2235,17 +2236,17 @@ char** escreve_tile_15_2(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
            map[linhas+1][colunas+5+i] = '3';
-       for(i=0;i<9;i++)
+       for(i=0;i<9;++i)
            map[linhas+2][colunas+3+i] = '3';
-       for(i=0;i<9;i++)
+       for(i=0;i<9;++i)
            map[linhas+3][colunas+5+i] = '3';
-       for(i=0;i<10;i++)
+       for(i=0;i<10;++i)
            map[linhas+4][colunas+4+i] = '3';
-       for(i=0;i<9;i++)
+       for(i=0;i<9;++i)
            map[linhas+5][colunas+4+i] = '3';
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas+6][colunas+9+i] = '3';
        
        return map;
@@ -2255,17 +2256,17 @@ char** escreve_tile_15_3(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
            map[linhas+1][colunas+7+i] = '3';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
            map[linhas+2][colunas+7+i] = '3';
-       for(i=0;i<11;i++)
+       for(i=0;i<11;++i)
            map[linhas+3][colunas+3+i] = '3';
-       for(i=0;i<11;i++)
+       for(i=0;i<11;++i)
            map[linhas+4][colunas+2+i] = '3';
-       for(i=0;i<9;i++)
+       for(i=0;i<9;++i)
            map[linhas+5][colunas+3+i] = '3';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
            map[linhas+6][colunas+5+i] = '3';
        
        return map;
@@ -2276,16 +2277,16 @@ char** escreve_tile_15_4(char **map,int linhas,int colunas)
        int i;
        
        map[linhas+1][colunas+9] = '3';
-       for(i=0;i<8;i++)
+       for(i=0;i<8;++i)
            map[linhas+2][colunas+5+i] = '3';
-       for(i=0;i<11;i++)
+       for(i=0;i<11;++i)
        {
        	   map[linhas+3][colunas+3+i] = '3';
        	   map[linhas+4][colunas+3+i] = '3';
        }
-       for(i=0;i<9;i++)
+       for(i=0;i<9;++i)
            map[linhas+5][colunas+4+i] = '3';
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+6][colunas+7+i] = '3';
        
        return map;
@@ -2295,18 +2296,18 @@ char** escreve_tile_15_5(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas+1][colunas+6+i] = '3';
-       for(i=0;i<9;i++)
+       for(i=0;i<9;++i)
            map[linhas+2][colunas+4+i] = '3';
-       for(i=0;i<12;i++)
+       for(i=0;i<12;++i)
        {
            map[linhas+3][colunas+2+i] = '3';
            map[linhas+4][colunas+2+i] = '3';
        }
-       for(i=0;i<9;i++)
+       for(i=0;i<9;++i)
            map[linhas+5][colunas+3+i] = '3';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
            map[linhas+6][colunas+5+i] = '3';
        
        return map;
@@ -2316,17 +2317,17 @@ char** escreve_tile_15_6(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+1][colunas+6+i] = '3';
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
            map[linhas+2][colunas+4+i] = '3';
-       for(i=0;i<11;i++)
+       for(i=0;i<11;++i)
            map[linhas+3][colunas+3+i] = '3';
-       for(i=0;i<12;i++)
+       for(i=0;i<12;++i)
            map[linhas+4][colunas+2+i] = '3';
-       for(i=0;i<10;i++)
+       for(i=0;i<10;++i)
            map[linhas+5][colunas+3+i] = '3';
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
            map[linhas+6][colunas+5+i] = '3';
        
        return map;
@@ -2337,20 +2338,20 @@ char** escreve_tile_15_7(char **map,int linhas,int colunas)
        int i;
        
        map[linhas][colunas+7] = '3';
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+1][colunas+6+i] = '3';
-       for(i=0;i<8;i++)
+       for(i=0;i<8;++i)
            map[linhas+2][colunas+4+i] = '3';
-       for(i=0;i<14;i++)
+       for(i=0;i<14;++i)
        {
        	   map[linhas+3][colunas+1+i] = '3';
        	   map[linhas+4][colunas+1+i] = '3';
        }
-       for(i=0;i<10;i++)
+       for(i=0;i<10;++i)
            map[linhas+5][colunas+3+i] = '3';
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
            map[linhas+6][colunas+5+i] = '3';
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas+7][colunas+7+i] = '3';
        
        return map;
@@ -2360,21 +2361,21 @@ char** escreve_tile_15_8(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas][colunas+7+i] = '3';
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+1][colunas+6+i] = '3';
-       for(i=0;i<8;i++)
+       for(i=0;i<8;++i)
            map[linhas+2][colunas+4+i] = '3';
-       for(i=0;i<12;i++)
+       for(i=0;i<12;++i)
            map[linhas+3][colunas+2+i] = '3';
-       for(i=0;i<13;i++)
+       for(i=0;i<13;++i)
            map[linhas+4][colunas+1+i] = '3';
-       for(i=0;i<10;i++)
+       for(i=0;i<10;++i)
            map[linhas+5][colunas+3+i] = '3';
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
            map[linhas+6][colunas+5+i] = '3';
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas+7][colunas+7+i] = '3';
        
        return map;
@@ -2384,22 +2385,22 @@ char** escreve_tile_15_9(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas][colunas+7+i] = '3';
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+1][colunas+6+i] = '3';
-       for(i=0;i<8;i++)
+       for(i=0;i<8;++i)
            map[linhas+2][colunas+4+i] = '3';
-       for(i=0;i<12;i++)
+       for(i=0;i<12;++i)
        {
        	   map[linhas+3][colunas+2+i] = '3';
        	   map[linhas+4][colunas+2+i] = '3';
        }
-       for(i=0;i<10;i++)
+       for(i=0;i<10;++i)
            map[linhas+5][colunas+3+i] = '3';
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
            map[linhas+6][colunas+5+i] = '3';
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas+7][colunas+7+i] = '3';
        
        return map;
@@ -2409,19 +2410,19 @@ char** escreve_tile_15_10(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas][colunas+7+i] = '3';
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+1][colunas+6+i] = '3';
-       for(i=0;i<8;i++)
+       for(i=0;i<8;++i)
            map[linhas+2][colunas+4+i] = '3';
-       for(i=0;i<12;i++)
+       for(i=0;i<12;++i)
            map[linhas+3][colunas+2+i] = '3';
-       for(i=0;i<14;i++)
+       for(i=0;i<14;++i)
            map[linhas+4][colunas+1+i] = '3';
-       for(i=0;i<10;i++)
+       for(i=0;i<10;++i)
            map[linhas+5][colunas+3+i] = '3';
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
            map[linhas+6][colunas+5+i] = '3';
        
        return map;
@@ -2431,21 +2432,21 @@ char** escreve_tile_16_1(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
            map[linhas][colunas+6+i] = '3';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
            map[linhas+1][colunas+5+i] = '3';
-       for(i=0;i<8;i++)
+       for(i=0;i<8;++i)
            map[linhas+2][colunas+4+i] = '3';
-       for(i=0;i<12;i++)
+       for(i=0;i<12;++i)
            map[linhas+3][colunas+2+i] = '3';
-       for(i=0;i<14;i++)
+       for(i=0;i<14;++i)
            map[linhas+4][colunas+1+i] = '3';
-       for(i=0;i<10;i++)
+       for(i=0;i<10;++i)
            map[linhas+5][colunas+3+i] = '3';
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
            map[linhas+6][colunas+5+i] = '3';
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas+7][colunas+7+i] = '3';
        
        return map;
@@ -2455,13 +2456,13 @@ char** escreve_tile_16_2(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas+1][colunas+7+i] = '3';
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
            map[linhas+2][colunas+4+i] = '3';
-       for(i=0;i<10;i++)
+       for(i=0;i<10;++i)
            map[linhas+3][colunas+3+i] = '3';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
        {
        	   map[linhas+4][colunas+4+i] = '3';
        	   map[linhas+5][colunas+3+i] = '3';
@@ -2474,29 +2475,29 @@ char** escreve_tile_16_3(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas][colunas+7+i] = '3';
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
            map[linhas+1][colunas+6+i] = '3';
-       for(i=0;i<3;i++)
+       for(i=0;i<3;++i)
        {
        	   map[linhas+2][colunas+4+i] = '3';
        	   map[linhas+2][colunas+9+i] = '3';
        }
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
            map[linhas+3][colunas+1+i] = '3';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
            map[linhas+3][colunas+9+i] = '3';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
        {
        	   map[linhas+4][colunas+1+i] = '3';
        	   map[linhas+4][colunas+10+i] = '3';
        }
-       for(i=0;i<10;i++)
+       for(i=0;i<10;++i)
            map[linhas+5][colunas+3+i] = '3';
-       for(i=0;i<5;i++)
+       for(i=0;i<5;++i)
            map[linhas+6][colunas+5+i] = '3';
-       for(i=0;i<2;i++)
+       for(i=0;i<2;++i)
            map[linhas+7][colunas+7+i] = '3';
        
        return map;
@@ -2506,7 +2507,7 @@ char** escreve_tile_23_3(char **map,int linhas,int colunas)
 {
        int i;
        
-	   for(i=0;i<3;i++)
+	   for(i=0;i<3;++i)
 	   {
 	   		map[linhas+2][colunas+6+i] = '3';
 	   		map[linhas+3][colunas+6+i] = '3';
@@ -2519,7 +2520,7 @@ char** escreve_tile_27_1(char **map,int linhas,int colunas)
 {
        int i;
        
-	   for(i=0;i<3;i++)
+	   for(i=0;i<3;++i)
 	   {
 	   		map[linhas+2][colunas+6+i] = '3';
 	   		map[linhas+3][colunas+6+i] = '3';
@@ -2533,17 +2534,17 @@ char** escreve_tile_27_5(char **map,int linhas,int colunas)
 {
        int i;
        
-       for(i=0;i<4;i++)
+       for(i=0;i<4;++i)
        {
        	   map[linhas][colunas+6+i] = '3';
        	   map[linhas+1][colunas+6+i] = '3';
        }
-       for(i=0;i<6;i++)
+       for(i=0;i<6;++i)
        {
        	   map[linhas+2][colunas+5+i] = '3';
        	   map[linhas+4][colunas+6+i] = '3';
        }
-	   for(i=0;i<10;i++)
+	   for(i=0;i<10;++i)
 	   		map[linhas+3][colunas+3+i] = '3';
        map[linhas+5][colunas+6] = '3';
        
@@ -2557,43 +2558,45 @@ char** escreve_tile_x_x(char **map,int linhas,int colunas)
 {
        int i;
        return map;
-}    
+}
 */
 
 
 /*
 "Prototipo"
 char** escreve_tile_x_x(char **map,int linhas,int colunas)
-/*
+
 
 *
 {
        int i;
        return map;
-}    
+}
 */
 
 char** escreve_arquivo(char **map)
 {
 	FILE *fp = fopen("matriz.txt","w");
 	int j;
-	
-	for(int i=0;i<TAM;i++)
+
+	for(int i=0;i<TAM;++i)
 	{
 	    for(j=0;j<TAM;j++)
 	        fprintf(fp,"%c",map[i][j]);
 	    fprintf(fp,"\n");
     }
-    
+
     fclose(fp);
-    
+
     char travar;
-    
+
     scanf("%c",&travar);
+
+    return map;
 }
 
 
-/* 
+/*
 
 TODOS OS TILES:
 
