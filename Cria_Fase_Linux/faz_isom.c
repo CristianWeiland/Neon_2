@@ -8,6 +8,7 @@
 #define MAX_X_CORTE 576
 #define MIN_Y_CORTE 32
 #define MAX_Y_CORTE 992
+#define MAX_TAM_SEL_Y 4
 
 Window graphinit() {
     Window win = {NULL, NULL, NULL, {0, 0, 0, 0}};
@@ -85,7 +86,7 @@ int main() {
     int mouse_x, mouse_y;
     unsigned int mouse_b = 0;
     FILE *arquivo;
-    bool redraw = true, sair = false, salvo = true;
+    bool redraw = true, sair = false, salvo = true, help = false;
 
     if(!tileiso) {
         puts("Nao consegui abrir tileiso.");
@@ -125,6 +126,9 @@ int main() {
                 --pos;
                 redraw = true;
             }
+            /*if(ev.keyboard.keycode == ALLEGRO_KEY_LCTRL || ev.keyboard.keycode == ALLEGRO_KEY_RCTRL) {
+                ctrl_pressed = true;
+            }*/
 
             /*
             0  <= xcorte <= 960, isto é, xcorte só pode ser um valor entre 0 e 960.
@@ -204,7 +208,7 @@ int main() {
                 }
             }
             if(ev.keyboard.keycode == ALLEGRO_KEY_E) {
-                if(altura_sel <= 7 && ycorte_aux + 32*(altura_sel-1) < MAX_Y_CORTE) { // Não pode passar do limite pra baixo. Tá errado.
+                if(altura_sel <= MAX_TAM_SEL_Y && ycorte_aux + 32*(altura_sel-1) < MAX_Y_CORTE) { // Não pode passar do limite pra baixo. Tá errado.
                     altura_sel += 1;
                     redraw = true;
                     largura_pincel = 1;
@@ -230,13 +234,14 @@ int main() {
             if(ev.keyboard.keycode == ALLEGRO_KEY_S) {
                 arquivo = fopen("mapa.txt", "w");
                 puts("Salvando no arquivo...");
+                aux = 0;
                 for(i=0; i<index; ++i) {
-                    if(xtile >= 0 && ytile >= 0) {
+                    if(xtile[i] >= 0 && ytile[i] >= 0) {
                         ++aux;
                     }
                 }
                 //fprintf(arquivo,"%i\n",index+1);
-                fprintf(arquivo,"%i\n",aux+1);
+                fprintf(arquivo,"%i\n",aux);
                 // for(i=0; i<index+1; ++i) {
                 for(i=0; i<index; ++i) {
                     if(xtile[i] >= 0 && ytile[i] >= 0) {
@@ -245,6 +250,33 @@ int main() {
                 }
                 fclose(arquivo);
                 salvo = true;
+            }
+            /* Apertou backspace. Esse botão indica uma função que elimina todos os tiles inseridos
+               que são repetidos (se inseri num x = 50 e num y = 50 um tile com x = 10 e y = 10, 
+               e depois eu inseri esse mesmo tile no mesmo x, y, ele fica duplicado, mas não muda nada). */
+            if(ev.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
+                for(i=index; i>0; --i) {
+                    for(j=i-1; j>=0; --j) {
+                        if(xtile[i] == xtile[j] && ytile[i] == ytile[j] && xcorte[i] == xcorte[j] && ycorte[i] == ycorte[j]) {
+                            // Repetido, remove o anterior (j).
+                            xtile[j] = -100;
+                            ytile[j] = -100;
+                            xcorte[j] = 0;
+                            ycorte[j] = 0;
+                        }
+                    }
+                }
+                puts("Arquivo limpo!");
+            }
+            // Imprime o vetor.
+            if(ev.keyboard.keycode == ALLEGRO_KEY_P) {
+                for(i=0; i<index; ++i) {
+                    printf("Entrada %d: %d - %d - %d - %d\n", i, xtile[i], ytile[i], xcorte[i], ycorte[i]);
+                }
+            }
+            if(ev.keyboard.keycode == ALLEGRO_KEY_ENTER) {
+                help = !help;
+                redraw = true;
             }
         } else if(ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
             mouse_x = ev.mouse.x;
@@ -261,6 +293,16 @@ int main() {
             mouse_b = ev.mouse.button;
             redraw = true;
             salvo = false;
+        }
+
+        /* Detecta se apertou Ctrl Z. */
+        if(ev.keyboard.keycode == ALLEGRO_KEY_Z && ev.keyboard.modifiers & ALLEGRO_KEYMOD_CTRL) {
+            --index;
+            xtile[index] = -100;
+            ytile[index] = -100;
+            xcorte[index] = 0;
+            ycorte[index] = 0;
+            redraw = true;
         }
 
         if(mouse_b & 1) {
@@ -330,17 +372,21 @@ int main() {
             /* Desenha o retângulo azul que mostra quais tiles estão selecionados (pra entender essa linha, olhar no explicação 1 no final do código) */
             al_draw_rectangle(((float) xcorte_aux)/5+XMENU, ((float)ycorte_aux+32*(altura_sel-1))/5+YMENU+8, ((float) (xcorte_aux+64*(largura_sel-1))/5)+12+XMENU, ((float) ycorte_aux)/5+YMENU-2, al_map_rgb(0,0,255), 1);
 
+            al_draw_text(font, CARMESIM, 20, 20, 0, "Para ver os comandos digite <Enter>.");
             /* Imprime comandos básicos. */
-            al_draw_text(font, CARMESIM, 20, 20, 0, "Comandos: S (Salvar), Seta <-- e -->, A (Carregar), Q (Expandir Pincel), W (Diminuir Pincel)");
-            al_draw_text(font, CARMESIM, 20, 40, 0, "E (Expandir Altura Selecao), R (Diminuir Altura Selecao), D (Expandir Largura Selecao)");
-            al_draw_text(font, CARMESIM, 20, 60, 0, "F (Diminuir Largura Selecao), H (Esquerda), J (Baixo), K (Cima), L (Direita)");
-            al_draw_text(font, CARMESIM, 20, 80, 0, "Y (Esquerda Total), U (Baixo Total), I (Cima Total), O (Direita Total)");
+            if(help) {
+                al_draw_text(font, CARMESIM, 20, 40, 0, "Comandos: S (Salvar), Seta <-- e -->, A (Carregar), Q (Expandir Pincel), W (Diminuir Pincel)");
+                al_draw_text(font, CARMESIM, 20, 60, 0, "E (Expandir Altura Selecao), R (Diminuir Altura Selecao), D (Expandir Largura Selecao)");
+                al_draw_text(font, CARMESIM, 20, 80, 0, "F (Diminuir Largura Selecao), H (Esquerda), J (Baixo), K (Cima), L (Direita)");
+                al_draw_text(font, CARMESIM, 20, 100, 0, "Y (Esquerda Total), U (Baixo Total), I (Cima Total), O (Direita Total)");
+                al_draw_text(font, CARMESIM, 20, 120, 0, "P (Imprime o que sera salvo no arquivo), <Backspace> (Limpa os dados repetidos no arquivo)");
+                if(salvo)
+                    al_draw_text(font, CARMESIM, 20, 140, 0, "Todas as alteracoes foram salvas.");
+                else
+                    al_draw_text(font, CARMESIM, 20, 140, 0, "Existem alteracoes nao salvas!");
+            }
 
             /* Imprime se foram feitas modificações desde a última vez que o arquivo foi salvo. */
-            if(salvo)
-                al_draw_text(font, CARMESIM, 20, 100, 0, "Todas as alteracoes foram salvas.");
-            else
-                al_draw_text(font, CARMESIM, 20, 100, 0, "Existem alteracoes nao salvas!");
 
             // al_draw_textf(font, al_map_rgb(255,0,0), 100, 70, 0, "Xcorte = %d, ycorte = %d", pos_x, pos_y);
             al_flip_display();
