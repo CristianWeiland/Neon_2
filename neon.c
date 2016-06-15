@@ -44,7 +44,7 @@ int main()
 	p = (Pessoa *) malloc(sizeof(Pessoa) * NJOGADORES);
 	for(i=0; i<NJOGADORES; ++i) {
 		// Inicializacoes da estrutura Pessoa
-		p[i].hp = 1000;
+		p[i].hp = MAX_HP;
 		p[i].selx = 0;
 		p[i].sely = 64;
 		p[i].time = i+1;
@@ -53,7 +53,7 @@ int main()
 		p[i].andou_c = 0;
 		p[i].andou_d = 0;
 		p[i].andou_e = 0;
-		p[i].energia = 100;
+		p[i].energia = MAX_ENERGY;
 		p[i].nome = (char*) malloc(30*sizeof(char));
 		if(!p[i].nome) {
 			fprintf(errext,"Falha ao alocar memoria para p[%d].nome",i);
@@ -69,7 +69,7 @@ int main()
     /* Inicializacao dos Bitmaps */
     Sprite s = init_sprites(errext);
 
-    init_magias(&m);
+    init_magias(&m, NJOGADORES);
 
     al_register_event_source(win.event_queue, al_get_display_event_source(win.display));
 

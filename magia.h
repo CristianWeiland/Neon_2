@@ -3,7 +3,7 @@
 
 #include "colisao.h"
 
-void init_magias(Magias *m);
+void init_magias(Magias *m, int njogadores);
 void tira_neon(bool *puxa,bool *temneon, Pessoa *p, int njogadores);
 void calcula_status(Pessoa *p, int njogadores);
 void usa_fireball(char **matriz, Pessoa *p, Magias *m, int njogadores);

@@ -20,6 +20,12 @@ int fase1(Window win, Pessoa *p, Sprite s, Magias m, int JOGADORES)
 	for(i=0; i<JOGADORES; ++i) {
 		p[i].x = 100 + 50*i;
 		p[i].y = 200;
+		p[i].hp = MAX_HP;
+		p[i].energia = MAX_ENERGY;
+		p[i].andou_b = 0;
+		p[i].andou_c = 0;
+		p[i].andou_d = 0;
+		p[i].andou_e = 0;
 		cor[i] = i+1;
 		puxa[i] = false;
 		flash[i] = 0;
@@ -89,7 +95,7 @@ int fase1(Window win, Pessoa *p, Sprite s, Magias m, int JOGADORES)
 
 		mortos = 0;
 		for(i=0; i<JOGADORES; ++i) {
-			if(p[i].hp == 0) {
+			if(!(temneon[i])) {
 				++mortos;
 			} else {
 				vivo = i;
