@@ -165,7 +165,7 @@ int imprime_4_chars_for(int cont,char** matriz,int *cor,bool *temneon,int njogad
     	al_draw_bitmap_region(s.energybar,0,0,p[i].energia,20,20+200*i,665,0);
     	al_draw_bitmap(s.bar,20+200*i,640,0);
     	al_draw_bitmap(s.bar,20+200*i,665,0);
-	    al_draw_textf(font, al_map_rgb(255,0,255), 300, 600+20*i, 0, "b: %d - c: %d - d: %d - e: %d", p[i].andou_b, p[i].andou_c, p[i].andou_d, p[i].andou_e);
+	    // al_draw_textf(font, al_map_rgb(255,0,255), 300, 600+20*i, 0, "b: %d - c: %d - d: %d - e: %d", p[i].andou_b, p[i].andou_c, p[i].andou_d, p[i].andou_e);
     }
     al_destroy_font(font);
 	return 1;

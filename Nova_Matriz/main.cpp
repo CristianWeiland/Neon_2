@@ -129,46 +129,46 @@ int main()
     for(i=0;i<mapsize;++i)
     {
     	fscanf(mapa,"%i %i %i %i\n",&colunas[i],&linhas[i],&xcorte[i],&ycorte[i]);
-    	
+
     	tiley[i] = ycorte[i] / 32; // Tiley vai indicar a linha da imagem, começando no 0 (linha bugada). 0, 2a e 4a linhas nao existem.
     	tilex[i] = xcorte[i] / 64; // Começa a contagem a partir do 0 (coluna jah existente).
     	//colunas[i] -= 16/4;
     	//linhas[i] -= 32/4;
     	if (tiley[i] == 2 || tiley[i] == 4)
     	    tiley[i] = 0;
-    	
+
     	/* Caso tenha usado um quadrado rosa da imagem dos tiles. */
         if( (tiley[i]==1 && tilex[i]>6)  ||  (tiley[i]==3 && tilex[i]>7) || (tilex[i]>3 && (tiley[i]==5 || tiley[i]==8 || tiley[i]==9) )  
             || ( (tiley[i]==6 || tiley[i]==7) && tilex[i]>8) || ( (tiley[i]==20 || tiley[i]==21) && tilex[i]>2) || 
 			( (ycorte[i]==26 || tiley[i]==27) && (tilex[i]<2 || tilex[i] > 3)) )
 			tiley[i] = 0;
-            
+
         /* Tiles 9x5, 9x6, 11x1, 11x2, 11x3, 11x4, 11x5, 11x6, 13x2, 13x3, 13x4, 13x5, 13x6, 13x7, 13x8, 13x9, 13x10 sao todos iguais. */
         if((tiley[i] == 11 && tilex[i] == 6) || (tiley[i]==13 && (tilex[i]==1 || tilex[i]==2 || tilex[i]==3 || tilex[i]==4
 		 || tilex[i]==5 || tilex[i]==0) ) || (tiley[i]==15 && tilex[i]!=0) )
 		{
 			tiley[i] = 11;
 			tilex[i] = 4;
-		} 
-		
+		}
+
 		/* Tiles 12x2, 12x3, ..., 12x10 sao todos iguais. */
 		if((tiley[i] == 14) && (tilex[i]>1 && tilex[i]<11))
 		    tilex[i] = 1;
-		
+
         // OBS: Os tiles das funcoes escreve_tile NAO CONTAM as linhas fantasmas (0, 2 e 4). Tiley SIM! NAO CONFUNDIR!
-        
+
     	if (tiley[i] == 3 || tiley[i] == 5)
     	    tiley[i] = 1; // Nessas 3 linhas, todos os tiles sao iguais em questao de colisao.
-    	
+
     	printf("%d %d %d %d\n",tiley[i],tilex[i],linhas[i]/4,colunas[i]/4);
-    	
+
     	switch(tiley[i])
     	{
     		case 0: break; // Caso seja alguma das linhas bugadas soh cai fora.
     		case 1:
     			map = escreve_tile_1_1(map,linhas[i]/4,colunas[i]/4);
     			break;
-    		case 6: 
+    		case 6:
 			    switch(tilex[i])
 			    {
 			    	case 0:
@@ -287,7 +287,7 @@ int main()
 				    case 3:
 						map = escreve_tile_9_4(map,linhas[i]/4,colunas[i]/4);
 				        break;
-				    case 4: 
+				    case 4:
 					    map = escreve_tile_9_5(map,linhas[i]/4,colunas[i]/4);
 				        break;
 				    case 6:
@@ -302,7 +302,7 @@ int main()
 				    case 9:
 						map = escreve_tile_9_10(map,linhas[i]/4,colunas[i]/4);
 				        break;
-					default: break; 
+					default: break;
 			    }
 			    break;
 			case 12:
@@ -370,7 +370,7 @@ int main()
                         break;
                     default: break;
                  }
-                 break; 
+                 break;
 			case 15:
 			     switch(tilex[i])
 				 {
@@ -378,8 +378,8 @@ int main()
 				 		map = escreve_tile_13_1(map,linhas[i]/4,colunas[i]/4);
 				 		break;
 				 	default: break;
-				 }    
-				 break;   
+				 }
+				 break;
 			case 17: // Pulou case 16 por causa da linha rosa do tiles.
 				switch(tilex[i])
 				{
@@ -503,16 +503,16 @@ int main()
 					default: break;
 				}
 				break;
-			    
+
     		default: break;
     	}
     }
-    
+
     map = escreve_arquivo(map);
-    
+
     return 1;
 }
-    
+
 
 
 char** escreve_tile_1_1(char **map,int linhas,int colunas)
@@ -2576,6 +2576,7 @@ char** escreve_tile_x_x(char **map,int linhas,int colunas)
 
 char** escreve_arquivo(char **map)
 {
+    puts("Escrevendo no arquivo...");
 	FILE *fp = fopen("matriz.txt","w");
 	int j;
 

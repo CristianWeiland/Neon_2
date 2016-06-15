@@ -16,7 +16,20 @@
 #include <allegro5/allegro_ttf.h>
 #endif
 
-//ALLEGRO_FONT *font5;
+#define CONT 2
+#define NEONAMARELO 1
+#define NEONAZUL 2
+#define NEONVERDE 3
+#define NEONVERMELHO 4
+#define TAM 1000
+#define BAIXO 0
+#define ESQ 1
+#define CIMA 2
+#define DIR 3
+#define PESSOAS 4
+#define COMPUTADORES 1
+#define ICEBALLS_P_PESSOA 2
+#define FIREBALLS_P_PESSOA 2
 
 typedef struct Pessoa {
 	int x,y,desx,desy,selx,sely,hp; // Desx e desy escolhem o char na imagem; Selx e sely escolhem qual sprite do char (olhando pra cima,esq,...)
@@ -24,10 +37,10 @@ typedef struct Pessoa {
 	int andou_b,andou_c,andou_d,andou_e;
 	char *botao_b, *botao_c, *botao_d, *botao_e;
 	char *nome,*ataque;
-	char *botao_char[7];
+	char *botao_char[8];
 	int energia,correr,morto,dash;
 	int comp;
-	int botao_char_int[7],time;
+	int botao_char_int[8],time;
 	int freeze; // Congelado não pode usar magias nem andar. Freeze <= 0 -> não está mais congelado. Freeze > 0, congelado.
 } Pessoa;
 
@@ -40,9 +53,9 @@ typedef struct Magia {
 } Magia;
 
 typedef struct Magias {
-	int explox[4][2], exploy[4][2]; // Selecionam a posicao da explosao no bitmap explo.bmp.
-	Magia fireball[4][2];
-	Magia iceball[4][2];
+	int explox[PESSOAS][FIREBALLS_P_PESSOA], exploy[PESSOAS][FIREBALLS_P_PESSOA]; // Selecionam a posicao da explosao no bitmap explo.bmp.
+	Magia fireball[PESSOAS][FIREBALLS_P_PESSOA];
+	Magia iceball[PESSOAS][ICEBALLS_P_PESSOA];
 } Magias;
 
 typedef struct Sprite {
@@ -110,19 +123,6 @@ private:
 	bool ativa,explosao;
 };
 */
-
-#define CONT 2
-#define NEONAMARELO 1
-#define NEONAZUL 2
-#define NEONVERDE 3
-#define NEONVERMELHO 4
-#define TAM 1000
-#define BAIXO 0
-#define ESQ 1
-#define CIMA 2
-#define DIR 3
-#define PESSOAS 4
-#define COMPUTADORES 1
 
 char** le_matriz(FILE *fp);
 bool colisao(int,int,char**,int);
