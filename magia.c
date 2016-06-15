@@ -62,7 +62,7 @@ void calcula_status(Pessoa *p, int njogadores)
 
 	// Recupera energia
   	for(i=0; i<njogadores; ++i)
-  		if(p[i].energia < MAX_ENERGY)
+  		if(p[i].energia < MAX_ENERGY && p[i].hp > 0)
 			p[i].energia += 2;
 
 	// Diminui tempo de congelamento.
@@ -101,15 +101,6 @@ void usa_fireball(char **matriz, Pessoa *p, Magias *m, int njogadores) {
 			}
 			// Nao colidiu com nenhum char, verifica se colidiu com algo do mapa.
 			if(m->fireball[i][j].ativa==true && colisao_fireball(matriz,m->fireball[i][j].x,m->fireball[i][j].y,m->fireball[i][j].d) == 0) {
-				// if(andou_b[i]==1){
-					// m->fireball[i][j].y -= 12;
-				// }else if(andou_d[i]==1){
-					// m->fireball[i][j].x += 12;
-				// }else if(andou_e[i]==1){
-					// m->fireball[i][j].x -= 12;
-				// }else if(andou_b[i]==1){
-					// m->fireball[i][j].y += 12;
-				// }
 				switch(m->fireball[i][j].d) {
 					case 0:
 						m->fireball[i][j].y -= 12;
@@ -257,7 +248,7 @@ void usa_flash(Pessoa *p, int *flash, char **matriz, int njogadores)
 	*/
 	int i,j;
 	for(i=0; i<njogadores; ++i) {
-		if(flash[i] && p[i].energia >= 60 && p[i].hp >= 0 && p[i].freeze <= 0) {
+		if(flash[i] && p[i].energia >= 60 && p[i].hp > 0 && p[i].freeze <= 0) {
 			flash[i] = 0;
 			p[i].energia -= 60;
 			/* Existem 8 casos (8 direçoes possiveis de andar, 4 sentidos e 4 diagonais). */

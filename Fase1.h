@@ -97,6 +97,7 @@ int fase1(Window win, Pessoa *p, Sprite s, Magias m, int JOGADORES)
 		for(i=0; i<JOGADORES; ++i) {
 			if(!(temneon[i])) {
 				++mortos;
+				p[i].energia = 0;
 			} else {
 				vivo = i;
 			}
