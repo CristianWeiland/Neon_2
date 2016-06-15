@@ -27,6 +27,8 @@
 #define CIMA 2
 #define DIR 3
 #define PESSOAS 4
+#define MAX_HP 1000
+#define MAX_ENERGY 300
 #define COMPUTADORES 1
 #define ICEBALLS_P_PESSOA 2
 #define FIREBALLS_P_PESSOA 2
@@ -45,7 +47,7 @@ typedef struct Pessoa {
 } Pessoa;
 
 typedef struct Magia {
-	int dano,x,y,dist,xexpl,yexpl;
+	int dano,x,y,dist,xexpl,yexpl, energia;
 	bool ativa,explosao;
 	ALLEGRO_BITMAP* sprite;
 	int d; /* Direcao == -1 significa que nao foi calculada ainda.

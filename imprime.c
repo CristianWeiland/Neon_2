@@ -161,8 +161,8 @@ int imprime_4_chars_for(int cont,char** matriz,int *cor,bool *temneon,int njogad
     for(i=0; i<njogadores; ++i) {
     	if(p[i].hp < 0)
     		p[i].hp = 0;
-    	al_draw_bitmap_region(s.healthbar,0,0,p[i].hp/10,20,20+200*i,640,0);
-    	al_draw_bitmap_region(s.energybar,0,0,p[i].energia,20,20+200*i,665,0);
+    	al_draw_bitmap_region(s.healthbar,0,0,p[i].hp*100 / MAX_HP,20,20+200*i,640,0);
+    	al_draw_bitmap_region(s.energybar,0,0,p[i].energia*100 / MAX_ENERGY,20,20+200*i,665,0);
     	al_draw_bitmap(s.bar,20+200*i,640,0);
     	al_draw_bitmap(s.bar,20+200*i,665,0);
 	    // al_draw_textf(font, al_map_rgb(255,0,255), 300, 600+20*i, 0, "b: %d - c: %d - d: %d - e: %d", p[i].andou_b, p[i].andou_c, p[i].andou_d, p[i].andou_e);
@@ -170,3 +170,9 @@ int imprime_4_chars_for(int cont,char** matriz,int *cor,bool *temneon,int njogad
     al_destroy_font(font);
 	return 1;
 }
+
+
+/*
+MAX_ENERGY - 100%
+P[I].ENERGIA - X%
+*/

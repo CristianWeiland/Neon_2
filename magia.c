@@ -1,8 +1,8 @@
 #include "magia.h"
 
-void init_magias(Magias *m) {
+void init_magias(Magias *m, int njogadores) {
 	int i,j;
-	for(i=0; i<4; ++i) {
+	for(i=0; i<njogadores; ++i) {
 		for(j=0; j<2; ++j) {
 			m->fireball[i][j].ativa = false; // Nao foi usada.
 			m->fireball[i][j].dano = 200; // Dano da tecnica.
@@ -13,11 +13,12 @@ void init_magias(Magias *m) {
 			m->exploy[i][j] = 220;
 		}
 	}
-	for(i=0; i<4; ++i) {
+	for(i=0; i<njogadores; ++i) {
 		for(j=0; j<2; ++j) {
 			m->iceball[i][j].ativa = false; // Nao foi usada.
 			m->iceball[i][j].dano = 25; // Dano da tecnica.
 			m->iceball[i][j].explosao = false; // Nao colidiu / chegou na distancia limite.
+			m->iceball[i][j].energia = 30;
 			m->iceball[i][j].dist = 0; // Nao percorreu nenhuma distancia.
 			m->iceball[i][j].d = -1; // Nao tem direçao.
 		}
@@ -28,16 +29,12 @@ void tira_neon(bool *puxa,bool *temneon, Pessoa *p, int njogadores)
 {
 	int i,j,k;
 	for(i=0; i<njogadores; ++i) {
-		/*
-		if(puxa[i]) {
-			if(j = contato_proximo(i,j,p) != 5)
-				temneon[j] = false;
-		}
-		*/
-		if(puxa[i]) {
+		if(puxa[i] && p[i].hp > 0 && p[i].freeze <= 0) {
 			for(j=0; j<njogadores; ++j) {
-				if(k = contato_proximo(i,j,p) != 5)
+				if(j != i && (k = contato_proximo(i,j,p)) != 5) {
 					temneon[k] = false;
+					p[k].hp = 0;
+				}
 			}
 		}
 	}
@@ -65,15 +62,14 @@ void calcula_status(Pessoa *p, int njogadores)
 
 	// Recupera energia
   	for(i=0; i<njogadores; ++i)
-  		if(p[i].energia < 100)
-			p[i].energia++;
+  		if(p[i].energia < MAX_ENERGY)
+			p[i].energia += 2;
 
 	// Diminui tempo de congelamento.
 	for(i=0; i<njogadores; ++i)
 		if(p[i].freeze > 0) {
 			--(p[i].freeze);
 			if(p[i].freeze <= 0) {
-				printf("Descongelou.\n");
 				if(p[i].andou_b == 2) p[i].andou_b = 1;
 				if(p[i].andou_c == 2) p[i].andou_c = 1;
 				if(p[i].andou_d == 2) p[i].andou_d = 1;
@@ -179,7 +175,7 @@ void explosao(Pessoa *p, int njogadores, Sprite s, Magias *m) {
 void usa_iceball(char **matriz, Pessoa *p, Magias *m, Sprite s, int njogadores) {
 	int i,j,k;
 	for(i=0; i<njogadores; ++i) {
-		if(m->iceball[i][0].ativa == false && m->iceball[i][1].ativa == false)
+		if(m->iceball[i][0].ativa == false && m->iceball[i][1].ativa == false || p[i].hp <= 0)
 			continue;
 		// printf("Player %d mandou uma iceball.\n", i);
 		for(j=0; j<2; ++j) { // O mesmo player pode ter jogado duas iceballs.
@@ -216,8 +212,7 @@ void usa_iceball(char **matriz, Pessoa *p, Magias *m, Sprite s, int njogadores) 
 					m->iceball[i][j].d = -1;
 					m->iceball[i][j].ativa = false;
 				}
-			}
-			else if(m->iceball[i][j].ativa == true) { // Nao tah ativa OU colidiu. Vou considerar que eh a hipotese de ter colidido, entao passa pra falso.
+			} else if(m->iceball[i][j].ativa == true) { // Nao tah ativa OU colidiu. Vou considerar que eh a hipotese de ter colidido, entao passa pra falso.
 				m->iceball[i][j].d = -1;
 				m->iceball[i][j].ativa = false;
 			}
@@ -262,9 +257,9 @@ void usa_flash(Pessoa *p, int *flash, char **matriz, int njogadores)
 	*/
 	int i,j;
 	for(i=0; i<njogadores; ++i) {
-		if(flash[i] && p[i].energia >= 50) {
+		if(flash[i] && p[i].energia >= 60 && p[i].hp >= 0 && p[i].freeze <= 0) {
 			flash[i] = 0;
-			p[i].energia -= 50;
+			p[i].energia -= 60;
 			/* Existem 8 casos (8 direçoes possiveis de andar, 4 sentidos e 4 diagonais). */
 			for(j=0; j<19; ++j) {
 				// Antes tinha if(p[i].andou_c), mas, quando ele ficar parado, ele também deve dar flash pra cima.
