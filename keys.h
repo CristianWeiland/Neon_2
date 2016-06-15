@@ -15,8 +15,8 @@
 #include <allegro5/allegro_ttf.h>
 
 void teclas_iniciais(Pessoa *pessoa);
-void keyboard_down(int evkeyboardkeycode,bool *puxa,int *flash, Pessoa *p, Magias *m);
-void keyboard_up(int evkeyboardkeycode,bool *puxa,bool *sair, Pessoa *p);
+void keyboard_down(int evkeyboardkeycode,bool *puxa,int *flash, Pessoa *p, Magias *m, int njogadores);
+void keyboard_up(int evkeyboardkeycode,bool *puxa,bool *sair, Pessoa *p, int njogadores);
 
 /*
 b 2

@@ -5,7 +5,7 @@ OBJ = main.o
 CC = g++
 CFLAGS = -Wall -g
 
-faz_isom: $(OBJ)
+cria_matriz: $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^ $(ALLEGRO)
 
 %.o: %.cpp

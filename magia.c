@@ -24,17 +24,25 @@ void init_magias(Magias *m) {
 	}
 }
 
-void tira_neon(bool *puxa,bool *temneon, Pessoa *p)
+void tira_neon(bool *puxa,bool *temneon, Pessoa *p, int njogadores)
 {
-	int i,j;
-	for(i=0; i<4; ++i) {
+	int i,j,k;
+	for(i=0; i<njogadores; ++i) {
+		/*
 		if(puxa[i]) {
 			if(j = contato_proximo(i,j,p) != 5)
 				temneon[j] = false;
 		}
+		*/
+		if(puxa[i]) {
+			for(j=0; j<njogadores; ++j) {
+				if(k = contato_proximo(i,j,p) != 5)
+					temneon[k] = false;
+			}
+		}
 	}
 
-	for(i=0; i<4; ++i) // Pra nao contar como se estivesse sempre tentando puxar.
+	for(i=0; i<njogadores; ++i) // Pra nao contar como se estivesse sempre tentando puxar.
 		puxa[i] = false;
 
 	return ;
@@ -67,7 +75,7 @@ void calcula_status(Pessoa *p, int njogadores)
 			if(p[i].freeze <= 0) {
 				printf("Descongelou.\n");
 				if(p[i].andou_b == 2) p[i].andou_b = 1;
-				if(p[i].andou_c == 2) {p[i].andou_c = 1;printf("Mudei andou_c\n");}
+				if(p[i].andou_c == 2) p[i].andou_c = 1;
 				if(p[i].andou_d == 2) p[i].andou_d = 1;
 				if(p[i].andou_e == 2) p[i].andou_e = 1;
 			}
@@ -76,16 +84,16 @@ void calcula_status(Pessoa *p, int njogadores)
 	return ;
 }
 
-void usa_fireball(char **matriz, Pessoa *p, Magias *m) {
+void usa_fireball(char **matriz, Pessoa *p, Magias *m, int njogadores) {
 	int i,j,k;
-	for(i=0; i<4; ++i) {
+	for(i=0; i<njogadores; ++i) {
 		if(m->fireball[i][0].ativa == false && m->fireball[i][1].ativa == false)
 			break ;
 		for(j=0; j<2; ++j) { // O mesmo player pode ter jogado duas fireballs.
 			if(m->fireball[i][j].d == -1) {
 				m->fireball[i][j].d = calcula_direcao(p,i); // Numeros de direçao no colisao.h
 			}
-			for(k=0; k<4; ++k) {
+			for(k=0; k<njogadores; ++k) {
 				if(contato_proximo_direcionado(m->fireball[i][j].x,m->fireball[i][j].y,i,k,m->fireball[i][j].d,p) == k) {
 					p[k].hp -= m->fireball[i][j].dano;
 					m->fireball[i][j].ativa = false;
@@ -168,16 +176,17 @@ void explosao(Pessoa *p, int njogadores, Sprite s, Magias *m) {
 	}
 }
 
-void usa_iceball(char **matriz, Pessoa *p, Magias *m, Sprite s) {
+void usa_iceball(char **matriz, Pessoa *p, Magias *m, Sprite s, int njogadores) {
 	int i,j,k;
-	for(i=0; i<4; ++i) {
+	for(i=0; i<njogadores; ++i) {
 		if(m->iceball[i][0].ativa == false && m->iceball[i][1].ativa == false)
-			break ;
+			continue;
+		// printf("Player %d mandou uma iceball.\n", i);
 		for(j=0; j<2; ++j) { // O mesmo player pode ter jogado duas iceballs.
 			if(m->iceball[i][j].d == -1) {
 				m->iceball[i][j].d = calcula_direcao(p,i); // Numeros de direçao no colisao.h
 			}
-			for(k=0; k<4; ++k) {
+			for(k=0; k<njogadores; ++k) {
 				if(contato_proximo_direcionado(m->iceball[i][j].x,m->iceball[i][j].y,i,k,m->iceball[i][j].d,p) == k) {
 					p[k].freeze = m->iceball[i][j].dano;
 					m->iceball[i][j].ativa = false;
@@ -185,7 +194,7 @@ void usa_iceball(char **matriz, Pessoa *p, Magias *m, Sprite s) {
 				}
 			}
 			// Nao colidiu com nenhum char, verifica se colidiu com algo do mapa.
-			if(m->iceball[i][j].ativa==true && colisao_fireball(matriz,m->iceball[i][j].x,m->iceball[i][j].y,m->iceball[i][j].d) == 0) {
+			if(m->iceball[i][j].ativa == true && colisao_fireball(matriz,m->iceball[i][j].x,m->iceball[i][j].y,m->iceball[i][j].d) == 0) {
 				switch(m->iceball[i][j].d) {
 					case 0:
 						m->iceball[i][j].y -= 12;
@@ -208,7 +217,7 @@ void usa_iceball(char **matriz, Pessoa *p, Magias *m, Sprite s) {
 					m->iceball[i][j].ativa = false;
 				}
 			}
-			else if(m->iceball[i][j].ativa==true) { // Nao tah ativa OU colidiu. Vou considerar que eh a hipotese de ter colidido, entao passa pra falso.
+			else if(m->iceball[i][j].ativa == true) { // Nao tah ativa OU colidiu. Vou considerar que eh a hipotese de ter colidido, entao passa pra falso.
 				m->iceball[i][j].d = -1;
 				m->iceball[i][j].ativa = false;
 			}
@@ -221,42 +230,38 @@ void usa_iceball(char **matriz, Pessoa *p, Magias *m, Sprite s) {
 
 void usa_magias(char **matriz, Pessoa *p, int njogadores, Sprite s, int *flash, Magias *m)
 {
-	usa_flash(p,flash,matriz);
-	usa_fireball(matriz, p, m);
-	explosao(p,njogadores,s, m);
-	usa_iceball(matriz, p, m, s);
+	usa_flash(p, flash, matriz, njogadores);
+	usa_fireball(matriz, p, m, njogadores);
+	explosao(p, njogadores,s, m);
+	usa_iceball(matriz, p, m, s, njogadores);
 	return ;
 }
 
 int calcula_direcao(Pessoa *p,int i)
 {
 	if(p[i].andou_c == 1 || (p[i].andou_b == 0 && p[i].andou_c == 0 && p[i].andou_d == 0 && p[i].andou_e == 0)) { // Olhando pra cima.
-		al_flip_display;
 		return 0;
 	}
 	if(p[i].andou_d == 1) { // Olhando pra direita.
-		al_flip_display;
 		return 1;
 	}
 	if(p[i].andou_e == 1) { // Olhando pra esquerda.
-		al_flip_display;
 		return 2;
 	}
 	if(p[i].andou_b == 1) { // Olhando pra baixo.
-		al_flip_display;
 		return 3;
 	}
 	return -1; // Deu erro.
 }
 
-void usa_flash(Pessoa *p,int *flash,char **matriz)
+void usa_flash(Pessoa *p, int *flash, char **matriz, int njogadores)
 {
 	/* Por favor otimizar isso aqui. O for(j=0; j<19) tem 8 ifs dentro. Nao da pra puxar o if pra fora
 	   e escolher qual deles eh feito, e dai fazer as 19 iteracoes? Alem disso, se colidiu uma vez, colidiu
 	   pra sempre, entao pode dar um break/return (cuidar com diagonais dai!)
 	*/
 	int i,j;
-	for(i=0; i<4; ++i) {
+	for(i=0; i<njogadores; ++i) {
 		if(flash[i] && p[i].energia >= 50) {
 			flash[i] = 0;
 			p[i].energia -= 50;
