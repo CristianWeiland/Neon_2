@@ -193,6 +193,20 @@ int selecao_personagem(void *) {
                 break ;
         }
     } while(!retorno);
+
+    /* Salva as configurações no arquivo Comandos/cmd.txt */
+    FILE *cmd = fopen("Comandos/cmd.txt", "w");
+    if(!cmd) {
+        perror("Erro ao abrir o arquivo cmd.txt na pasta Comandos.");
+        exit(1);
+    }
+    for(i=0; i<PESSOAS; ++i) {
+        for(j=0; j<COMANDOS_POR_PERSONAGEM; ++j) {
+            fprintf(cmd, "%d\n", Pessoas[i].botao_char_int[j]);
+        }
+    }
+    fclose(cmd);
+
     return 0;
 }
 
