@@ -37,7 +37,7 @@ void teclas_iniciais(Pessoa *p)
 	p[1].botao_char_int[RIGHT] = ALLEGRO_KEY_L;
 	p[1].botao_char_int[LEFT] = ALLEGRO_KEY_J;
 	p[1].botao_char_int[CORRE] = ALLEGRO_KEY_U;
-	p[1].botao_char_int[PUXAR] = ALLEGRO_KEY_O;
+	p[1].botao_char_int[PUXAR] = ALLEGRO_KEY_9;
 	p[1].botao_char_int[FLASH] = ALLEGRO_KEY_8;
 	p[1].botao_char_int[ICEBALL] = ALLEGRO_KEY_7;
 

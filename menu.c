@@ -39,6 +39,7 @@ void imprime_configs() {
         al_draw_text(Font, CINZA_ESCURO, 75+200*i, 330, 0, "Correr :");
         al_draw_text(Font, CINZA_ESCURO, 75+200*i, 350, 0, "Puxar :");
         al_draw_text(Font, CINZA_ESCURO, 75+200*i, 370, 0, "Flash :");
+        al_draw_text(Font, CINZA_ESCURO, 75+200*i, 390, 0, "Iceball :");
     }
 
 	// Falta imprimir textos tipo: Escolha seu personagem! Escolha seu time!
@@ -146,9 +147,9 @@ int selecao_personagem(void *) {
             botoes[17+i*COMANDOS_POR_PERSONAGEM+j].set_button("", 170+200*i, 250+20*j, set_next_key, (void*) param, sizeof(int) * 2);
         }
     }
-    /* Botoes pra selecionar numero de jogadores */
-    botoes[45].set_button("<", 510, 50, num_jogadores_dec, NULL, 0);
-    botoes[46].set_button(">", 540, 50, num_jogadores_inc, NULL, 0);
+    /* Botoes pra selecionar numero de jogadores - se adicionar mais comandos, tem que mudar esses índices! */
+    botoes[49].set_button("<", 510, 50, num_jogadores_dec, NULL, 0);
+    botoes[50].set_button(">", 540, 50, num_jogadores_inc, NULL, 0);
 
     set_buttons(botoes);
     imprime_menu(botoes, BOTOES_SEL_PERSONAGEM_TOTAL, mx, my, -1);
