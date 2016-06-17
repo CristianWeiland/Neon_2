@@ -26,26 +26,39 @@ int fecha_jogo(void *param) {
     return 0;
 }
 
+int maior_texto(int index) {
+    /* Essa função descobre o maior tamanho de texto dos comandos de um jogador Pessoa[i].
+       Não é mais usada. Talvez podemos deletá-la. */
+    int aux, maior = 0;
+    for(int i=0; i<COMANDOS_POR_PERSONAGEM; ++i) {
+        aux = al_get_text_width(Font, al_keycode_to_name(Pessoas[index].botao_char_int[i]));
+        if(aux > maior)
+            maior = aux;
+    }
+    return maior;
+}
+
 void imprime_configs() {
-    al_draw_textf(Font, AMARELO_QUEIMADO, 350, 50, 0, "Numero de Jogadores  %d", Njogadores);
+    int x_variacao = 250;
+    al_draw_textf(Font, AMBAR, 350, 50, 0, "Numero de Jogadores  %d", Njogadores);
     for(int i=0; i<PESSOAS; ++i) {
-        al_draw_textf(Font, AMARELO_QUEIMADO, 90+200*i, 100, 0, "Jogador %d", i+1);
-        imprime_char(112+200*i, 150, Pessoas[i].desx, Pessoas[i].desy, Pessoas[i].selx, Pessoas[i].sely, Sprites);
-        al_draw_textf(Font, Color[Pessoas[i].time-1], 105+200*i, 200, 0, "Time %d", Pessoas[i].time);
-        al_draw_text(Font, CINZA_ESCURO, 75+200*i, 250, 0, "Cima :");
-        al_draw_text(Font, CINZA_ESCURO, 75+200*i, 270, 0, "Baixo :");
-        al_draw_text(Font, CINZA_ESCURO, 75+200*i, 290, 0, "Esquerda :");
-        al_draw_text(Font, CINZA_ESCURO, 75+200*i, 310, 0, "Direita :");
-        al_draw_text(Font, CINZA_ESCURO, 75+200*i, 330, 0, "Correr :");
-        al_draw_text(Font, CINZA_ESCURO, 75+200*i, 350, 0, "Puxar :");
-        al_draw_text(Font, CINZA_ESCURO, 75+200*i, 370, 0, "Flash :");
-        al_draw_text(Font, CINZA_ESCURO, 75+200*i, 390, 0, "Iceball :");
+        al_draw_textf(Font, AMARELO_QUEIMADO, 100+x_variacao*i, 100, 0, "Jogador %d", i+1);
+        imprime_char(120+x_variacao*i, 150, Pessoas[i].desx, Pessoas[i].desy, Pessoas[i].selx, Pessoas[i].sely, Sprites);
+        al_draw_textf(Font, Color[Pessoas[i].time-1], 115+x_variacao*i, 200, 0, "Time %d", Pessoas[i].time);
+        al_draw_text(Font, CINZA_ESCURO, 50+x_variacao*i, 250, 0, "Cima :");
+        al_draw_text(Font, CINZA_ESCURO, 50+x_variacao*i, 270, 0, "Baixo :");
+        al_draw_text(Font, CINZA_ESCURO, 50+x_variacao*i, 290, 0, "Esquerda :");
+        al_draw_text(Font, CINZA_ESCURO, 50+x_variacao*i, 310, 0, "Direita :");
+        al_draw_text(Font, CINZA_ESCURO, 50+x_variacao*i, 330, 0, "Correr :");
+        al_draw_text(Font, CINZA_ESCURO, 50+x_variacao*i, 350, 0, "Puxar :");
+        al_draw_text(Font, CINZA_ESCURO, 50+x_variacao*i, 370, 0, "Flash :");
+        al_draw_text(Font, CINZA_ESCURO, 50+x_variacao*i, 390, 0, "Iceball :");
+
+        al_draw_rounded_rectangle(40+x_variacao*i, 85, 245+x_variacao*i, 415, 1, 1, CINZA_CLARO, 2);
     }
 
-    al_draw_rounded_rectangle(60, 85, 235, 415, 1, 1, BRANCO, 2);
-
-    al_draw_text(Font, AMARELO_QUEIMADO, 350, 600, 0, "Salvar mantem as configuracoes entre execucoes do jogo.");
-    al_draw_text(Font, AMARELO_QUEIMADO, 340, 620, 0, "Clicar em voltar muda as configuracoes somente para essa execucao.");
+    al_draw_text(Font, AMBAR, 350, 600, 0, "Salvar mantem as configuracoes entre execucoes do jogo.");
+    al_draw_text(Font, AMBAR, 340, 620, 0, "Clicar em voltar muda as configuracoes somente para essa execucao.");
 
 	// Falta imprimir textos tipo: Escolha seu personagem! Escolha seu time!
 }
@@ -131,8 +144,8 @@ int return_int(void *params) {
 /* Menu de seleção de personagens, times e teclas. */
 int selecao_personagem(void *) {
 	int i, j, tamanho, mx = 0, my = 0, retorno = 0;
-    int x_inicial[2] = {90,160}; // Posição inicial dos "<" e ">" (botoes pra selecionar personagem e time).
-    int x_variacao = 200; // Distancia entre dois "<"
+    int x_inicial[2] = {100,170}; // Posição inicial dos "<" e ">" (botoes pra selecionar personagem e time).
+    int x_variacao = 250; // Distancia entre dois "<"
     int param[2];
     Botoes botoes[BOTOES_SEL_PERSONAGEM_TOTAL];
     bool oldHovering[BOTOES_SEL_PERSONAGEM_TOTAL], newHovering[BOTOES_SEL_PERSONAGEM_TOTAL], devoImprimir = false;
@@ -159,13 +172,13 @@ int selecao_personagem(void *) {
     }
     /* Botao para voltar para o menu inicial. */
     param[0] = 1;
-    botoes[16].set_button("Voltar", 75, 500, return_int, (void*) param, sizeof(int));
+    botoes[16].set_button("Voltar", 50, 500, return_int, (void*) param, sizeof(int));
     /* Botoes para selecionar as teclas que executam os comandos de cada personagem. */
     for(i=0; i<PESSOAS; ++i) {
         for(j=0; j<COMANDOS_POR_PERSONAGEM; ++j) {
             param[0] = i;
             param[1] = j;
-            botoes[17+i*COMANDOS_POR_PERSONAGEM+j].set_button("", 170+200*i, 250+20*j, set_next_key, (void*) param, sizeof(int) * 2);
+            botoes[17+i*COMANDOS_POR_PERSONAGEM+j].set_button("", 145+250*i, 250+20*j, set_next_key, (void*) param, sizeof(int) * 2);
         }
     }
     /* Botoes pra selecionar numero de jogadores - se adicionar mais comandos, tem que mudar esses índices! */
