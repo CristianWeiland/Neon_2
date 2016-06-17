@@ -32,6 +32,7 @@
 #define COMPUTADORES 1
 #define ICEBALLS_P_PESSOA 2
 #define FIREBALLS_P_PESSOA 2
+#define COMANDOS_POR_PERSONAGEM 8
 
 typedef struct Pessoa {
 	int x,y,desx,desy,selx,sely,hp; // Desx e desy escolhem o char na imagem; Selx e sely escolhem qual sprite do char (olhando pra cima,esq,...)

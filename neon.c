@@ -23,7 +23,7 @@ Problemas:
 int main()
 {
     /* Coisas relacionadas aos chars */
-    int i,j,JOGADORES,vencedor;
+    int i,j,jogadores,vencedor;
 	/* Coisas relacionadas as tecnicas/magias */
 	Magias m;
 	/* Pessoas, que contem quase todos os dados (ver colisao.h) */
@@ -31,7 +31,7 @@ int main()
 	/* Janela */
 	Window win;
 	/* Arquivos */
-    FILE *errext; // errext = error exit (ou saida de erros)
+    FILE *errext, *cmd; // errext = error exit (ou saida de erros)
 
 	/* Inicializacao do arquivo */
 	errext = fopen("err.txt","w");
@@ -73,30 +73,15 @@ int main()
 
     al_register_event_source(win.event_queue, al_get_display_event_source(win.display));
 
-	teclas_iniciais(p);
-
-/*
-	if( access( Comandos/cmd.txt, F_OK ) != -1 ) {
-		FILE *cmd = fopen("Comandos/cmd.txt","r");
-		for(j=0; j<4; ++j) {
-			for(i=0; i<NJOGADORES; ++i) {
-				fscanf(cmd,"%s %d\n",p[j].botao_char[i],&p[j].botao_char_int[i]);
-				//printf("%s %d\n",p[j].botao_char[i],p[j].botao_char_int[i]);
-		    }
-		}
-		fclose(cmd);
-	} else {
-	    teclas_iniciais(p);
-	}
-*/
-
 	fclose(errext);
+
+	teclas_iniciais(p);
 
     /* Opera o jogo */
     vencedor = -1;
     while(1) {
-		if(menu_principal(win,p,s,&JOGADORES,vencedor)==1) {
-			vencedor = fase1(win,p,s,m,JOGADORES);
+		if(menu_principal(win,p,s,&jogadores,vencedor)==1) {
+			vencedor = fase1(win,p,s,m,jogadores);
 		}
 	}
 

@@ -23,6 +23,19 @@ void teclas_iniciais(Pessoa *p)
 		[7] --> Iceball.
 	*/
 
+	/* Checa se existe arquivo de comandos. Se sim, carrega dados dele. */
+	if( access("Comandos/cmd.txt", F_OK) != -1 ) {
+		FILE *cmd = fopen("Comandos/cmd.txt","r");
+		for(int i=0; i<PESSOAS; ++i) {
+			for(int j=0; j<COMANDOS_POR_PERSONAGEM; ++j) {
+				fscanf(cmd, "%d\n", &(p[i].botao_char_int[j]));
+		    }
+		}
+		fclose(cmd);
+		return ;
+	}
+
+	/* Como não existia o arquivo, atribui valores padrão. */
 	p[0].botao_char_int[UP] = ALLEGRO_KEY_UP;
 	p[0].botao_char_int[DOWN] = ALLEGRO_KEY_DOWN;
 	p[0].botao_char_int[RIGHT] = ALLEGRO_KEY_RIGHT;
@@ -37,7 +50,7 @@ void teclas_iniciais(Pessoa *p)
 	p[1].botao_char_int[RIGHT] = ALLEGRO_KEY_L;
 	p[1].botao_char_int[LEFT] = ALLEGRO_KEY_J;
 	p[1].botao_char_int[CORRE] = ALLEGRO_KEY_U;
-	p[1].botao_char_int[PUXAR] = ALLEGRO_KEY_O;
+	p[1].botao_char_int[PUXAR] = ALLEGRO_KEY_9;
 	p[1].botao_char_int[FLASH] = ALLEGRO_KEY_8;
 	p[1].botao_char_int[ICEBALL] = ALLEGRO_KEY_7;
 
