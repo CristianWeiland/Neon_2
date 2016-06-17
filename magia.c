@@ -2,6 +2,8 @@
 
 void init_magias(Magias *m, int njogadores) {
 	int i,j;
+	/* Inicializa fireball. */
+	/*
 	for(i=0; i<njogadores; ++i) {
 		for(j=0; j<2; ++j) {
 			m->fireball[i][j].ativa = false; // Nao foi usada.
@@ -13,6 +15,8 @@ void init_magias(Magias *m, int njogadores) {
 			m->exploy[i][j] = 220;
 		}
 	}
+	*/
+	/* Inicializa iceball. */
 	for(i=0; i<njogadores; ++i) {
 		for(j=0; j<2; ++j) {
 			m->iceball[i][j].ativa = false; // Nao foi usada.
@@ -21,6 +25,20 @@ void init_magias(Magias *m, int njogadores) {
 			m->iceball[i][j].energia = 30;
 			m->iceball[i][j].dist = 0; // Nao percorreu nenhuma distancia.
 			m->iceball[i][j].d = -1; // Nao tem direçao.
+		}/*
+		for(j=0; j<MAX_FLASH_POSSIVEL; ++j) {
+			m->flash[i][j].ativa = false; // Nao foi usada.
+			m->flash[i][j].count = 0;
+			m->flash[i][j].xsprite = 88;
+		}*/
+	}
+	/* Inicializa animacao do flash. */
+	for(i=0; i<njogadores; ++i) {
+		for(j=0; j<MAX_FLASH_POSSIVEL; ++j) {
+			m->flash[i][j].ativa = false; // Nao foi usada.
+			m->flash[i][j].count = 0;
+			//m->flash[i][j].xsprite = 88;
+			//puts("Oi");
 		}
 	}
 }
@@ -214,17 +232,37 @@ void usa_iceball(char **matriz, Pessoa *p, Magias *m, Sprite s, int njogadores) 
 	}
 }
 
-void usa_magias(char **matriz, Pessoa *p, int njogadores, Sprite s, int *flash, Magias *m)
-{
-	usa_flash(p, flash, matriz, njogadores);
-	usa_fireball(matriz, p, m, njogadores);
-	explosao(p, njogadores,s, m);
+void animacao_flash(Pessoa *p, int njogadores, Sprite s, Magias *m) {
+	int i, j;
+	for(i=0; i<njogadores; ++i) {
+		for(j=0; j<MAX_FLASH_POSSIVEL; ++j) {
+			if(m->flash[i][j].ativa == true) { // Enquanto xsprite = 88, ele nao imprime a animacao. Quando xprite = 0, ele comeca a animacao.
+				m->flash[i][j].xsprite = 0;
+				m->flash[i][j].ativa = false;
+				m->flash[i][j].count = 0;
+			}
+			if(m->flash[i][j].xsprite < 88) { // Imprime a animação.
+				al_draw_bitmap_region(s.animacao_flash,m->flash[i][j].xsprite,0,FLASH_SPRITE_WIDTH,FLASH_SPRITE_HEIGHT,m->flash[i][j].x,m->flash[i][j].y,0);
+				if(m->flash[i][j].count == 3) {
+					m->flash[i][j].xsprite += FLASH_SPRITE_WIDTH;
+					m->flash[i][j].count = 0;
+				}
+				++(m->flash[i][j].count);
+			}
+		}
+	}
+}
+
+void usa_magias(char **matriz, Pessoa *p, int njogadores, Sprite s, int *flash, Magias *m) {
+	usa_flash(p, flash, matriz, njogadores, m);
+	animacao_flash(p, njogadores, s, m);
 	usa_iceball(matriz, p, m, s, njogadores);
+	// usa_fireball(matriz, p, m, njogadores);
+	// explosao(p, njogadores, s, m);
 	return ;
 }
 
-int calcula_direcao(Pessoa *p,int i)
-{
+int calcula_direcao(Pessoa *p,int i) {
 	if(p[i].andou_c == 1 || (p[i].andou_b == 0 && p[i].andou_c == 0 && p[i].andou_d == 0 && p[i].andou_e == 0)) { // Olhando pra cima.
 		return 0;
 	}
@@ -240,8 +278,7 @@ int calcula_direcao(Pessoa *p,int i)
 	return -1; // Deu erro.
 }
 
-void usa_flash(Pessoa *p, int *flash, char **matriz, int njogadores)
-{
+void usa_flash(Pessoa *p, int *flash, char **matriz, int njogadores, Magias *m) {
 	/* Por favor otimizar isso aqui. O for(j=0; j<19) tem 8 ifs dentro. Nao da pra puxar o if pra fora
 	   e escolher qual deles eh feito, e dai fazer as 19 iteracoes? Alem disso, se colidiu uma vez, colidiu
 	   pra sempre, entao pode dar um break/return (cuidar com diagonais dai!)
@@ -250,6 +287,14 @@ void usa_flash(Pessoa *p, int *flash, char **matriz, int njogadores)
 	for(i=0; i<njogadores; ++i) {
 		if(flash[i] && p[i].energia >= 60 && p[i].hp > 0 && p[i].freeze <= 0) {
 			flash[i] = 0;
+			// Ativar a animação.
+			for(j=0; j<MAX_FLASH_POSSIVEL; ++j) {
+				if(m->flash[i][j].xsprite >= 88) {
+					// Escolhi uma instância da animação. Ativa ela e sai.
+					m->flash[i][j].ativa = true;
+					break;
+				}
+			}
 			p[i].energia -= 60;
 			/* Existem 8 casos (8 direçoes possiveis de andar, 4 sentidos e 4 diagonais). */
 			for(j=0; j<19; ++j) {
