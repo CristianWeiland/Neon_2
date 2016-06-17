@@ -42,7 +42,28 @@ void imprime_configs() {
         al_draw_text(Font, CINZA_ESCURO, 75+200*i, 390, 0, "Iceball :");
     }
 
+    al_draw_rounded_rectangle(60, 85, 235, 415, 1, 1, BRANCO, 2);
+
+    al_draw_text(Font, AMARELO_QUEIMADO, 350, 600, 0, "Salvar mantem as configuracoes entre execucoes do jogo.");
+    al_draw_text(Font, AMARELO_QUEIMADO, 340, 620, 0, "Clicar em voltar muda as configuracoes somente para essa execucao.");
+
 	// Falta imprimir textos tipo: Escolha seu personagem! Escolha seu time!
+}
+
+int salvar_configs(void *param) {
+    /* Salva as configurações no arquivo Comandos/cmd.txt */
+    FILE *cmd = fopen("Comandos/cmd.txt", "w");
+    if(!cmd) {
+        perror("Erro ao abrir o arquivo cmd.txt na pasta Comandos.");
+        exit(1);
+    }
+    for(int i=0; i<PESSOAS; ++i) {
+        for(int j=0; j<COMANDOS_POR_PERSONAGEM; ++j) {
+            fprintf(cmd, "%d\n", Pessoas[i].botao_char_int[j]);
+        }
+    }
+    fclose(cmd);
+    return 0;
 }
 
 // Funcoes que retornam 0 significa que o retorno eh ignorado. Se retorno != 0, vai sair do while.
@@ -138,7 +159,7 @@ int selecao_personagem(void *) {
     }
     /* Botao para voltar para o menu inicial. */
     param[0] = 1;
-    botoes[16].set_button("Voltar", 70, 500, return_int, (void*) param, sizeof(int));
+    botoes[16].set_button("Voltar", 75, 500, return_int, (void*) param, sizeof(int));
     /* Botoes para selecionar as teclas que executam os comandos de cada personagem. */
     for(i=0; i<PESSOAS; ++i) {
         for(j=0; j<COMANDOS_POR_PERSONAGEM; ++j) {
@@ -150,6 +171,7 @@ int selecao_personagem(void *) {
     /* Botoes pra selecionar numero de jogadores - se adicionar mais comandos, tem que mudar esses índices! */
     botoes[49].set_button("<", 510, 50, num_jogadores_dec, NULL, 0);
     botoes[50].set_button(">", 540, 50, num_jogadores_inc, NULL, 0);
+    botoes[51].set_button("Salvar", 729, 500, salvar_configs, NULL, 0);
 
     set_buttons(botoes);
     imprime_menu(botoes, BOTOES_SEL_PERSONAGEM_TOTAL, mx, my, -1);
@@ -193,19 +215,6 @@ int selecao_personagem(void *) {
                 break ;
         }
     } while(!retorno);
-
-    /* Salva as configurações no arquivo Comandos/cmd.txt */
-    FILE *cmd = fopen("Comandos/cmd.txt", "w");
-    if(!cmd) {
-        perror("Erro ao abrir o arquivo cmd.txt na pasta Comandos.");
-        exit(1);
-    }
-    for(i=0; i<PESSOAS; ++i) {
-        for(j=0; j<COMANDOS_POR_PERSONAGEM; ++j) {
-            fprintf(cmd, "%d\n", Pessoas[i].botao_char_int[j]);
-        }
-    }
-    fclose(cmd);
 
     return 0;
 }

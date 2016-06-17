@@ -20,7 +20,7 @@ int menu_principal(Window win,Pessoa *p,Sprite s,int *num_jogadores, int vencedo
 #define BOTOES_SEL_PERSONAGEM 8
 #define BOTOES_SEL_TIME 8
 #define BOTOES_SEL_N_JOGADORES 2
-#define OUTROS_BOTOES 1 // voltar
+#define OUTROS_BOTOES 2 // voltar e salvar
 //#define COMANDOS_POR_PERSONAGEM é definido no colisao.h
 
 // 16 pra selecionar, 1 pra voltar, 28 teclas (7 pra cada jogador, 4 jogadores), 2 pra selec. nº jogadores -> Total = 47.
