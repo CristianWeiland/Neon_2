@@ -170,9 +170,3 @@ int imprime_4_chars_for(int cont,char** matriz,int *cor,bool *temneon,int njogad
     al_destroy_font(font);
 	return 1;
 }
-
-
-/*
-MAX_ENERGY - 100%
-P[I].ENERGIA - X%
-*/

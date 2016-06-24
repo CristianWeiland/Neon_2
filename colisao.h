@@ -34,6 +34,11 @@
 #define FIREBALLS_P_PESSOA 2
 #define COMANDOS_POR_PERSONAGEM 8
 
+/* Defines para flash */
+#define FLASH_SPRITE_WIDTH 22
+#define FLASH_SPRITE_HEIGHT 22
+#define MAX_FLASH_POSSIVEL 5
+
 typedef struct Pessoa {
 	int x,y,desx,desy,selx,sely,hp; // Desx e desy escolhem o char na imagem; Selx e sely escolhem qual sprite do char (olhando pra cima,esq,...)
 	int xneon,yneon;
@@ -48,8 +53,8 @@ typedef struct Pessoa {
 } Pessoa;
 
 typedef struct Magia {
-	int dano,x,y,dist,xexpl,yexpl, energia;
-	bool ativa,explosao;
+	int dano, x, y, dist, xsprite, ysprite, xexpl, yexpl, energia, count;
+	bool ativa, explosao;
 	ALLEGRO_BITMAP* sprite;
 	int d; /* Direcao == -1 significa que nao foi calculada ainda.
 				  * 0 = cima; 1 = direita; 2 = esquerda; 3 = baixo; */
@@ -59,6 +64,7 @@ typedef struct Magias {
 	int explox[PESSOAS][FIREBALLS_P_PESSOA], exploy[PESSOAS][FIREBALLS_P_PESSOA]; // Selecionam a posicao da explosao no bitmap explo.bmp.
 	Magia fireball[PESSOAS][FIREBALLS_P_PESSOA];
 	Magia iceball[PESSOAS][ICEBALLS_P_PESSOA];
+	Magia flash[PESSOAS][MAX_FLASH_POSSIVEL];
 } Magias;
 
 typedef struct Sprite {
@@ -66,6 +72,7 @@ typedef struct Sprite {
 	ALLEGRO_BITMAP **fireballs, *explosion; // Sprite da bola de fogo (cima, dir, esq, baixo) + explosao da fireball.
 	ALLEGRO_BITMAP **iceballs, *gelos; // Sprite da bola de fogo (cima, dir, esq, baixo) + explosao da fireball.
 	ALLEGRO_BITMAP **neons; // Todos os neons (4 cores, na sequencia: amarelo - azul - verde - vermelho)
+	ALLEGRO_BITMAP *animacao_flash;
 	ALLEGRO_BITMAP *bar, *healthbar, *energybar, *frente;
 	ALLEGRO_BITMAP *chars, *dead, *chars_congelados;
 } Sprite;
