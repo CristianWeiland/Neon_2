@@ -144,8 +144,7 @@ Sprite init_sprites(FILE *errext) {
         exit(1);
     }
 
-    // s.animacao_flash = al_load_bitmap("Imgs/smoke.bmp");
-    s.animacao_flash = al_load_bitmap("Imgs/Explo.bmp");
+    s.animacao_flash = al_load_bitmap("Imgs/smoke.bmp");
     if(!(s.animacao_flash)) {
         fprintf(errext,"Falha ao abrir a imagem smoke.");
         fclose(errext);

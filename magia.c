@@ -2,8 +2,11 @@
 
 void init_magias(Magias *m, int njogadores) {
 	int i,j;
-	/* Inicializa fireball. */
-	/*
+	if(njogadores > PESSOAS) { // Vai dar seg fault.
+		printf("Njogadores (%d) maior que pessoas (%d). Abortando.", njogadores, PESSOAS);
+		exit(1);
+	}
+	/* Inicializa fireball.
 	for(i=0; i<njogadores; ++i) {
 		for(j=0; j<2; ++j) {
 			m->fireball[i][j].ativa = false; // Nao foi usada.
@@ -16,8 +19,8 @@ void init_magias(Magias *m, int njogadores) {
 		}
 	}
 	*/
-	/* Inicializa iceball. */
 	for(i=0; i<njogadores; ++i) {
+		/* Inicializa iceball. */
 		for(j=0; j<2; ++j) {
 			m->iceball[i][j].ativa = false; // Nao foi usada.
 			m->iceball[i][j].dano = 25; // Dano da tecnica.
@@ -25,20 +28,12 @@ void init_magias(Magias *m, int njogadores) {
 			m->iceball[i][j].energia = 30;
 			m->iceball[i][j].dist = 0; // Nao percorreu nenhuma distancia.
 			m->iceball[i][j].d = -1; // Nao tem direçao.
-		}/*
+		}
+		/* Inicializa animacao do flash. */
 		for(j=0; j<MAX_FLASH_POSSIVEL; ++j) {
 			m->flash[i][j].ativa = false; // Nao foi usada.
 			m->flash[i][j].count = 0;
 			m->flash[i][j].xsprite = 88;
-		}*/
-	}
-	/* Inicializa animacao do flash. */
-	for(i=0; i<njogadores; ++i) {
-		for(j=0; j<MAX_FLASH_POSSIVEL; ++j) {
-			m->flash[i][j].ativa = false; // Nao foi usada.
-			m->flash[i][j].count = 0;
-			//m->flash[i][j].xsprite = 88;
-			//puts("Oi");
 		}
 	}
 }
@@ -242,6 +237,7 @@ void animacao_flash(Pessoa *p, int njogadores, Sprite s, Magias *m) {
 				m->flash[i][j].count = 0;
 			}
 			if(m->flash[i][j].xsprite < 88) { // Imprime a animação.
+				// printf("Imprimindo %d e %d, count = %d, xsprite = %d, x = %d, y = %d...\n", i, j, m->flash[i][j].count, m->flash[i][j].xsprite, m->flash[i][j].x, m->flash[i][j].y);
 				al_draw_bitmap_region(s.animacao_flash,m->flash[i][j].xsprite,0,FLASH_SPRITE_WIDTH,FLASH_SPRITE_HEIGHT,m->flash[i][j].x,m->flash[i][j].y,0);
 				if(m->flash[i][j].count == 3) {
 					m->flash[i][j].xsprite += FLASH_SPRITE_WIDTH;
@@ -292,6 +288,8 @@ void usa_flash(Pessoa *p, int *flash, char **matriz, int njogadores, Magias *m) 
 				if(m->flash[i][j].xsprite >= 88) {
 					// Escolhi uma instância da animação. Ativa ela e sai.
 					m->flash[i][j].ativa = true;
+					m->flash[i][j].x = p[i].x;
+					m->flash[i][j].y = p[i].y;
 					break;
 				}
 			}

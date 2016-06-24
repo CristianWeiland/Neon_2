@@ -18,7 +18,6 @@ Problemas:
 #define CONT 2
 #define CONTEXPLO 9
 #define TAM 1000
-#define NJOGADORES 5
 
 int main()
 {
@@ -41,8 +40,8 @@ int main()
 	}
 
 	// Isso tem que ficar depois do abremenu.
-	p = (Pessoa *) malloc(sizeof(Pessoa) * NJOGADORES);
-	for(i=0; i<NJOGADORES; ++i) {
+	p = (Pessoa *) malloc(sizeof(Pessoa) * PESSOAS);
+	for(i=0; i<PESSOAS; ++i) {
 		// Inicializacoes da estrutura Pessoa
 		p[i].hp = MAX_HP;
 		p[i].selx = 0;
@@ -69,7 +68,7 @@ int main()
     /* Inicializacao dos Bitmaps */
     Sprite s = init_sprites(errext);
 
-    init_magias(&m, NJOGADORES);
+    init_magias(&m, PESSOAS);
 
     al_register_event_source(win.event_queue, al_get_display_event_source(win.display));
 
