@@ -1,14 +1,5 @@
 #include "keys.h"
 
-#define UP 0
-#define DOWN 1
-#define RIGHT 2
-#define LEFT 3
-#define CORRE 4
-#define PUXAR 5
-#define FLASH 6
-#define ICEBALL 7
-
 void teclas_iniciais(Pessoa *p)
 {
 	/*
@@ -44,6 +35,7 @@ void teclas_iniciais(Pessoa *p)
 	p[0].botao_char_int[PUXAR] = ALLEGRO_KEY_HOME;
 	p[0].botao_char_int[FLASH] = ALLEGRO_KEY_PGUP;
 	p[0].botao_char_int[ICEBALL] = ALLEGRO_KEY_DELETE;
+	p[0].botao_char_int[TRAP] = ALLEGRO_KEY_M;
 
 	p[1].botao_char_int[UP] = ALLEGRO_KEY_I;
 	p[1].botao_char_int[DOWN] = ALLEGRO_KEY_K;

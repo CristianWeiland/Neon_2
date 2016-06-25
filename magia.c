@@ -21,7 +21,7 @@ void init_magias(Magias *m, int njogadores) {
 	*/
 	for(i=0; i<njogadores; ++i) {
 		/* Inicializa iceball. */
-		for(j=0; j<2; ++j) {
+		for(j=0; j<ICEBALLS_P_PESSOA; ++j) {
 			m->iceball[i][j].ativa = false; // Nao foi usada.
 			m->iceball[i][j].dano = 25; // Dano da tecnica.
 			m->iceball[i][j].explosao = false; // Nao colidiu / chegou na distancia limite.
@@ -34,6 +34,11 @@ void init_magias(Magias *m, int njogadores) {
 			m->flash[i][j].ativa = false; // Nao foi usada.
 			m->flash[i][j].count = 0;
 			m->flash[i][j].xsprite = 88;
+		}
+		/* Inicializa trap. */
+		for(j=0; j<TRAP_P_PESSOA; ++j) {
+			m->trap[i][j].ativa = false; // Nao foi usada.
+			m->trap[i][j].count = 0; // Duração
 		}
 	}
 }
@@ -245,6 +250,42 @@ void animacao_flash(Pessoa *p, int njogadores, Sprite s, Magias *m) {
 				}
 				++(m->flash[i][j].count);
 			}
+		}
+	}
+}
+
+void usa_trap(Pessoa *p, int njogadores, Sprite s, Magias *m) {
+	int i, j, k;
+	for(i=0; i<njogadores; ++i) {
+		if(p[i].preso > 0) {
+			--(p[i].preso);
+		}
+		for(j=0; j<TRAP_P_PESSOA; ++j) {
+			if(m->trap[i][j].ativa == true) { // Enquanto xsprite = 88, ele nao imprime a animacao. Quando xprite = 0, ele comeca a animacao.
+				m->trap[i][j].ativa = false;
+				m->trap[i][j].count = TRAP_TEMPO_ARMADA;
+				m->trap[i][j].x = p[i].x;
+				m->trap[i][j].y = p[i].y;
+				m->trap[i][j].em_acao = false;
+			}
+			if(m->trap[i][j].count > 0) { // Imprime a animação.
+				al_draw_bitmap_region(s.trap,0,0,TRAP_SPRITE_WIDTH,TRAP_SPRITE_HEIGHT,m->trap[i][j].x,m->trap[i][j].y,0);
+				--(m->trap[i][j].count);
+				for(k=0; k<njogadores; ++k) {
+					if(i == k)
+						continue;
+
+					// Checa se algum outro jogador pisou na trap
+					if(p[i].preso <= 0 && m->trap[i][j].em_acao == false && // Confere se o jogador nao pisou em nenhum trap e se a trap nao foi pisada por outro jogador.
+					   p[i].x >= m->trap[i][j].x && p[i].x <= m->trap[i][j].x + 32 && // Colidiu no eixo X
+					   p[i].y >= m->trap[i][j].y && p[i].y <=  m->trap[i][j].y + 32) { // Colidiu no eixo Y
+						p[i].preso = TRAP_TEMPO_PRENDENDO;
+						m->trap[i][j].count = TRAP_TEMPO_PRENDENDO;
+						m->trap[i][j].em_acao = true;
+					}
+				}
+			}
+
 		}
 	}
 }

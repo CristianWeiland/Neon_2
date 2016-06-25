@@ -3,18 +3,6 @@
 #include "Fase1.h"
 #include <math.h>
 
-/*
-Problemas:
-1- Bola de fogo não explode.
-2- Barra de HP / Energia - OK.
-3- Cor do neon quando parado - Xunxo.
-4- Neon se movendo quando colide - OK.
-5- Personagens todos iguais.
-6- Bola de fogo nao da dano - OK.
-7- Nao armazena comandos.
-8- Usa fireball quando explosao ta ativa - explosao acompanha a fireball.
-*/
-
 #define CONT 2
 #define CONTEXPLO 9
 #define TAM 1000
@@ -47,6 +35,7 @@ int main()
 		p[i].selx = 0;
 		p[i].sely = 64;
 		p[i].time = i+1;
+		p[i].preso = 0;
 		p[i].correr = 1;
 		p[i].andou_b = 0;
 		p[i].andou_c = 0;

@@ -30,10 +30,17 @@
 #define MAX_HP 1000
 #define MAX_ENERGY 300
 #define COMPUTADORES 1
+#define COMANDOS_POR_PERSONAGEM 9
+
+/* Defines para magias */
 #define ICEBALLS_P_PESSOA 2
 #define FIREBALLS_P_PESSOA 2
-#define COMANDOS_POR_PERSONAGEM 8
-
+/* Defines para traps */
+#define TRAP_P_PESSOA 3
+#define TRAP_SPRITE_WIDTH 32
+#define TRAP_SPRITE_HEIGHT 32
+#define TRAP_TEMPO_ARMADA 300
+#define TRAP_TEMPO_PRENDENDO 30
 /* Defines para flash */
 #define FLASH_SPRITE_WIDTH 22
 #define FLASH_SPRITE_HEIGHT 22
@@ -50,11 +57,12 @@ typedef struct Pessoa {
 	int comp;
 	int botao_char_int[8],time;
 	int freeze; // Congelado não pode usar magias nem andar. Freeze <= 0 -> não está mais congelado. Freeze > 0, congelado.
+	int preso; // Preso não pode andar, mas pode usar magias. Preso <= 0, não está preso. Preso > 0, está preso.
 } Pessoa;
 
 typedef struct Magia {
 	int dano, x, y, dist, xsprite, ysprite, xexpl, yexpl, energia, count;
-	bool ativa, explosao;
+	bool ativa, explosao, em_acao;
 	ALLEGRO_BITMAP* sprite;
 	int d; /* Direcao == -1 significa que nao foi calculada ainda.
 				  * 0 = cima; 1 = direita; 2 = esquerda; 3 = baixo; */
@@ -65,6 +73,7 @@ typedef struct Magias {
 	Magia fireball[PESSOAS][FIREBALLS_P_PESSOA];
 	Magia iceball[PESSOAS][ICEBALLS_P_PESSOA];
 	Magia flash[PESSOAS][MAX_FLASH_POSSIVEL];
+	Magia trap[PESSOAS][TRAP_P_PESSOA];
 } Magias;
 
 typedef struct Sprite {
@@ -72,7 +81,7 @@ typedef struct Sprite {
 	ALLEGRO_BITMAP **fireballs, *explosion; // Sprite da bola de fogo (cima, dir, esq, baixo) + explosao da fireball.
 	ALLEGRO_BITMAP **iceballs, *gelos; // Sprite da bola de fogo (cima, dir, esq, baixo) + explosao da fireball.
 	ALLEGRO_BITMAP **neons; // Todos os neons (4 cores, na sequencia: amarelo - azul - verde - vermelho)
-	ALLEGRO_BITMAP *animacao_flash;
+	ALLEGRO_BITMAP *animacao_flash, *trap;
 	ALLEGRO_BITMAP *bar, *healthbar, *energybar, *frente;
 	ALLEGRO_BITMAP *chars, *dead, *chars_congelados;
 } Sprite;
@@ -136,6 +145,7 @@ private:
 
 char** le_matriz(FILE *fp);
 bool colisao(int,int,char**,int);
+int pode_andar(int i, Pessoa *p);
 int colidiu(char** map,int x,int y,int caso,int eu, Pessoa *p);
 int colisao_fireball(char** m,int x,int y,int d);
 int contato_proximo(int i,int j, Pessoa *p);
