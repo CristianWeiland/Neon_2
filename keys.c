@@ -45,6 +45,7 @@ void teclas_iniciais(Pessoa *p)
 	p[1].botao_char_int[PUXAR] = ALLEGRO_KEY_9;
 	p[1].botao_char_int[FLASH] = ALLEGRO_KEY_8;
 	p[1].botao_char_int[ICEBALL] = ALLEGRO_KEY_7;
+	p[1].botao_char_int[TRAP] = ALLEGRO_KEY_N;
 
 	p[2].botao_char_int[UP] = ALLEGRO_KEY_T;
 	p[2].botao_char_int[DOWN] = ALLEGRO_KEY_G;
@@ -54,6 +55,7 @@ void teclas_iniciais(Pessoa *p)
 	p[2].botao_char_int[PUXAR] = ALLEGRO_KEY_Y;
 	p[2].botao_char_int[FLASH] = ALLEGRO_KEY_5;
 	p[2].botao_char_int[ICEBALL] = ALLEGRO_KEY_4;
+	p[2].botao_char_int[TRAP] = ALLEGRO_KEY_N;
 
 	p[3].botao_char_int[UP] = ALLEGRO_KEY_W;
 	p[3].botao_char_int[DOWN] = ALLEGRO_KEY_S;
@@ -63,6 +65,7 @@ void teclas_iniciais(Pessoa *p)
 	p[3].botao_char_int[PUXAR] = ALLEGRO_KEY_3;
 	p[3].botao_char_int[FLASH] = ALLEGRO_KEY_2;
 	p[3].botao_char_int[ICEBALL] = ALLEGRO_KEY_1;
+	p[3].botao_char_int[TRAP] = ALLEGRO_KEY_N;
 
 	return;
 }

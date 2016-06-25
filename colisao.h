@@ -52,10 +52,10 @@ typedef struct Pessoa {
 	int andou_b,andou_c,andou_d,andou_e;
 	char *botao_b, *botao_c, *botao_d, *botao_e;
 	char *nome,*ataque;
-	char *botao_char[8];
+	char *botao_char[COMANDOS_POR_PERSONAGEM];
 	int energia,correr,morto,dash;
 	int comp;
-	int botao_char_int[8],time;
+	int botao_char_int[COMANDOS_POR_PERSONAGEM],time;
 	int freeze; // Congelado não pode usar magias nem andar. Freeze <= 0 -> não está mais congelado. Freeze > 0, congelado.
 	int preso; // Preso não pode andar, mas pode usar magias. Preso <= 0, não está preso. Preso > 0, está preso.
 } Pessoa;
