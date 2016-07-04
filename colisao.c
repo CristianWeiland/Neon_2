@@ -21,6 +21,13 @@ char** le_matriz(FILE *fp)
 	return matriz;
 }
 
+int pode_andar(int i, Pessoa *p) {
+	if(p[i].freeze <= 0 && p[i].preso <= 0) {
+		return 1;
+	}
+	return 0;
+}
+
 int contato_proximo(int i,int j, Pessoa *p)
 {	// I eh o char que tah realizando a acao, J eh o cara que talvez foi atacado / puxado o neon
 	if(p[i].andou_c == 1 || (p[i].andou_b == 0 && p[i].andou_c == 0 && p[i].andou_d == 0 && p[i].andou_e == 0)) { // Olhando pra cima.

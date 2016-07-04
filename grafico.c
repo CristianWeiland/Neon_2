@@ -151,6 +151,13 @@ Sprite init_sprites(FILE *errext) {
         exit(1);
     }
 
+    s.trap = al_load_bitmap("Imgs/trap.bmp");
+    if(!(s.trap)) {
+        fprintf(errext,"Falha ao abrir a imagem trap.");
+        fclose(errext);
+        exit(1);
+    }
+
     s.neons[0] = al_load_bitmap("Imgs/neonamarelo.bmp");
     if(!s.neons[0]) {
         fprintf(errext,"Falha ao abrir a imagem s.neons[0].");
@@ -237,6 +244,7 @@ Sprite init_sprites(FILE *errext) {
 
     al_convert_mask_to_alpha(s.bar,al_map_rgb(255,0,255));
     al_convert_mask_to_alpha(s.dead,al_map_rgb(255,0,255));
+    al_convert_mask_to_alpha(s.trap,al_map_rgb(255,0,255));
     al_convert_mask_to_alpha(s.tiles,al_map_rgb(255,0,255));
     al_convert_mask_to_alpha(s.chars,al_map_rgb(255,0,255));
     al_convert_mask_to_alpha(s.explosion,al_map_rgb(255,0,255));

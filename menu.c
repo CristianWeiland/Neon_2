@@ -53,8 +53,9 @@ void imprime_configs() {
         al_draw_text(Font, CINZA_ESCURO, 50+x_variacao*i, 350, 0, "Puxar :");
         al_draw_text(Font, CINZA_ESCURO, 50+x_variacao*i, 370, 0, "Flash :");
         al_draw_text(Font, CINZA_ESCURO, 50+x_variacao*i, 390, 0, "Iceball :");
+        al_draw_text(Font, CINZA_ESCURO, 50+x_variacao*i, 410, 0, "Trap :");
 
-        al_draw_rounded_rectangle(40+x_variacao*i, 85, 245+x_variacao*i, 415, 1, 1, CINZA_CLARO, 2);
+        al_draw_rounded_rectangle(40+x_variacao*i, 85, 245+x_variacao*i, 435, 1, 1, CINZA_CLARO, 2);
     }
 
     al_draw_text(Font, AMBAR, 350, 600, 0, "Salvar mantem as configuracoes entre execucoes do jogo.");
@@ -113,7 +114,7 @@ void set_buttons(Botoes botoes[BOTOES_SEL_PERSONAGEM_TOTAL]) {
 /* Muda o texto dos botoes para as letras que representam as teclas dos jogadores. */
     for(int i=0; i<PESSOAS; ++i) {
         for(int j=0; j<COMANDOS_POR_PERSONAGEM; ++j) {
-            botoes[17+i*COMANDOS_POR_PERSONAGEM+j].set_text(al_keycode_to_name(Pessoas[i].botao_char_int[j]));
+            botoes[16+i*COMANDOS_POR_PERSONAGEM+j].set_text(al_keycode_to_name(Pessoas[i].botao_char_int[j]));
         }
     }
 }
@@ -163,28 +164,28 @@ int selecao_personagem(void *) {
 
     for(i=0; i<PESSOAS; ++i) {
         param[0] = i;
-        /* Botoes para selecionar personagens. */
+        /* Botoes (indices 0-7) para selecionar personagens. */
         botoes[2*i  ].set_button("<", x_inicial[0] + i*x_variacao, 160, char_prev, (void*) param, sizeof(int)) ;
         botoes[2*i+1].set_button(">", x_inicial[1] + i*x_variacao, 160, char_next, (void*) param, sizeof(int)) ;
-        /* Botoes para selecionar times. */
+        /* Botoes (indices 8-15) para selecionar times. */
         botoes[2*i+8].set_button("<", x_inicial[0] + i*x_variacao, 200, team_prev, (void*) param, sizeof(int)) ;
         botoes[2*i+9].set_button(">", x_inicial[1] + i*x_variacao, 200, team_next, (void*) param, sizeof(int)) ;
     }
-    /* Botao para voltar para o menu inicial. */
-    param[0] = 1;
-    botoes[16].set_button("Voltar", 50, 500, return_int, (void*) param, sizeof(int));
-    /* Botoes para selecionar as teclas que executam os comandos de cada personagem. */
+    /* Botoes (indices 16-51) para selecionar as teclas que executam os comandos de cada personagem. */
     for(i=0; i<PESSOAS; ++i) {
         for(j=0; j<COMANDOS_POR_PERSONAGEM; ++j) {
             param[0] = i;
             param[1] = j;
-            botoes[17+i*COMANDOS_POR_PERSONAGEM+j].set_button("", 145+250*i, 250+20*j, set_next_key, (void*) param, sizeof(int) * 2);
+            botoes[16+i*COMANDOS_POR_PERSONAGEM+j].set_button("", 145+250*i, 250+20*j, set_next_key, (void*) param, sizeof(int) * 2);
         }
     }
+    /* Botao para voltar para o menu inicial. */
+    param[0] = 1;
+    botoes[PESSOAS_E_COMANDOS+0].set_button("Voltar", 50, 500, return_int, (void*) param, sizeof(int));
     /* Botoes pra selecionar numero de jogadores - se adicionar mais comandos, tem que mudar esses índices! */
-    botoes[49].set_button("<", 510, 50, num_jogadores_dec, NULL, 0);
-    botoes[50].set_button(">", 540, 50, num_jogadores_inc, NULL, 0);
-    botoes[51].set_button("Salvar", 729, 500, salvar_configs, NULL, 0);
+    botoes[PESSOAS_E_COMANDOS+1].set_button("<", 510, 50, num_jogadores_dec, NULL, 0);
+    botoes[PESSOAS_E_COMANDOS+2].set_button(">", 540, 50, num_jogadores_inc, NULL, 0);
+    botoes[PESSOAS_E_COMANDOS+3].set_button("Salvar", 729, 500, salvar_configs, NULL, 0);
 
     set_buttons(botoes);
     imprime_menu(botoes, BOTOES_SEL_PERSONAGEM_TOTAL, mx, my, -1);

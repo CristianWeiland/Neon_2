@@ -14,6 +14,16 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
 
+#define UP 0
+#define DOWN 1
+#define RIGHT 2
+#define LEFT 3
+#define CORRE 4
+#define PUXAR 5
+#define FLASH 6
+#define ICEBALL 7
+#define TRAP 8
+
 void teclas_iniciais(Pessoa *pessoa);
 void keyboard_down(int evkeyboardkeycode,bool *puxa,int *flash, Pessoa *p, Magias *m, int njogadores);
 void keyboard_up(int evkeyboardkeycode,bool *puxa,bool *sair, Pessoa *p, int njogadores);
