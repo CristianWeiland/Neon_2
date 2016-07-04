@@ -36,18 +36,19 @@
 #define ICEBALLS_P_PESSOA 2
 #define FIREBALLS_P_PESSOA 2
 /* Defines para traps */
+#define TRAP_ENERGIA 50
 #define TRAP_P_PESSOA 3
 #define TRAP_SPRITE_WIDTH 32
 #define TRAP_SPRITE_HEIGHT 32
-#define TRAP_TEMPO_ARMADA 300
-#define TRAP_TEMPO_PRENDENDO 30
+#define TRAP_TEMPO_ARMADA 10000
+#define TRAP_TEMPO_PRENDENDO 150
 /* Defines para flash */
 #define FLASH_SPRITE_WIDTH 22
 #define FLASH_SPRITE_HEIGHT 22
 #define MAX_FLASH_POSSIVEL 5
 
 typedef struct Pessoa {
-	int x,y,desx,desy,selx,sely,hp; // Desx e desy escolhem o char na imagem; Selx e sely escolhem qual sprite do char (olhando pra cima,esq,...)
+	int x, y, desx, desy, selx, sely, hp, d; // Desx e desy escolhem o char na imagem; Selx e sely escolhem qual sprite do char (olhando pra cima,esq,...)
 	int xneon,yneon;
 	int andou_b,andou_c,andou_d,andou_e;
 	char *botao_b, *botao_c, *botao_d, *botao_e;

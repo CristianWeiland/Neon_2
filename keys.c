@@ -110,6 +110,14 @@ void keyboard_down(int evkeyboardkeycode,bool *puxa,int *flash, Pessoa *p, Magia
         		m->iceball[i][0].dist = 0;
         		p[i].energia -= 50;
         	}
+		} else if(evkeyboardkeycode == p[i].botao_char_int[TRAP]) {
+			for(int j=0; j<TRAP_P_PESSOA; ++j) {
+				if(!m->trap[i][j].ativa && p[i].energia >= TRAP_ENERGIA && m->trap[i][j].count <= 0 && p[i].freeze <= 0) {
+					m->trap[i][j].ativa = true;
+					p[i].energia -= TRAP_ENERGIA;
+					break;
+				}
+			}
 		}
 	}/*
 	switch(evkeyboardkeycode) {

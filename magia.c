@@ -262,30 +262,38 @@ void usa_trap(Pessoa *p, int njogadores, Sprite s, Magias *m) {
 		}
 		for(j=0; j<TRAP_P_PESSOA; ++j) {
 			if(m->trap[i][j].ativa == true) { // Enquanto xsprite = 88, ele nao imprime a animacao. Quando xprite = 0, ele comeca a animacao.
+				if(p[i].d == CIMA) {
+					m->trap[i][j].x = p[i].x;
+					m->trap[i][j].y = p[i].y+16;
+				} else if(p[i].d == ESQ) {
+					m->trap[i][j].x = p[i].x-16;
+					m->trap[i][j].y = p[i].y;
+				} else if(p[i].d == DIR) {
+					m->trap[i][j].x = p[i].x+16;
+					m->trap[i][j].y = p[i].y;
+				} else {
+					m->trap[i][j].x = p[i].x;
+					m->trap[i][j].y = p[i].y-16;
+				}
 				m->trap[i][j].ativa = false;
-				m->trap[i][j].count = TRAP_TEMPO_ARMADA;
-				m->trap[i][j].x = p[i].x;
-				m->trap[i][j].y = p[i].y;
 				m->trap[i][j].em_acao = false;
+				m->trap[i][j].count = TRAP_TEMPO_ARMADA;
 			}
 			if(m->trap[i][j].count > 0) { // Imprime a animação.
 				al_draw_bitmap_region(s.trap,0,0,TRAP_SPRITE_WIDTH,TRAP_SPRITE_HEIGHT,m->trap[i][j].x,m->trap[i][j].y,0);
 				--(m->trap[i][j].count);
 				for(k=0; k<njogadores; ++k) {
-					if(i == k)
-						continue;
-
 					// Checa se algum outro jogador pisou na trap
-					if(p[i].preso <= 0 && m->trap[i][j].em_acao == false && // Confere se o jogador nao pisou em nenhum trap e se a trap nao foi pisada por outro jogador.
-					   p[i].x >= m->trap[i][j].x && p[i].x <= m->trap[i][j].x + 32 && // Colidiu no eixo X
-					   p[i].y >= m->trap[i][j].y && p[i].y <=  m->trap[i][j].y + 32) { // Colidiu no eixo Y
-						p[i].preso = TRAP_TEMPO_PRENDENDO;
+					if(i != k && m->trap[i][j].em_acao == false && // Confere se a trap nao foi pisada por outro jogador e se nao eh o proprio jogador que a colocou.
+					   p[k].x >= m->trap[i][j].x - 12 && p[k].x <= m->trap[i][j].x + 0 && // Colidiu no eixo X
+					   p[k].y >= m->trap[i][j].y - 16 && p[k].y <=  m->trap[i][j].y + 0) { // Colidiu no eixo Y e nao eh quem colocou a trap
+
+						p[k].preso = (p[k].preso >= TRAP_TEMPO_PRENDENDO) ? p[k].preso : TRAP_TEMPO_PRENDENDO; // max{ Tempo que estaria preso, Tempo que a trap prende}
 						m->trap[i][j].count = TRAP_TEMPO_PRENDENDO;
 						m->trap[i][j].em_acao = true;
 					}
 				}
 			}
-
 		}
 	}
 }
@@ -294,6 +302,7 @@ void usa_magias(char **matriz, Pessoa *p, int njogadores, Sprite s, int *flash, 
 	usa_flash(p, flash, matriz, njogadores, m);
 	animacao_flash(p, njogadores, s, m);
 	usa_iceball(matriz, p, m, s, njogadores);
+	usa_trap(p, njogadores, s, m);
 	// usa_fireball(matriz, p, m, njogadores);
 	// explosao(p, njogadores, s, m);
 	return ;

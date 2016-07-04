@@ -44,7 +44,6 @@ void imprime_configs() {
     for(int i=0; i<PESSOAS; ++i) {
         al_draw_textf(Font, AMARELO_QUEIMADO, 100+x_variacao*i, 100, 0, "Jogador %d", i+1);
         imprime_char(120+x_variacao*i, 150, Pessoas[i].desx, Pessoas[i].desy, Pessoas[i].selx, Pessoas[i].sely, Sprites);
-        printf("Imprimindo time de %d = %d\n", i, Pessoas[i].time);
         al_draw_textf(Font, Color[Pessoas[i].time-1], 115+x_variacao*i, 200, 0, "Time %d", Pessoas[i].time);
         al_draw_text(Font, CINZA_ESCURO, 50+x_variacao*i, 250, 0, "Cima :");
         al_draw_text(Font, CINZA_ESCURO, 50+x_variacao*i, 270, 0, "Baixo :");
